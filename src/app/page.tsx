@@ -350,7 +350,7 @@ const Pricing = () => (
 
         {/* VIP Setup */}
         <motion.div 
-          whileHover={{ y: -10, shadow: "0 30px 60px rgba(212, 175, 55, 0.2)" }}
+          whileHover={{ y: -10, boxShadow: "0 30px 60px rgba(212, 175, 55, 0.2)" }}
           className="p-16 rounded-[2.5rem] bg-[var(--emerald-deep)] text-white relative overflow-hidden shadow-2xl flex flex-col h-full border-2 border-[var(--gold-vivid)]/30"
         >
           <div className="absolute top-0 right-0 p-8">
