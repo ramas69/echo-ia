@@ -103,85 +103,82 @@ export default function FormationPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-48 pb-20 px-6">
+      <section className="pt-32 pb-12 px-6">
         <div className="max-w-5xl mx-auto text-center">
-          <Badge className="mb-12 border-[var(--gold-vivid)]/30">VOTRE SYSTÈME AU SERVICE DE L'HUMAIN.</Badge>
-          <h1 className="text-6xl md:text-9xl font-light uppercase tracking-tighter mb-12 leading-[0.85]">
+          <Badge className="mb-8 border-[var(--gold-vivid)]/30">VOTRE SYSTÈME AU SERVICE DE L'HUMAIN.</Badge>
+          <h1 className="text-5xl md:text-8xl font-light uppercase tracking-tighter mb-8 leading-[0.85]">
             LA CARTE DE <br />
-            <span className="font-serif italic text-[var(--gold-vivid)] drop-shadow-sm">VOTRE LIBERTÉ.</span> <br />
-            <span className="text-[0.3em] tracking-[0.5em] font-black opacity-20 block mt-4">V.2025</span>
+            <span className="font-serif italic text-[var(--gold-vivid)] drop-shadow-sm">VOTRE LIBERTÉ.</span>
           </h1>
-          <p className="text-xl md:text-2xl text-[var(--text-secondary)] font-light leading-relaxed max-w-3xl mx-auto text-balance">
+          <p className="text-lg md:text-xl text-[var(--text-secondary)] font-light leading-relaxed max-w-2xl mx-auto text-balance">
             Voici le chemin exact pour ne plus choisir entre votre impact et votre épuisement. 
-            <span className="block mt-6 font-medium text-[var(--emerald-deep)]">Ce n'est pas une formation technique, c'est un parcours pour libérer votre énergie des tâches qui ne nécessitent pas votre cœur.</span>
+            <span className="block mt-4 font-medium text-[var(--emerald-deep)]">Ce n'est pas une formation technique, c'est un parcours pour libérer votre énergie.</span>
           </p>
         </div>
       </section>
 
       {/* Curriculum Grid */}
-      <section className="px-6 py-32">
-        <div className="max-w-6xl mx-auto space-y-48">
+      <section className="px-6 py-12">
+        <div className="max-w-6xl mx-auto space-y-24">
           {modules.map((mod, i) => (
             <motion.div 
               key={i}
-              initial={{ opacity: 0, y: 60 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.8 }}
               className={cn(
-                "flex flex-col md:flex-row gap-20 md:gap-32 items-center",
+                "flex flex-col md:flex-row gap-12 md:gap-20 items-center",
                 i % 2 !== 0 && "md:flex-row-reverse"
               )}
             >
               {/* Decorative Side */}
-              <div className="w-full md:w-1/2 relative group">
-                <div className="aspect-square rounded-[4rem] bg-[var(--emerald-deep)] overflow-hidden shadow-2xl relative interactive-card border-4 border-[var(--gold-vivid)]/10">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 z-10" />
+              <div className="w-full md:w-[40%] relative group">
+                <div className="aspect-[4/3] rounded-[2.5rem] bg-[var(--emerald-deep)] overflow-hidden shadow-xl relative interactive-card border-2 border-[var(--gold-vivid)]/10">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/10 z-10" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <mod.icon className="w-40 h-40 text-white/5 group-hover:scale-110 transition-transform duration-[2s] ease-out" />
+                    <mod.icon className="w-24 h-24 text-white/10 group-hover:scale-110 transition-transform duration-1000 ease-out" />
                   </div>
                   {/* Phase Marker */}
-                  <div className="absolute top-12 left-12 z-20">
-                    <div className="text-[10px] font-black uppercase tracking-[0.5em] text-[var(--gold-sand)] opacity-60">{mod.phase}</div>
+                  <div className="absolute top-8 left-8 z-20">
+                    <div className="text-[8px] font-black uppercase tracking-[0.4em] text-[var(--gold-sand)] opacity-60">{mod.phase}</div>
                   </div>
                   {/* Sparkles */}
-                  <div className="absolute top-12 right-12 z-20">
-                    <Sparkles className="w-8 h-8 text-[var(--gold-vivid)] animate-pulse" />
+                  <div className="absolute top-8 right-8 z-20">
+                    <Sparkles className="w-5 h-5 text-[var(--gold-vivid)] animate-pulse" />
                   </div>
                 </div>
                 
                 {/* Floating Outcome Card */}
                 <motion.div 
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  className="absolute -bottom-12 -right-6 md:-right-12 glass-card p-10 rounded-[2.5rem] border-2 border-[var(--gold-vivid)]/30 shadow-[0_30px_60px_rgba(212,175,55,0.15)] max-w-sm z-30 bg-white/90"
+                  whileHover={{ y: -3 }}
+                  className="absolute -bottom-8 -right-4 md:-right-8 glass-card p-6 rounded-[2rem] border border-[var(--gold-vivid)]/20 shadow-xl max-w-[280px] z-30 bg-white/95"
                 >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-2 h-2 bg-[var(--gold-vivid)] rounded-full animate-ping" />
-                    <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)]">RÉSULTAT GARANTI</div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-1.5 h-1.5 bg-[var(--gold-vivid)] rounded-full animate-ping" />
+                    <div className="text-[8px] font-black uppercase tracking-[0.2em] text-[var(--emerald-deep)]">RÉSULTAT GARANTI</div>
                   </div>
-                  <p className="text-base font-serif italic text-[var(--text-primary)] leading-relaxed">
+                  <p className="text-xs font-serif italic text-[var(--text-primary)] leading-relaxed">
                     "{mod.outcome}"
                   </p>
                 </motion.div>
               </div>
 
               {/* Text Side */}
-              <div className="w-full md:w-1/2 space-y-10 pt-8">
-                <div className="space-y-6">
-                  <h2 className="text-5xl md:text-7xl font-light uppercase tracking-tighter leading-none">{mod.title}</h2>
-                  <div className="h-px w-20 bg-[var(--gold-vivid)]" />
-                  <p className="text-[var(--text-secondary)] text-xl font-light leading-relaxed">{mod.desc}</p>
+              <div className="w-full md:w-[60%] space-y-6 pt-4">
+                <div className="space-y-4">
+                  <h2 className="text-4xl md:text-5xl font-light uppercase tracking-tighter leading-none">{mod.title}</h2>
+                  <div className="h-px w-16 bg-[var(--gold-vivid)]" />
+                  <p className="text-[var(--text-secondary)] text-lg font-light leading-relaxed">{mod.desc}</p>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--emerald-deep)] opacity-40">LES ÉTAPES CLÉS</div>
-                  <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-4">
+                  <div className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)] opacity-40">LES ÉTAPES CLÉS</div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {mod.units.map((unit, idx) => (
-                      <div key={idx} className="flex items-start gap-5 p-6 rounded-3xl bg-white border border-[var(--border-subtle)] group hover:border-[var(--gold-vivid)]/40 hover:bg-[var(--gold-sand)]/5 transition-all duration-500 cursor-default">
-                        <div className="w-6 h-6 rounded-full bg-[var(--emerald-deep)]/5 flex items-center justify-center mt-0.5 group-hover:bg-[var(--gold-vivid)]/10 transition-colors">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[var(--emerald-deep)] group-hover:text-[var(--gold-vivid)] transition-colors" />
-                        </div>
-                        <span className="text-sm font-bold uppercase tracking-tight text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">{unit}</span>
+                      <div key={idx} className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-[var(--border-subtle)] group hover:border-[var(--gold-vivid)]/30 transition-all duration-300">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[var(--emerald-deep)] group-hover:text-[var(--gold-vivid)] shrink-0" />
+                        <span className="text-[10px] font-bold uppercase tracking-tight text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] leading-tight">{unit}</span>
                       </div>
                     ))}
                   </div>
@@ -193,8 +190,8 @@ export default function FormationPage() {
       </section>
 
       {/* CTA Final */}
-      <section className="py-48 px-6">
-        <div className="max-w-5xl mx-auto glass-card rounded-[5rem] p-20 md:p-32 text-center border-4 border-[var(--gold-vivid)]/20 relative overflow-hidden shadow-2xl group">
+      <section className="py-24 px-6">
+        <div className="max-w-4xl mx-auto glass-card rounded-[3.5rem] p-12 md:p-20 text-center border-2 border-[var(--gold-vivid)]/20 relative overflow-hidden shadow-xl group">
           <div className="absolute inset-0 bg-[var(--emerald-deep)]/5 -z-10 group-hover:bg-[var(--emerald-deep)]/10 transition-colors duration-1000" />
           <div className="relative z-10 space-y-16">
             <div className="flex justify-center">
