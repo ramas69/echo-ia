@@ -16,7 +16,8 @@ import {
   X,
   Sparkles,
   ExternalLink,
-  Lock
+  Lock,
+  Target
 } from 'lucide-react';
 import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import Link from 'next/link';
