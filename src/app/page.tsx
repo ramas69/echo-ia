@@ -145,7 +145,7 @@ const Hero = () => {
           </SophisticatedButton>
           <motion.div 
             whileHover={{ scale: 1.05 }}
-            onClick={() => document.getElementById('demo-live')?.scrollIntoView({behavior: 'smooth'})}
+            onClick={() => document.getElementById('vision')?.scrollIntoView({behavior: 'smooth'})}
             className="flex items-center gap-4 group cursor-pointer"
           >
             <div className="w-12 h-12 rounded-full border border-[var(--gold-vivid)]/20 flex items-center justify-center group-hover:border-[var(--gold-vivid)] group-hover:bg-[var(--gold-vivid)]/10 transition-all shadow-[0_0_15px_rgba(212,175,55,0.1)]">
@@ -178,7 +178,7 @@ const Hero = () => {
 };
 
 const DemoLive = () => (
-  <section id="demo-live" className="py-32 px-6 bg-[var(--bg-primary)]">
+  <section id="vision" className="py-32 px-6 bg-[var(--bg-primary)]">
     <div className="max-w-5xl mx-auto">
       <div className="text-center mb-16">
         <Badge className="mb-6 border-[var(--gold-vivid)]/30">IMMERSION : VOTRE FUTUR QUOTIDIEN.</Badge>
