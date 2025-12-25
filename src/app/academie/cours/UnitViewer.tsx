@@ -101,6 +101,8 @@ const VideoPlayer = ({ url }: { url?: string }) => {
     />
   );
 };
+
+const PromptBlock = ({ content }: { content: string }) => {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
