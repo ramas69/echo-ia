@@ -6,12 +6,12 @@ import LessonViewerClient from "../../UnitViewer";
 export default async function LessonPage({ 
   params 
 }: { 
-  params: { moduleId: string, lessonId: string } 
+  params: Promise<{ moduleId: string, lessonId: string }> 
 }) {
   const session = await auth();
   if (!session?.user) redirect("/auth/login");
 
-  const { moduleId, lessonId } = params;
+  const { moduleId, lessonId } = await params;
 
   // Fetch current lesson with resources
   const lesson = await prisma.lesson.findUnique({

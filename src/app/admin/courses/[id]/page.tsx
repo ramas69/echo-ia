@@ -2,8 +2,8 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import ManageCourseClient from "../ManageCourseClient";
 
-export default async function AdminManageCoursePage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function AdminManageCoursePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   // Si c'est un nouveau cours, on passe un objet vide
   if (id === 'new') {
