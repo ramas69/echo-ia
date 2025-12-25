@@ -343,7 +343,7 @@ const Pricing = () => (
             ))}
           </ul>
           
-          <Link href="/academie" className="block w-full">
+          <Link href="/formation" className="block w-full">
             <SophisticatedButton variant="outline" className="w-full justify-center">Accéder à la formation</SophisticatedButton>
           </Link>
         </motion.div>
