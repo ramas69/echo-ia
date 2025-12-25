@@ -12,12 +12,12 @@ import {
   ArrowUpRight, 
   ShieldCheck, 
   Menu, 
-  X,
-  Sparkles,
-  MousePointer2,
-  Lock,
-  ArrowRight,
-  Play,
+  X, 
+  Sparkles, 
+  MousePointer2, 
+  Lock, 
+  ArrowRight, 
+  Play, 
   Waves
 } from 'lucide-react';
 import Link from 'next/link';
@@ -61,7 +61,10 @@ const TopBar = () => (
       />
       SESSION DE JANVIER : PLUS QU'UNE PLACE DISPONIBLE.
     </div>
-    <button className="text-[9px] font-black uppercase tracking-[0.3em] border border-[var(--gold-vivid)]/30 px-4 py-1.5 rounded-full hover:bg-[var(--gold-vivid)] hover:text-white transition-all shadow-sm">
+    <button 
+      onClick={() => document.getElementById('offres')?.scrollIntoView({behavior: 'smooth'})}
+      className="text-[9px] font-black uppercase tracking-[0.3em] border border-[var(--gold-vivid)]/30 px-4 py-1.5 rounded-full hover:bg-[var(--gold-vivid)] hover:text-white transition-all shadow-sm"
+    >
       Réserver mon slot
     </button>
   </div>
@@ -94,14 +97,17 @@ const Navbar = () => {
         
         <div className="hidden md:flex gap-12 text-[9px] font-bold uppercase tracking-[0.4em] text-[var(--text-secondary)]">
           {['Vision', 'Infrastructure', 'Offres'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-[var(--gold-vivid)] transition-colors relative group">
+            <a key={item} href={`#${item.toLowerCase() === 'infrastructure' ? 'méthode' : item.toLowerCase()}`} className="hover:text-[var(--gold-vivid)] transition-colors relative group">
               {item}
               <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[var(--gold-vivid)] transition-all group-hover:w-full" />
             </a>
           ))}
         </div>
 
-        <button className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)] border-b-2 border-[var(--gold-vivid)] pb-1 hover:text-[var(--gold-vivid)] transition-all">
+        <button 
+          onClick={() => document.getElementById('offres')?.scrollIntoView({behavior: 'smooth'})}
+          className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)] border-b-2 border-[var(--gold-vivid)] pb-1 hover:text-[var(--gold-vivid)] transition-all"
+        >
           Postuler
         </button>
       </div>
@@ -140,19 +146,19 @@ const Hero = () => {
         </motion.p>
         
         <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
-          <SophisticatedButton onClick={() => document.getElementById('offres')?.scrollIntoView({behavior: 'smooth'})}>
-            Voir comment ça marche
+          <SophisticatedButton onClick={() => document.getElementById('vision')?.scrollIntoView({behavior: 'smooth'})}>
+            Voir le système en action
           </SophisticatedButton>
           <motion.div 
             whileHover={{ scale: 1.05 }}
-            onClick={() => document.getElementById('vision')?.scrollIntoView({behavior: 'smooth'})}
+            onClick={() => document.getElementById('offres')?.scrollIntoView({behavior: 'smooth'})}
             className="flex items-center gap-4 group cursor-pointer"
           >
             <div className="w-12 h-12 rounded-full border border-[var(--gold-vivid)]/20 flex items-center justify-center group-hover:border-[var(--gold-vivid)] group-hover:bg-[var(--gold-vivid)]/10 transition-all shadow-[0_0_15px_rgba(212,175,55,0.1)]">
-              <Play className="w-4 h-4 text-[var(--gold-vivid)] fill-[var(--gold-vivid)]" />
+              <ArrowRight className="w-4 h-4 text-[var(--gold-vivid)]" />
             </div>
             <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[var(--text-secondary)] group-hover:text-[var(--gold-vivid)] transition-colors">
-              Voir le système en action
+              Découvrir les offres
             </span>
           </motion.div>
         </div>
@@ -188,8 +194,8 @@ const DemoLive = () => (
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        whileHover={{ scale: 1.01, borderColor: "var(--gold-vivid)" }}
-        className="relative aspect-video rounded-3xl border-4 border-[var(--emerald-deep)] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.1)] bg-[var(--text-primary)] flex items-center justify-center group cursor-pointer transition-all duration-700"
+        whileHover={{ scale: 1.01, boxShadow: "0 30px 60px rgba(0,0,0,0.1)" }}
+        className="relative aspect-video rounded-3xl border-4 border-[var(--emerald-deep)] overflow-hidden shadow-2xl bg-[var(--text-primary)] flex items-center justify-center group cursor-pointer transition-all duration-700"
       >
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--emerald-deep)]/40 to-transparent z-10 opacity-60 group-hover:opacity-20 transition-opacity" />
         <img 
@@ -217,11 +223,11 @@ const Infrastructure = () => {
     { icon: Video, title: "L'Usine à Contenu", desc: "Votre image et votre voix, clonées pour le web. Soyez présent partout en y passant seulement 1h par semaine." },
     { icon: Zap, title: "Le Flux Zéro-Friction", desc: "L'administratif disparaît. Paiements, contrats, accès : tout est géré automatiquement, sans erreur humaine.", gold: true },
     { icon: Target, title: "L'Aimant à Clients", desc: "Votre agenda se remplit de prospects qualifiés pendant que vous dormez. Finie la prospection manuelle épuisante." },
-    { icon: Cpu, title: "L'Outil Signature", desc: "Nous créons le petit \"logiciel magique\" sur-mesure qui bluffera vos clients et que vos concurrents n'auront jamais.", gold: true }
+    { icon: Cpu, title: "L'Outil Signature", desc: "Nous créons votre propre outil numérique sur-mesure. Une expérience unique pour vos clients que vos concurrents ne pourront pas copier.", gold: true }
   ];
 
   return (
-    <section id="infrastructure" className="py-40 px-6 bg-[var(--bg-secondary)] border-y border-[var(--border-subtle)] relative overflow-hidden">
+    <section id="méthode" className="py-40 px-6 bg-[var(--bg-secondary)] border-y border-[var(--border-subtle)] relative overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid md:grid-cols-2 gap-20 items-end mb-32">
           <div>
@@ -269,7 +275,7 @@ const RetoursExperience = () => {
   const reviews = [
     { name: "Marc Aubert", text: "J'ai retrouvé mes soirées et mes week-ends. Le système gère tout le travail ingrat. Je peux enfin me concentrer uniquement sur mes clients et ma stratégie.", role: "Coach Business", gold: true },
     { name: "Sarah Benali", text: "Ma charge mentale a chuté de 80%. Mes clients ont l'impression que je suis disponible H24, alors que c'est mon 'double IA' qui répond.", role: "Mentor Leadership" },
-    { name: "Julien Roche", text: "Le Studio IA est bluffant. Je produis du contenu de haute qualité en 15 minutes par semaine.", role: "Expert Marketing", gold: true }
+    { name: "Julien Roche", text: "Le Studio IA est impressionnant de réalisme. Je produis désormais un mois de contenu de haute qualité en 15 minutes par semaine.", role: "Expert Marketing", gold: true }
   ];
 
   return (
@@ -397,13 +403,13 @@ const Footer = () => (
           <span className="font-black tracking-[0.5em] text-[12px] text-[var(--emerald-deep)] uppercase group-hover:text-[var(--gold-vivid)] transition-colors">L'ÉCHO IA</span>
         </div>
         <p className="text-[9px] uppercase tracking-[0.4em] text-[var(--text-secondary)]/40 text-center md:text-left leading-loose">
-          Le futur de l'accompagnement est systémique.<br />
-          Architecturé en France // © 2025
+          Le futur de l'accompagnement est plus humain, car mieux automatisé.<br />
+          Créé en France // © 2025
         </p>
       </div>
       
       <div className="flex gap-16 text-[9px] font-black uppercase tracking-[0.5em] text-[var(--text-secondary)]/40">
-        {['Privacy', 'Legal', 'Architect'].map((item) => (
+        {['Privacy', 'Legal', 'Contact'].map((item) => (
           <a key={item} href="#" className="hover:text-[var(--gold-vivid)] transition-colors">{item}</a>
         ))}
       </div>
