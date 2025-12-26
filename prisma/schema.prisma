@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,6 +6,8 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// --- AUTHENTIFICATION (NEXTAUTH) ---
 
 model Account {
   id                 String  @id @default(cuid())
@@ -37,21 +36,6 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          String    @default("STUDENT") // STUDENT or ADMIN
-  accounts      Account[]
-  sessions      Session[]
-  progress      Progress[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-}
-
 model VerificationToken {
   identifier String
   token      String   @unique
@@ -60,78 +44,122 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Course {
+// --- UTILISATEURS & PROGRESSION ---
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String    @default("STUDENT") // STUDENT or ADMIN
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  
+  // LMS Relationships
+  progress      UserProgress[]
+  phaseStatuses UserPhaseStatus[]
+}
+
+model UserProgress {
+  id          String    @id @default(cuid())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  unit        Unit      @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  unitId      String
+  
+  completedAt DateTime? 
+
+  @@unique([userId, unitId])
+}
+
+model UserPhaseStatus {
+  id        String      @id @default(cuid())
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  phase     Phase       @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  phaseId   String
+  
+  status    PhaseStatus @default(LOCKED) 
+  checkpointVerifiedAt DateTime? 
+
+  @@unique([userId, phaseId])
+}
+
+// --- CURRICULUM (CONTENU STATIQUE) ---
+
+model Phase {
+  id           String   @id @default(cuid())
+  title        String   
+  slug         String   @unique 
+  description  String   @db.Text 
+  outcome      String   @db.Text 
+  thumbnailUrl String?  
+  orderIndex   Int      @unique 
+  isPublished  Boolean  @default(false)
+  
+  checkpointInstruction String? @db.Text 
+  units        Unit[]
+  userStatuses UserPhaseStatus[]
+  
+  @@index([orderIndex])
+  @@index([isPublished])
+}
+
+model Unit {
   id          String   @id @default(cuid())
-  title       String
-  description String?
-  modules     Module[]
-  published   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Module {
-  id                 String   @id @default(cuid())
-  title              String
-  slug               String?  @unique
-  description        String?
-  outcome            String?  // Résultat attendu
-  order              Int
-  courseId           String
-  course             Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  lessons            Lesson[]
+  phase       Phase    @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  phaseId     String
   
-  // Action Finale
-  finalActionTitle   String?
-  finalActionDesc    String?
+  title       String   
+  slug        String   @unique
+  orderIndex  Int
+  isPublished Boolean  @default(false)
   
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-}
-
-model Lesson {
-  id          String     @id @default(cuid())
-  title       String
-  content     String?    @db.Text
-  videoUrl    String?
-  duration    String?
-  order       Int
-  moduleId    String
-  module      Module     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  progress    Progress[]
+  videoProvider String // MUX, VIMEO, YOUTUBE
+  videoId       String 
+  durationSec   Int    
+  
+  content     String? @db.Text 
   resources   Resource[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  progress    UserProgress[]
+
+  @@unique([phaseId, orderIndex])
+  @@index([phaseId])
+  @@index([orderIndex])
+  @@index([isPublished])
+  @@index([slug])
 }
 
 model Resource {
-  id        String   @id @default(cuid())
-  type      String   // notion, pdf, prompt, link
-  label     String
-  url       String?
-  content   String?  @db.Text // Pour les prompts
-  lessonId  String
-  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  id          String       @id @default(cuid())
+  unit        Unit         @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  unitId      String
+  
+  title       String       
+  type        ResourceType 
+  
+  url         String?      @db.Text
+  textContent String?      @db.Text 
 }
 
-model Progress {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lessonId  String
-  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  completed Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// --- ENUMS ---
 
-  @@unique([userId, lessonId])
+enum PhaseStatus {
+  LOCKED
+  UNLOCKED
+  COMPLETED
 }
 
-model Lead {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  status    String   @default("PENDING")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum ResourceType {
+  NOTION_TEMPLATE
+  MAKE_BLUEPRINT
+  PDF_GUIDE
+  PROMPT_TEXT
+  EXTERNAL_LINK
+  FILE_DOWNLOAD
 }

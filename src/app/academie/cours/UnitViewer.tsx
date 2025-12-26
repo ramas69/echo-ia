@@ -17,76 +17,61 @@ import {
   Sparkles,
   ExternalLink,
   Lock,
-  Target
+  Target,
+  ShieldCheck,
+  Video,
+  Zap
 } from 'lucide-react';
 import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 
 // --- Types ---
 interface Resource {
   id: string;
-  type: 'notion' | 'pdf' | 'prompt' | 'link' | string;
-  label: string;
+  type: string;
+  title: string;
   url?: string;
-  content?: string;
+  textContent?: string;
 }
 
-interface Lesson {
+interface Unit {
   id: string;
   title: string;
-  duration: string;
-  videoUrl?: string;
   content?: string;
+  videoProvider: string;
+  videoId: string;
+  isCompleted: boolean;
   resources: Resource[];
-  completed: boolean;
+  slug: string;
 }
 
-interface Module {
+interface Phase {
   id: string;
   title: string;
-  slug?: string;
-  description?: string;
-  outcome?: string;
-  lessons: Lesson[];
-  finalActionTitle?: string;
-  finalActionDesc?: string;
+  slug: string;
+  outcome: string;
+  units: { id: string, title: string, slug: string, isCompleted: boolean }[];
 }
-
-// --- Helper ---
-const getEmbedUrl = (url?: string) => {
-  if (!url) return null;
-
-  // YouTube
-  if (url.includes('youtube.com') || url.includes('youtu.be')) {
-    const id = url.includes('v=') 
-      ? url.split('v=')[1]?.split('&')[0] 
-      : url.split('/').pop();
-    return `https://www.youtube.com/embed/${id}`;
-  }
-
-  // Loom
-  if (url.includes('loom.com')) {
-    const id = url.split('/').pop()?.split('?')[0];
-    return `https://www.loom.com/embed/${id}`;
-  }
-
-  return url;
-};
 
 // --- Components ---
 
-const VideoPlayer = ({ url }: { url?: string }) => {
-  const embedUrl = getEmbedUrl(url);
+const VideoPlayer = ({ provider, id }: { provider: string, id: string }) => {
+  let embedUrl = "";
+  if (provider === "YOUTUBE") {
+    embedUrl = `https://www.youtube.com/embed/${id}`;
+  } else if (provider === "VIMEO") {
+    embedUrl = `https://player.vimeo.com/video/${id}`;
+  } else if (provider === "LOOM") {
+    embedUrl = `https://www.loom.com/embed/${id}`;
+  }
 
   if (!embedUrl) {
     return (
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-black">
         <div className="w-24 h-24 rounded-full bg-[var(--emerald-deep)] flex items-center justify-center shadow-[0_0_50px_rgba(6,78,59,0.4)]">
           <Play className="w-10 h-10 text-white fill-white translate-x-1" />
-        </div>
-        <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 animate-pulse">
-          AUCUNE VIDÉO DISPONIBLE
         </div>
       </div>
     );
@@ -134,19 +119,21 @@ const PromptBlock = ({ content }: { content: string }) => {
 
 const ResourceCard = ({ resource }: { resource: Resource }) => {
   const icons: any = {
-    notion: <LinkIcon className="w-4 h-4" />,
-    pdf: <Download className="w-4 h-4" />,
-    prompt: <Sparkles className="w-4 h-4" />,
-    link: <ExternalLink className="w-4 h-4" />
+    NOTION_TEMPLATE: <LinkIcon className="w-4 h-4" />,
+    PDF_GUIDE: <Download className="w-4 h-4" />,
+    PROMPT_TEXT: <Sparkles className="w-4 h-4" />,
+    EXTERNAL_LINK: <ExternalLink className="w-4 h-4" />,
+    FILE_DOWNLOAD: <Download className="w-4 h-4" />,
+    MAKE_BLUEPRINT: <Zap className="w-4 h-4" />
   };
 
-  if (resource.type === 'prompt' && resource.content) {
+  if (resource.type === 'PROMPT_TEXT' && resource.textContent) {
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">
-          <Sparkles className="w-3 h-3 text-[var(--gold-vivid)]" /> {resource.label}
+          <Sparkles className="w-3 h-3 text-[var(--gold-vivid)]" /> {resource.title}
         </div>
-        <PromptBlock content={resource.content} />
+        <PromptBlock content={resource.textContent} />
       </div>
     );
   }
@@ -163,29 +150,52 @@ const ResourceCard = ({ resource }: { resource: Resource }) => {
           {icons[resource.type] || <FileText className="w-4 h-4" />}
         </div>
         <div>
-          <div className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]/40 mb-1">{resource.type}</div>
-          <div className="text-xs font-bold">{resource.label}</div>
+          <div className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]/40 mb-1">{resource.type.replace('_', ' ')}</div>
+          <div className="text-xs font-bold">{resource.title}</div>
         </div>
       </div>
-      <ArrowUpRight className="w-4 h-4 text-[var(--text-secondary)]/20 group-hover:text-[var(--gold-vivid)] transition-all" />
+      <ChevronRight className="w-4 h-4 text-[var(--text-secondary)]/20 group-hover:text-[var(--gold-vivid)] transition-all" />
     </a>
   );
 };
 
-export default function LessonViewerClient({ 
-  currentModule, 
-  currentLesson,
-  allModules 
+export default function UnitViewerClient({ 
+  currentUnit, 
+  currentPhase,
+  allPhases 
 }: { 
-  currentModule: Module, 
-  currentLesson: Lesson,
-  allModules: Module[]
+  currentUnit: Unit, 
+  currentPhase: Phase,
+  allPhases: Phase[]
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isCompleting, setIsCompleting] = useState(false);
+  const router = useRouter();
+
+  const handleComplete = async () => {
+    setIsCompleting(true);
+    try {
+      const response = await fetch('/api/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ unitId: currentUnit.id }),
+      });
+
+      if (response.ok) {
+        router.refresh();
+      } else {
+        alert("Erreur lors de la validation.");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsCompleting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#FDFCFB] flex">
-      {/* Sidebar Navigation */}
+      {/* Sidebar */}
       <AnimatePresence mode="wait">
         {sidebarOpen && (
           <motion.aside 
@@ -205,29 +215,29 @@ export default function LessonViewerClient({
             </div>
 
             <div className="flex-grow overflow-y-auto p-6 space-y-8">
-              {allModules.map((mod) => (
-                <div key={mod.id} className="space-y-4">
+              {allPhases.map((phase) => (
+                <div key={phase.id} className="space-y-4">
                   <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)] flex items-center gap-2">
                     <div className="w-1 h-1 bg-[var(--emerald-deep)] rounded-full" />
-                    {mod.title}
+                    {phase.title}
                   </div>
                   <div className="space-y-2">
-                    {mod.lessons.map((lsn) => (
+                    {phase.units.map((u) => (
                       <Link 
-                        key={lsn.id}
-                        href={`/academie/cours/${mod.id}/${lsn.id}`}
+                        key={u.id}
+                        href={`/academie/cours/${phase.slug}/${u.slug}`}
                         className={cn(
                           "flex items-center justify-between p-4 rounded-xl text-xs transition-all group",
-                          lsn.id === currentLesson.id 
+                          u.id === currentUnit.id 
                             ? "bg-[var(--emerald-deep)] text-white shadow-lg" 
                             : "hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)]"
                         )}
                       >
                         <div className="flex items-center gap-3">
-                          <Play className={cn("w-3 h-3", lsn.id === currentLesson.id ? "fill-white" : "opacity-30")} />
-                          <span className="font-medium truncate max-w-[160px]">{lsn.title}</span>
+                          <Play className={cn("w-3 h-3", u.id === currentUnit.id ? "fill-white" : "opacity-30")} />
+                          <span className="font-medium truncate max-w-[160px]">{u.title}</span>
                         </div>
-                        {lsn.completed && <CheckCircle2 className="w-3 h-3 text-[var(--gold-vivid)]" />}
+                        {u.isCompleted && <CheckCircle2 className="w-3 h-3 text-[var(--gold-vivid)]" />}
                       </Link>
                     ))}
                   </div>
@@ -258,100 +268,93 @@ export default function LessonViewerClient({
           )}
           <div className="ml-auto flex items-center gap-6">
             <div className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
-              {currentModule.title} // {currentLesson.title}
+              {currentPhase.title} // {currentUnit.title}
             </div>
-            <SophisticatedButton variant="outline" className="py-2 px-6 text-[9px]">
-              Module Suivant <ChevronRight className="w-3 h-3 ml-2" />
-            </SophisticatedButton>
           </div>
         </div>
 
-        {/* Video & Resources */}
+        {/* Video & Content */}
         <div className="p-8 md:p-16 max-w-5xl mx-auto space-y-16">
-          {/* Video Player */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative aspect-video rounded-[2.5rem] bg-[var(--text-primary)] shadow-2xl overflow-hidden border-4 border-[var(--emerald-deep)]/10"
+            className="relative aspect-video rounded-[2.5rem] bg-black shadow-2xl overflow-hidden border-4 border-[var(--emerald-deep)]/10"
           >
-            <VideoPlayer url={currentLesson.videoUrl} />
-            {/* Overlay Gradient (only if no video or on top of it for styling) */}
-            {!currentLesson.videoUrl && (
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--emerald-deep)]/20 to-transparent pointer-events-none" />
-            )}
+            <VideoPlayer provider={currentUnit.videoProvider} id={currentUnit.videoId} />
           </motion.div>
 
-          {/* Lesson Header */}
           <div className="space-y-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
               <div className="space-y-4">
-                <Badge className="border-[var(--gold-vivid)]/30">MODULE OPÉRATIONNEL</Badge>
+                <Badge className="border-[var(--gold-vivid)]/30">UNITÉ OPÉRATIONNELLE</Badge>
                 <h1 className="text-4xl md:text-6xl font-light uppercase tracking-tighter leading-tight">
-                  {currentLesson.title.split(' ').map((word, i) => (
-                    <span key={i} className={cn(i === 0 && "font-serif italic text-[var(--gold-vivid)]")}>{word}{' '}</span>
-                  ))}
+                  <span className="text-[var(--emerald-deep)]/20 font-black italic mr-4 tabular-nums">
+                    {allPhases.findIndex(p => p.id === currentPhase.id) + 1}.{currentPhase.units.findIndex(u => u.id === currentUnit.id) + 1}
+                  </span>
+                  {currentUnit.title}
                 </h1>
-                <p className="text-[var(--text-secondary)] text-lg max-w-2xl font-light leading-relaxed">
-                  {currentModule.description || "Organiser votre expertise pour ne plus jamais vous répéter."}
-                </p>
+                <div 
+                  className="text-[var(--text-secondary)] text-lg max-w-2xl font-light leading-relaxed prose prose-emerald prose-sm md:prose-base"
+                  dangerouslySetInnerHTML={{ __html: currentUnit.content || "" }}
+                />
               </div>
               <div className="shrink-0 pb-2">
-                <SophisticatedButton className="py-5 px-12 group">
-                  <CheckCircle2 className="w-4 h-4 mr-2 text-[var(--gold-vivid)] group-hover:scale-110 transition-transform" /> 
-                  Valider l'unité
+                <SophisticatedButton 
+                  onClick={handleComplete}
+                  disabled={isCompleting || currentUnit.isCompleted}
+                  className="py-5 px-12 group"
+                >
+                  {currentUnit.isCompleted ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 mr-2 text-[var(--gold-vivid)]" /> 
+                      Unité validée
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-4 h-4 mr-2 border-2 border-white/30 rounded-full group-hover:border-[var(--gold-vivid)] transition-colors" />
+                      Valider l'unité
+                    </>
+                  )}
                 </SophisticatedButton>
               </div>
             </div>
 
-            {/* Outcome Box */}
             <div className="p-8 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--gold-vivid)]/10 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-6 opacity-5">
                 <Target className="w-20 h-20 text-[var(--emerald-deep)]" />
               </div>
               <div className="relative z-10">
-                <div className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)] mb-4">RÉSULTAT ATTENDU</div>
+                <div className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)] mb-4">OBJECTIF DE LA PHASE</div>
                 <p className="text-sm italic font-medium text-[var(--text-primary)]">
-                  "{currentModule.outcome || "À la fin de ce module, votre base de connaissances Notion est active et prête à recevoir votre savoir."}"
+                  "{currentPhase.outcome}"
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Resources & Action */}
           <div className="grid md:grid-cols-2 gap-16">
-            {/* Resources List */}
             <div className="space-y-8">
               <h3 className="text-xl font-bold uppercase tracking-tight flex items-center gap-3">
                 <Download className="w-5 h-5 text-[var(--emerald-deep)]" /> Ressources & Assets
               </h3>
               <div className="grid gap-4">
-                {currentLesson.resources.map((res) => (
+                {currentUnit.resources.map((res) => (
                   <ResourceCard key={res.id} resource={res} />
                 ))}
               </div>
             </div>
-
-            {/* Final Action / Next Steps */}
+            
             <div className="space-y-8">
               <h3 className="text-xl font-bold uppercase tracking-tight flex items-center gap-3">
-                <Sparkles className="w-5 h-5 text-[var(--gold-vivid)]" /> Action de Validation
+                <ShieldCheck className="w-5 h-5 text-[var(--gold-vivid)]" /> Support IA
               </h3>
-              <div className="p-10 rounded-[2rem] bg-[var(--emerald-deep)] text-white shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-700">
-                  <ShieldCheck className="w-24 h-24" />
-                </div>
-                <div className="relative z-10">
-                  <div className="text-[9px] font-black uppercase tracking-[0.4em] text-[var(--gold-sand)]/60 mb-6">PROTOCOLE DE FIN DE MODULE</div>
-                  <h4 className="text-2xl font-light uppercase tracking-tighter mb-4 italic text-[var(--gold-sand)]">
-                    {currentModule.finalActionTitle || "Validation de la Phase 1"}
-                  </h4>
-                  <p className="text-sm text-white/80 leading-relaxed mb-8">
-                    {currentModule.finalActionDesc || "Partagez une capture d'écran de votre Vault configuré sur le Discord dans le canal #victoires."}
-                  </p>
-                  <SophisticatedButton variant="secondary" className="w-full justify-center">
-                    Confirmer l'Action
-                  </SophisticatedButton>
-                </div>
+              <div className="p-8 rounded-3xl border border-[var(--border-subtle)] bg-white/50 space-y-4">
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                  Un doute sur l'implémentation de cette unité ? Posez votre question sur le Discord ou consultez la base de connaissances.
+                </p>
+                <Link href="#" className="text-[10px] font-black uppercase tracking-widest text-[var(--emerald-deep)] hover:text-[var(--gold-vivid)] transition-colors flex items-center gap-2">
+                  Consulter la doc <ChevronRight className="w-3 h-3" />
+                </Link>
               </div>
             </div>
           </div>
@@ -360,44 +363,3 @@ export default function LessonViewerClient({
     </div>
   );
 }
-
-function ShieldCheck(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-      <path d="m9 12 2 2 4-4" />
-    </svg>
-  );
-}
-
-function ArrowUpRight(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M7 7h10v10" />
-      <path d="M7 17 17 7" />
-    </svg>
-  );
-}
-
