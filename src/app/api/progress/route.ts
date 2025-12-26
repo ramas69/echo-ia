@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 export async function POST(req: Request) {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
@@ -16,11 +16,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Missing unitId" }, { status: 400 });
     }
 
+    const userId = session.user.id as string;
+
     // Mark unit as completed
     const progress = await prisma.userProgress.upsert({
       where: {
         userId_unitId: {
-          userId: session.user.id,
+          userId: userId,
           unitId: unitId,
         },
       },
@@ -28,7 +30,7 @@ export async function POST(req: Request) {
         completedAt: new Date(),
       },
       create: {
-        userId: session.user.id,
+        userId: userId,
         unitId: unitId,
         completedAt: new Date(),
       },

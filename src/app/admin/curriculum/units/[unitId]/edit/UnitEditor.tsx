@@ -65,12 +65,12 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
-  const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm<UnitFormValues>({
-    resolver: zodResolver(unitSchema),
+  const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+    resolver: zodResolver(unitSchema) as any,
     defaultValues: {
       title: initialUnit.title,
       slug: initialUnit.slug,
-      videoProvider: initialUnit.videoProvider,
+      videoProvider: initialUnit.videoProvider || "YOUTUBE",
       videoId: initialUnit.videoId,
       durationSec: initialUnit.durationSec,
       content: initialUnit.content || '',
@@ -204,7 +204,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
                   {...register("title")}
                   className="w-full bg-[var(--bg-secondary)] border border-transparent rounded-xl py-3 px-4 text-sm font-bold focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
                 />
-                {errors.title && <p className="text-red-500 text-[9px] uppercase font-black">{errors.title.message}</p>}
+                {errors.title && <p className="text-red-500 text-[9px] uppercase font-black">{String(errors.title.message)}</p>}
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -248,7 +248,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
                   )}
                   placeholder="Ex: dQw4w9WgXcQ"
                 />
-                {errors.videoId && <p className="text-red-500 text-[9px] uppercase font-black">{errors.videoId.message}</p>}
+                {errors.videoId && <p className="text-red-500 text-[9px] uppercase font-black">{String(errors.videoId.message)}</p>}
               </div>
 
               <div className="space-y-2">
@@ -324,11 +324,11 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
                         placeholder="Titre de la ressource"
                         className={cn(
                           "w-full bg-white/5 border border-white/10 rounded-xl py-2 px-4 text-xs font-bold focus:outline-none focus:border-[var(--gold-vivid)] transition-all",
-                          errors.resources?.[index]?.title && "border-red-500/50"
+                          (errors as any).resources?.[index]?.title && "border-red-500/50"
                         )}
                       />
-                      {errors.resources?.[index]?.title && (
-                        <p className="text-[9px] text-red-400 font-black uppercase ml-2">{errors.resources[index]?.title?.message}</p>
+                      {(errors as any).resources?.[index]?.title && (
+                        <p className="text-[9px] text-red-400 font-black uppercase ml-2">{String((errors as any).resources?.[index]?.title?.message)}</p>
                       )}
                     </div>
 

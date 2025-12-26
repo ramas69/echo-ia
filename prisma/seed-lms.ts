@@ -1,4 +1,4 @@
-import { PrismaClient, PhaseStatus, ResourceType } from '@prisma/client';
+import { PrismaClient, ResourceType } from '@prisma/client';
 
 const prisma = new PrismaClient();
 

@@ -76,14 +76,14 @@ export const unitSchema = z.object({
     /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
     "Le slug doit être en minuscules avec des tirets uniquement"
   ),
-  videoProvider: VideoProviderEnum.default("YOUTUBE"),
+  videoProvider: VideoProviderEnum.optional().default("YOUTUBE"),
   videoId: z.string().min(1, "L'ID de la vidéo est requis"),
   durationSec: z.number().int().min(0, "La durée doit être positive").or(
     z.string().transform((val) => parseInt(val, 10))
   ),
   content: z.string().nullable().optional(),
-  isPublished: z.boolean().default(false),
-  resources: z.array(resourceSchema).default([]),
+  isPublished: z.boolean().optional().default(false),
+  resources: z.array(resourceSchema).optional().default([]),
 });
 
 /**

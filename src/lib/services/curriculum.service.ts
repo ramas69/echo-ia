@@ -62,7 +62,7 @@ export async function getAllPhases(options?: {
     orderBy: { [orderBy]: 'asc' }
   });
 
-  return phases as PhaseWithUnits[];
+  return phases as unknown as PhaseWithUnits[];
 }
 
 /**
@@ -485,18 +485,13 @@ export async function getCurriculumSummary(): Promise<CurriculumSummary> {
     })
   ]);
 
-  const lastUpdatedPhase = await prisma.phase.findFirst({
-    orderBy: { updatedAt: 'desc' },
-    select: { updatedAt: true }
-  });
-
   return {
     totalPhases: phases.length,
     publishedPhases: phases.filter(p => p.isPublished).length,
     totalUnits: units.length,
     publishedUnits: units.filter(u => u.isPublished).length,
     totalDuration: totalDuration._sum.durationSec || 0,
-    lastUpdated: lastUpdatedPhase?.updatedAt || new Date()
+    lastUpdated: new Date()
   };
 }
 

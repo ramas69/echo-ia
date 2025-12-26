@@ -185,7 +185,9 @@ export default function AcademieClient({
 
                     <div className="grid gap-4 pt-8">
                       <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--emerald-deep)]/40 mb-2">Unités d'Apprentissage</h3>
-                      {selectedPhase.units.map((unit, uidx) => (
+                      {selectedPhase.units.map((unit, uidx) => {
+                        const phaseIndex = phases.findIndex(p => p.id === selectedPhase.id);
+                        return (
                         <Link 
                           key={unit.id} 
                           href={`/academie/cours/${selectedPhase.slug}/${unit.slug}`}
@@ -193,7 +195,7 @@ export default function AcademieClient({
                         >
                           <div className="flex items-center gap-6">
                             <div className="w-10 h-10 rounded-2xl bg-[var(--bg-secondary)] flex items-center justify-center text-[10px] font-black group-hover:bg-[var(--gold-vivid)]/10 transition-colors tabular-nums">
-                              {idx + 1}.{uidx + 1}
+                              {phaseIndex + 1}.{uidx + 1}
                             </div>
                             <span className="font-bold uppercase tracking-tight text-sm">{unit.title}</span>
                           </div>
@@ -206,7 +208,8 @@ export default function AcademieClient({
                             )}
                           </div>
                         </Link>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </motion.div>
