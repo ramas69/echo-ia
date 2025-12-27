@@ -15,7 +15,7 @@ import {
   Heart,
   Lock
 } from 'lucide-react';
-import { Badge, SophisticatedButton } from '@/components/SharedUI';
+import { Badge, SophisticatedButton, TopBar, Navbar, Footer } from '@/components/SharedUI';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
@@ -93,76 +93,10 @@ const modules = [
 ];
 
 export default function FormationPage() {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <div className="min-h-screen bg-[#FDFCFB] mesh-gradient selection:bg-[var(--gold-sand)] selection:text-[var(--emerald-deep)] pb-20">
-      
-      {/* TopBar */}
-      <div className="fixed top-0 w-full z-[110] bg-[var(--emerald-deep)] text-[var(--gold-sand)] py-3 px-6 flex justify-between items-center shadow-lg">
-        <div className="text-[9px] font-black uppercase tracking-[0.3em] flex items-center gap-4">
-          <motion.span 
-            animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-2 h-2 bg-[var(--gold-vivid)] rounded-full shadow-[0_0_10px_var(--gold-vivid)]" 
-          />
-          SESSION DE JANVIER : PLUS QU'UNE PLACE DISPONIBLE.
-        </div>
-        <a 
-          href="https://tally.so/r/vIP-echo-ia"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[9px] font-black uppercase tracking-[0.3em] border border-[var(--gold-vivid)]/30 px-4 py-1.5 rounded-full hover:bg-[var(--gold-vivid)] hover:text-white transition-all shadow-sm"
-        >
-          Réserver mon slot
-        </a>
-      </div>
-
-      {/* Navbar */}
-      <nav className={cn(
-        "fixed w-full z-[100] transition-all duration-700 px-6",
-        isScrolled ? "top-[48px] py-4" : "top-[48px] py-8"
-      )}>
-        <div className={cn(
-          "max-w-7xl mx-auto px-8 py-4 flex justify-between items-center transition-all duration-700 rounded-2xl",
-          isScrolled ? "glass-card shadow-2xl border-[var(--gold-vivid)]/20" : "bg-transparent"
-        )}>
-          <Link href="/" className="flex items-center gap-3 group cursor-pointer">
-            <div className="w-10 h-10 border-2 border-[var(--emerald-deep)] rounded-full flex items-center justify-center p-2 group-hover:border-[var(--gold-vivid)] transition-colors">
-              <div className="w-full h-full bg-[var(--emerald-deep)] rounded-full animate-pulse group-hover:bg-[var(--gold-vivid)]" />
-            </div>
-            <span className="font-black tracking-[0.4em] text-[12px] uppercase text-[var(--emerald-deep)] group-hover:text-[var(--gold-vivid)] transition-colors">L'ÉCHO IA</span>
-          </Link>
-          
-          <div className="hidden md:flex gap-12 text-[9px] font-bold uppercase tracking-[0.4em] text-[var(--text-secondary)]">
-            <Link href="/" className="hover:text-[var(--gold-vivid)] transition-colors relative group">
-              Accueil
-              <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[var(--gold-vivid)] transition-all group-hover:w-full" />
-            </Link>
-            <Link href="/le-programme" className="hover:text-[var(--gold-vivid)] transition-colors relative group">
-              Le Programme
-              <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[var(--gold-vivid)] transition-all group-hover:w-full" />
-            </Link>
-            <Link href="/offres" className="hover:text-[var(--gold-vivid)] transition-colors relative group">
-              Offres
-              <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[var(--gold-vivid)] transition-all group-hover:w-full" />
-            </Link>
-          </div>
-
-          <Link 
-            href="/candidature-vip"
-            className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)] border-b-2 border-[var(--gold-vivid)] pb-1 hover:text-[var(--gold-vivid)] transition-all"
-          >
-            Candidature VIP
-          </Link>
-        </div>
-      </nav>
+      <TopBar />
+      <Navbar />
 
       {/* Hero Section */}
       <section className="pt-48 pb-12 px-6">
@@ -470,6 +404,8 @@ export default function FormationPage() {
           <div className="absolute bottom-20 left-20 opacity-10 group-hover:-rotate-90 transition-transform duration-[10s]"><Sparkles className="w-40 h-40 text-[var(--gold-vivid)]" /></div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

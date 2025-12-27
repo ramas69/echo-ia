@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Badge, SophisticatedButton } from '@/components/SharedUI';
+import { Badge, SophisticatedButton, TopBar, Navbar, Footer } from '@/components/SharedUI';
 
 // --- Shared Transitions ---
 const springTransition = { type: "spring", stiffness: 100, damping: 20 };
@@ -48,78 +48,6 @@ const CursorFollower = () => {
       style={{ x: springX, y: springY }}
       className="fixed top-0 left-0 w-5 h-5 border border-[var(--gold-vivid)] rounded-full pointer-events-none z-[9999] mix-blend-difference hidden md:block"
     />
-  );
-};
-
-const TopBar = () => (
-  <div className="fixed top-0 w-full z-[110] bg-[var(--emerald-deep)] text-[var(--gold-sand)] py-3 px-6 flex justify-between items-center shadow-lg">
-    <div className="text-[9px] font-black uppercase tracking-[0.3em] flex items-center gap-4">
-      <motion.span 
-        animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className="w-2 h-2 bg-[var(--gold-vivid)] rounded-full shadow-[0_0_10px_var(--gold-vivid)]" 
-      />
-      SESSION DE JANVIER : PLUS QU'UNE PLACE DISPONIBLE.
-    </div>
-    <a 
-      href="https://tally.so/r/vIP-echo-ia"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-[9px] font-black uppercase tracking-[0.3em] border border-[var(--gold-vivid)]/30 px-4 py-1.5 rounded-full hover:bg-[var(--gold-vivid)] hover:text-white transition-all shadow-sm"
-    >
-      Réserver mon slot
-    </a>
-  </div>
-);
-
-const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return (
-    <nav className={cn(
-      "fixed w-full z-[100] transition-all duration-700 px-6",
-      isScrolled ? "top-[48px] py-4" : "top-[48px] py-8"
-    )}>
-      <div className={cn(
-        "max-w-7xl mx-auto px-8 py-4 flex justify-between items-center transition-all duration-700 rounded-2xl",
-        isScrolled ? "glass-card shadow-2xl border-[var(--gold-vivid)]/20" : "bg-transparent"
-      )}>
-        <div className="flex items-center gap-3 group cursor-pointer">
-          <div className="w-10 h-10 border-2 border-[var(--emerald-deep)] rounded-full flex items-center justify-center p-2 group-hover:border-[var(--gold-vivid)] transition-colors">
-            <div className="w-full h-full bg-[var(--emerald-deep)] rounded-full animate-pulse group-hover:bg-[var(--gold-vivid)]" />
-          </div>
-          <span className="font-black tracking-[0.4em] text-[12px] uppercase text-[var(--emerald-deep)] group-hover:text-[var(--gold-vivid)] transition-colors">L'ÉCHO IA</span>
-        </div>
-        
-        <div className="hidden md:flex gap-12 text-[9px] font-bold uppercase tracking-[0.4em] text-[var(--text-secondary)]">
-          <a href="/" className="hover:text-[var(--gold-vivid)] transition-colors relative group">
-            Accueil
-            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[var(--gold-vivid)] transition-all group-hover:w-full" />
-          </a>
-          <Link href="/le-programme" className="hover:text-[var(--gold-vivid)] transition-colors relative group">
-            Le Programme
-            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[var(--gold-vivid)] transition-all group-hover:w-full" />
-          </Link>
-          <Link href="/offres" className="hover:text-[var(--gold-vivid)] transition-colors relative group">
-            Offres
-            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[var(--gold-vivid)] transition-all group-hover:w-full" />
-          </Link>
-        </div>
-
-        <Link 
-          href="/candidature-vip"
-          className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)] border-b-2 border-[var(--gold-vivid)] pb-1 hover:text-[var(--gold-vivid)] transition-all"
-        >
-          Candidature VIP
-        </Link>
-      </div>
-    </nav>
   );
 };
 
@@ -685,30 +613,6 @@ const PromiseSection = () => (
       </div>
     </div>
   </section>
-);
-
-const Footer = () => (
-  <footer className="py-32 px-6 border-t border-[var(--border-subtle)] bg-white relative overflow-hidden">
-    <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-16 relative z-10">
-      <div className="flex flex-col items-center md:items-start gap-6">
-        <div className="flex items-center gap-2 group cursor-default">
-          <div className="w-6 h-6 bg-[var(--emerald-deep)] rounded-full group-hover:bg-[var(--gold-vivid)] transition-colors" />
-          <span className="font-black tracking-[0.5em] text-[12px] text-[var(--emerald-deep)] uppercase group-hover:text-[var(--gold-vivid)] transition-colors">L'ÉCHO IA</span>
-        </div>
-        <p className="text-[9px] uppercase tracking-[0.4em] text-[var(--text-secondary)]/40 text-center md:text-left leading-loose">
-          Le futur de l'accompagnement est plus humain, car mieux automatisé.<br />
-          Créé en France · © 2026
-        </p>
-      </div>
-      
-      <div className="flex gap-16 text-[9px] font-black uppercase tracking-[0.5em] text-[var(--text-secondary)]/40">
-        {['Privacy', 'Legal', 'Contact'].map((item) => (
-          <a key={item} href="#" className="hover:text-[var(--gold-vivid)] transition-colors">{item}</a>
-        ))}
-      </div>
-    </div>
-    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-[var(--gold-vivid)]/20 to-transparent" />
-  </footer>
 );
 
 export default function App() {
