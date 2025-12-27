@@ -242,21 +242,28 @@ export default function FormationPage() {
             >
               <div className="text-[8px] font-black tracking-[0.4em] text-[var(--text-secondary)]/40 mb-6 uppercase">🥉 OFFRE 01</div>
               <h3 className="text-2xl font-light uppercase tracking-tighter mb-2">Fondations</h3>
-              <p className="text-xs text-[var(--text-secondary)] italic mb-8">Construire votre système en autonomie</p>
+              <p className="text-xs text-[var(--text-secondary)] italic mb-6">Construire votre infrastructure en autonomie</p>
               
-              <div className="mb-8">
+              <div className="mb-6">
                 <div className="text-4xl font-bold text-[var(--emerald-deep)] tracking-tighter">997 €</div>
+                <div className="text-sm text-[var(--text-secondary)] mt-2">ou <span className="font-bold text-[var(--emerald-deep)]">3 × 349 €</span></div>
               </div>
 
-              <ul className="space-y-3 mb-8 text-xs text-[var(--text-secondary)]">
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] shrink-0 mt-0.5" /> Accès aux 5 phases en vidéo</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] shrink-0 mt-0.5" /> Templates & blueprints prêts à l'emploi</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] shrink-0 mt-0.5" /> Communauté d'entraide entre pairs</li>
+              <ul className="space-y-3 mb-6 text-xs text-[var(--text-secondary)]">
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] shrink-0 mt-0.5" /> Accès aux 5 modules vidéo</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] shrink-0 mt-0.5" /> Templates et blueprints prêts à l'emploi</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] shrink-0 mt-0.5" /> Communauté d'entraide</li>
               </ul>
 
-              <div className="space-y-2 mb-8 text-[10px] text-[var(--text-secondary)]">
+              <div className="space-y-2 mb-6 text-[10px] text-[var(--text-secondary)]">
                 <p>👉 100 % asynchrone</p>
                 <p>👉 Aucun support individuel</p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10">
+                <p className="text-[10px] text-[var(--emerald-deep)] font-medium leading-relaxed">
+                  <strong>Le socle indispensable</strong> sur lequel reposent toutes les autres offres, y compris le VIP.
+                </p>
               </div>
             </motion.div>
 
@@ -268,22 +275,28 @@ export default function FormationPage() {
               <div className="absolute top-4 right-4"><Sparkles className="w-4 h-4 text-[var(--gold-vivid)]" /></div>
               <div className="text-[8px] font-black tracking-[0.4em] text-[var(--gold-vivid)]/60 mb-6 uppercase">🥈 OFFRE 02 • POPULAIRE</div>
               <h3 className="text-2xl font-light uppercase tracking-tighter mb-2">Accélération</h3>
-              <p className="text-xs text-[var(--text-secondary)] italic mb-8">Avancer sans se perdre</p>
+              <p className="text-xs text-[var(--text-secondary)] italic mb-6">Avancer sans se perdre</p>
               
-              <div className="mb-8">
+              <div className="mb-6">
                 <div className="text-4xl font-bold text-[var(--gold-vivid)] tracking-tighter">1 490 €</div>
+                <div className="text-sm text-[var(--text-secondary)] mt-2">ou <span className="font-bold text-[var(--gold-vivid)]">3 × 530 €</span></div>
               </div>
 
-              <ul className="space-y-3 mb-8 text-xs text-[var(--text-secondary)]">
+              <ul className="space-y-3 mb-6 text-xs text-[var(--text-secondary)]">
                 <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-vivid)] shrink-0 mt-0.5" /> Tout FONDATIONS</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-vivid)] shrink-0 mt-0.5" /> 1 live collectif / mois (Q&A)</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-vivid)] shrink-0 mt-0.5" /> 1 live collectif par mois (Q&A)</li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-vivid)] shrink-0 mt-0.5" /> Cadre clair, temps mutualisé</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-vivid)] shrink-0 mt-0.5" /> Questions envoyées à l'avance</li>
               </ul>
 
-              <div className="space-y-2 mb-8 text-[10px] text-[var(--text-secondary)]">
-                <p>👉 Pour les profils non techniques</p>
+              <div className="space-y-2 mb-6 text-[10px] text-[var(--text-secondary)]">
+                <p>👉 Idéal pour les profils non techniques</p>
                 <p>👉 Sans surcharge mentale</p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[var(--gold-vivid)]/10 border border-[var(--gold-vivid)]/20">
+                <p className="text-[10px] text-[var(--gold-vivid)] font-medium leading-relaxed">
+                  <strong>Le meilleur équilibre</strong> entre autonomie et accompagnement.
+                </p>
               </div>
             </motion.div>
 
@@ -295,22 +308,29 @@ export default function FormationPage() {
               <div className="absolute top-4 right-4"><Lock className="w-5 h-5 text-[var(--gold-vivid)] animate-pulse" /></div>
               <div className="text-[8px] font-black tracking-[0.4em] text-[var(--gold-vivid)]/60 mb-6 uppercase">🥇 OFFRE 03 • VIP</div>
               <h3 className="text-2xl font-light uppercase tracking-tighter mb-2 italic text-[var(--gold-sand)]">VIP Architecte</h3>
-              <p className="text-xs text-white/70 italic mb-8">Libération maximale – Clé en main</p>
+              <p className="text-xs text-white/70 italic mb-6">Libération maximale – Clé en main</p>
               
-              <div className="mb-8">
+              <div className="mb-6">
                 <div className="text-4xl font-bold text-[var(--gold-sand)] tracking-tighter">À partir de 3 490 €</div>
+                <div className="text-sm text-white/70 mt-2">Prix défini après audit, <span className="font-bold text-white">aucune surprise</span></div>
               </div>
 
-              <ul className="space-y-3 mb-8 text-xs text-white/80">
+              <ul className="space-y-3 mb-6 text-xs text-white/80">
                 <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] shrink-0 mt-0.5" /> Tout ACCÉLÉRATION</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] shrink-0 mt-0.5" /> <strong>Installation complète</strong> de votre système cœur</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] shrink-0 mt-0.5" /> Création de votre premier outil signature</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] shrink-0 mt-0.5" /> <strong>Installation complète</strong> de votre infrastructure cœur</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] shrink-0 mt-0.5" /> Création de votre outil signature</li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] shrink-0 mt-0.5" /> Audit technique 1:1 (1h)</li>
               </ul>
 
-              <div className="space-y-2 mb-8 text-[10px] text-white/70">
-                <p>👉 Limité à 2 clients / mois</p>
+              <div className="space-y-2 mb-6 text-[10px] text-white/70">
+                <p>👉 Limité à 2 clients par mois</p>
                 <p>👉 Sur candidature uniquement</p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20">
+                <p className="text-[10px] text-white font-medium leading-relaxed">
+                  Pensé pour celles et ceux qui veulent <strong>déléguer sans perdre le contrôle</strong>.
+                </p>
               </div>
             </motion.div>
           </div>
