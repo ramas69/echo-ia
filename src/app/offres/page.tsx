@@ -20,69 +20,67 @@ import { cn } from '@/lib/utils';
 const offers = [
   {
     id: "fondations",
-    badge: "🥉 AUTONOMIE",
+    badge: "🥉 OFFRE 01",
     title: "Fondations",
-    subtitle: "Je construis moi-même",
-    desc: "Pour ceux qui veulent comprendre et mettre en place par eux-mêmes.",
+    subtitle: "Construire votre infrastructure en autonomie",
     price: "997 €",
+    priceMonthly: "ou 3 × 349 €",
     includes: [
-      "5 phases complètes en vidéo",
-      "Templates & blueprints",
-      "Communauté d'entraide",
-      "Mises à jour incluses"
+      "Accès aux 5 modules vidéo",
+      "Templates et blueprints prêts à l'emploi",
+      "Communauté d'entraide"
     ],
     notes: [
-      "100% asynchrone",
-      "Aucun support individuel",
-      "À votre rythme"
+      "100 % asynchrone",
+      "Aucun support individuel"
     ],
+    baseline: "Le socle indispensable sur lequel reposent toutes les autres offres, y compris le VIP.",
     cta: "Commencer",
     link: "/le-programme",
     color: "emerald"
   },
   {
     id: "acceleration",
-    badge: "🥈 ÉQUILIBRE",
+    badge: "🥈 OFFRE 02",
     title: "Accélération",
-    subtitle: "Guidé sans être seul",
-    desc: "Pour ceux qui veulent avancer vite avec un cadre clair.",
+    subtitle: "Avancer sans se perdre",
     price: "1 490 €",
+    priceMonthly: "ou 3 × 530 €",
     popular: true,
     includes: [
-      "Tout Fondations",
-      "1 live / mois (Q&A)",
-      "Replays disponibles",
-      "Questions prioritaires"
+      "Tout FONDATIONS",
+      "1 live collectif par mois (Q&A)",
+      "Cadre clair, temps mutualisé"
     ],
     notes: [
-      "Temps mutualisé",
-      "Pas de support 1:1",
-      "Cadre structuré"
+      "Idéal pour les profils non techniques",
+      "Sans surcharge mentale"
     ],
+    baseline: "Le meilleur équilibre entre autonomie et accompagnement.",
     cta: "Rejoindre",
     link: "https://tally.so/r/acceleration-echo-ia",
     color: "gold"
   },
   {
     id: "vip",
-    badge: "🥇 LIBÉRATION",
+    badge: "🥇 OFFRE 03",
     title: "VIP Architecte",
-    subtitle: "Fait avec moi, pour moi",
-    desc: "Pour ceux qui veulent un système opérationnel sans y passer du temps.",
+    subtitle: "Libération maximale – Clé en main",
     price: "À partir de 3 490 €",
+    priceMonthly: "Prix défini après audit, aucune surprise",
     vip: true,
     includes: [
-      "Tout Accélération",
-      "Installation complète",
-      "Outil signature créé",
-      "Audit technique 1:1"
+      "Tout ACCÉLÉRATION",
+      "Installation complète de votre infrastructure cœur",
+      "Création de votre outil signature",
+      "Audit technique 1:1 (1h)"
     ],
     notes: [
-      "Limité à 2/mois",
-      "Sur candidature",
-      "Périmètre cadré"
+      "Limité à 2 clients par mois",
+      "Sur candidature uniquement"
     ],
-    cta: "Candidater",
+    baseline: "Pensé pour celles et ceux qui veulent déléguer sans perdre le contrôle.",
+    cta: "Postuler",
     link: "/candidature-vip",
     color: "dark"
   }
@@ -186,12 +184,6 @@ export default function OffresPage() {
                     </p>
                   </div>
 
-                  <p className={cn(
-                    "text-sm leading-relaxed mb-6",
-                    offer.color === "dark" ? "text-white/80" : "text-black/60"
-                  )}>
-                    {offer.desc}
-                  </p>
 
                   {/* Prix */}
                   <div className="mb-8">
@@ -202,6 +194,12 @@ export default function OffresPage() {
                       offer.color === "dark" && "text-[var(--gold-sand)]"
                     )}>
                       {offer.price}
+                    </div>
+                    <div className={cn(
+                      "text-sm mt-2",
+                      offer.color === "dark" ? "text-white/70" : "text-black/60"
+                    )}>
+                      {offer.priceMonthly}
                     </div>
                   </div>
 
@@ -231,7 +229,7 @@ export default function OffresPage() {
                   </div>
 
                   {/* À savoir */}
-                  <div className="mb-8">
+                  <div className="mb-6">
                     <div className={cn(
                       "text-[10px] font-black uppercase tracking-widest mb-3",
                       offer.color === "dark" ? "text-white/40" : "text-black/30"
@@ -244,11 +242,28 @@ export default function OffresPage() {
                           "text-xs flex items-start gap-2",
                           offer.color === "dark" ? "text-white/60" : "text-black/50"
                         )}>
-                          <span>•</span>
+                          <span>👉</span>
                           <span>{note}</span>
                         </li>
                       ))}
                     </ul>
+                  </div>
+
+                  {/* Baseline */}
+                  <div className={cn(
+                    "p-4 rounded-xl mb-8",
+                    offer.color === "emerald" && "bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10",
+                    offer.color === "gold" && "bg-[var(--gold-vivid)]/10 border border-[var(--gold-vivid)]/20",
+                    offer.color === "dark" && "bg-white/10 backdrop-blur-sm border border-white/20"
+                  )}>
+                    <p className={cn(
+                      "text-[10px] font-medium leading-relaxed",
+                      offer.color === "emerald" && "text-[var(--emerald-deep)]",
+                      offer.color === "gold" && "text-[var(--gold-vivid)]",
+                      offer.color === "dark" && "text-white"
+                    )}>
+                      {offer.baseline}
+                    </p>
                   </div>
 
                   {/* CTA */}

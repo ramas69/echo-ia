@@ -474,17 +474,21 @@ const Pricing = () => (
         >
           <div className="text-[8px] font-black tracking-[0.4em] text-[var(--text-secondary)]/40 mb-8 uppercase">🥉 OFFRE 01</div>
           <h3 className="text-2xl font-light uppercase tracking-tighter mb-2 text-[var(--text-primary)]">Fondations</h3>
-          <p className="text-xs text-[var(--text-secondary)] italic mb-8">Construire votre infrastructure en autonomie</p>
-          <div className="text-4xl font-bold text-[var(--emerald-deep)] mb-12 tracking-tighter">997 €</div>
+          <p className="text-xs text-[var(--text-secondary)] italic mb-6">Construire votre infrastructure en autonomie</p>
           
-          <ul className="space-y-4 mb-12 flex-grow text-xs text-[var(--text-secondary)]">
+          <div className="mb-6">
+            <div className="text-4xl font-bold text-[var(--emerald-deep)] tracking-tighter">997 €</div>
+            <div className="text-sm text-[var(--text-secondary)] mt-2">ou <span className="font-bold text-[var(--emerald-deep)]">3 × 349 €</span></div>
+          </div>
+          
+          <ul className="space-y-4 mb-8 flex-grow text-xs text-[var(--text-secondary)]">
             <li className="flex items-start gap-3">
               <CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] flex-shrink-0 mt-0.5" />
               <span>Accès aux 5 modules vidéo</span>
             </li>
             <li className="flex items-start gap-3">
               <CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] flex-shrink-0 mt-0.5" />
-              <span>Templates & blueprints prêts à l'emploi</span>
+              <span>Templates et blueprints prêts à l'emploi</span>
             </li>
             <li className="flex items-start gap-3">
               <CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] flex-shrink-0 mt-0.5" />
@@ -492,9 +496,15 @@ const Pricing = () => (
             </li>
           </ul>
           
-          <div className="space-y-3 mb-8 text-[10px] text-[var(--text-secondary)]">
+          <div className="space-y-3 mb-6 text-[10px] text-[var(--text-secondary)]">
             <p>👉 100 % asynchrone</p>
             <p>👉 Aucun support individuel</p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10 mb-8">
+            <p className="text-[10px] text-[var(--emerald-deep)] font-medium leading-relaxed">
+              <strong>Le socle indispensable</strong> sur lequel reposent toutes les autres offres, y compris le VIP.
+            </p>
           </div>
           
           <Link href="/le-programme" className="block w-full">
@@ -513,17 +523,21 @@ const Pricing = () => (
           
           <div className="text-[8px] font-black tracking-[0.4em] text-[var(--gold-vivid)]/60 mb-8 uppercase">🥈 OFFRE 02 • POPULAIRE</div>
           <h3 className="text-2xl font-light uppercase tracking-tighter mb-2 text-[var(--text-primary)]">Accélération</h3>
-          <p className="text-xs text-[var(--text-secondary)] italic mb-8">Avancer sans se perdre</p>
-          <div className="text-4xl font-bold text-[var(--gold-vivid)] mb-12 tracking-tighter">1 490 €</div>
+          <p className="text-xs text-[var(--text-secondary)] italic mb-6">Avancer sans se perdre</p>
           
-          <ul className="space-y-4 mb-12 flex-grow text-xs text-[var(--text-secondary)]">
+          <div className="mb-6">
+            <div className="text-4xl font-bold text-[var(--gold-vivid)] tracking-tighter">1 490 €</div>
+            <div className="text-sm text-[var(--text-secondary)] mt-2">ou <span className="font-bold text-[var(--gold-vivid)]">3 × 530 €</span></div>
+          </div>
+          
+          <ul className="space-y-4 mb-8 flex-grow text-xs text-[var(--text-secondary)]">
             <li className="flex items-start gap-3">
               <CheckCircle2 className="w-4 h-4 text-[var(--gold-vivid)] flex-shrink-0 mt-0.5" />
               <span>Tout FONDATIONS</span>
             </li>
             <li className="flex items-start gap-3">
               <CheckCircle2 className="w-4 h-4 text-[var(--gold-vivid)] flex-shrink-0 mt-0.5" />
-              <span>1 live collectif / mois (Q&A)</span>
+              <span>1 live collectif par mois (Q&A)</span>
             </li>
             <li className="flex items-start gap-3">
               <CheckCircle2 className="w-4 h-4 text-[var(--gold-vivid)] flex-shrink-0 mt-0.5" />
@@ -531,9 +545,15 @@ const Pricing = () => (
             </li>
           </ul>
           
-          <div className="space-y-3 mb-8 text-[10px] text-[var(--text-secondary)]">
-            <p>👉 Pour les profils non techniques</p>
+          <div className="space-y-3 mb-6 text-[10px] text-[var(--text-secondary)]">
+            <p>👉 Idéal pour les profils non techniques</p>
             <p>👉 Sans surcharge mentale</p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-[var(--gold-vivid)]/10 border border-[var(--gold-vivid)]/20 mb-8">
+            <p className="text-[10px] text-[var(--gold-vivid)] font-medium leading-relaxed">
+              <strong>Le meilleur équilibre</strong> entre autonomie et accompagnement.
+            </p>
           </div>
           
           <a href="https://tally.so/r/acceleration-echo-ia" target="_blank" rel="noopener noreferrer" className="block w-full">
@@ -552,10 +572,14 @@ const Pricing = () => (
           
           <div className="text-[8px] font-black tracking-[0.4em] text-[var(--gold-vivid)]/60 mb-8 uppercase">🥇 OFFRE 03 • VIP</div>
           <h3 className="text-2xl font-light uppercase tracking-tighter mb-2 italic text-[var(--gold-sand)] drop-shadow-sm">VIP Architecte</h3>
-          <p className="text-xs text-white/70 italic mb-8">Libération maximale – Clé en main</p>
-          <div className="text-4xl font-bold text-[var(--gold-sand)] mb-12 tracking-tighter">À partir de 3 490 €</div>
+          <p className="text-xs text-white/70 italic mb-6">Libération maximale – Clé en main</p>
           
-          <ul className="space-y-4 mb-12 flex-grow text-xs text-white/80">
+          <div className="mb-6">
+            <div className="text-4xl font-bold text-[var(--gold-sand)] tracking-tighter">À partir de 3 490 €</div>
+            <div className="text-sm text-white/70 mt-2">Prix défini après audit, <span className="font-bold text-white">aucune surprise</span></div>
+          </div>
+          
+          <ul className="space-y-4 mb-8 flex-grow text-xs text-white/80">
             <li className="flex items-start gap-3">
               <CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] flex-shrink-0 mt-0.5" />
               <span>Tout ACCÉLÉRATION</span>
@@ -566,7 +590,7 @@ const Pricing = () => (
             </li>
             <li className="flex items-start gap-3">
               <CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] flex-shrink-0 mt-0.5" />
-              <span>Création de votre 1er outil signature</span>
+              <span>Création de votre outil signature</span>
             </li>
             <li className="flex items-start gap-3">
               <CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] flex-shrink-0 mt-0.5" />
@@ -574,9 +598,15 @@ const Pricing = () => (
             </li>
           </ul>
           
-          <div className="space-y-3 mb-8 text-[10px] text-white/70">
-            <p>👉 Limité à 2 clients / mois</p>
+          <div className="space-y-3 mb-6 text-[10px] text-white/70">
+            <p>👉 Limité à 2 clients par mois</p>
             <p>👉 Sur candidature uniquement</p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 mb-8">
+            <p className="text-[10px] text-white font-medium leading-relaxed">
+              Pensé pour celles et ceux qui veulent <strong>déléguer sans perdre le contrôle</strong>.
+            </p>
           </div>
           
           <Link href="/candidature-vip" className="block w-full">
