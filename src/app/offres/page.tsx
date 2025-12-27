@@ -20,7 +20,8 @@ const personas = [
     id: "alex",
     name: "Alex",
     role: "L'Architecte",
-    avatar: "🧑‍💻",
+    avatar: "▢",
+    avatarMeaning: "Structure & Fondations",
     quote: "Je veux maîtriser le système",
     personality: [
       "Aime comprendre chaque détail",
@@ -36,7 +37,8 @@ const personas = [
     id: "sarah",
     name: "Sarah",
     role: "La Stratège",
-    avatar: "👩‍💼",
+    avatar: "◆",
+    avatarMeaning: "Équilibre & Harmonie",
     quote: "Je veux un équilibre autonomie/soutien",
     personality: [
       "Aime être guidée sans être seule",
@@ -53,7 +55,8 @@ const personas = [
     id: "thomas",
     name: "Thomas",
     role: "Le Visionnaire",
-    avatar: "🧔‍♂️",
+    avatar: "▲",
+    avatarMeaning: "Vision & Sommet",
     quote: "Je veux la libération totale",
     personality: [
       "Préfère déléguer l'exécution",
@@ -157,7 +160,7 @@ export default function OffresPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="pt-48 pb-20 px-6">
+      <section className="pt-48 pb-12 px-6">
         <div className="max-w-6xl mx-auto text-center">
           <Badge className="mb-8">Trouvez votre chemin</Badge>
           
@@ -183,9 +186,9 @@ export default function OffresPage() {
       </section>
 
       {/* LES 3 PERSONAS */}
-      <section className="py-20 px-6 bg-white">
+      <section className="pt-12 pb-16 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-8">
             <h2 className="text-4xl md:text-5xl font-light uppercase tracking-tighter mb-4">
               Avec qui vous <span className="font-serif italic text-[var(--emerald-deep)]">identifiez-vous</span> ?
             </h2>
@@ -194,7 +197,7 @@ export default function OffresPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-20">
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
             {personas.map((persona, i) => {
               const PersonaIcon = persona.icon;
               const isSelected = selectedPersona === persona.id;
@@ -227,8 +230,8 @@ export default function OffresPage() {
 
                   {/* Avatar */}
                   <div className="text-center mb-6">
-                    <div className="w-24 h-24 mx-auto rounded-full bg-[var(--emerald-deep)]/10 flex items-center justify-center text-5xl mb-4">
-                      {persona.avatar}
+                    <div className="w-32 h-32 mx-auto rounded-2xl bg-gradient-to-br from-[var(--emerald-deep)]/10 to-[var(--emerald-deep)]/5 flex items-center justify-center text-7xl font-light mb-4 border border-[var(--emerald-deep)]/10">
+                      <span className="text-[var(--emerald-deep)]">{persona.avatar}</span>
                     </div>
                     <h3 className="text-2xl font-light uppercase tracking-tight mb-1">
                       {persona.name}
