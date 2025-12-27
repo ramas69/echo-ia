@@ -1,132 +1,121 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   CheckCircle2, 
-  ArrowLeft, 
-  Sparkles, 
-  Lock,
-  Target,
+  ArrowRight,
   Brain,
   Zap,
   Rocket,
-  ArrowRight,
-  Clock,
+  User,
   Users,
-  Gauge,
+  Crown,
+  Target,
+  Compass,
+  Sparkles,
+  Clock,
   TrendingUp,
-  Shield
+  Shield,
+  DoorOpen
 } from 'lucide-react';
-import { Badge, SophisticatedButton, TopBar, Navbar, Footer } from '@/components/SharedUI';
+import { Badge, TopBar, Navbar, Footer } from '@/components/SharedUI';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
-// Questions du quiz
-const quiz = {
-  questions: [
-    {
-      id: 1,
-      question: "Comment préférez-vous apprendre ?",
-      icon: Brain,
-      options: [
-        { 
-          id: "autonome", 
-          label: "En totale autonomie",
-          subtitle: "Je préfère découvrir par moi-même",
-          score: { fondations: 3, acceleration: 1, vip: 0 }
-        },
-        { 
-          id: "guide", 
-          label: "Avec un cadre et des réponses",
-          subtitle: "J'aime être guidé sans être seul",
-          score: { fondations: 1, acceleration: 3, vip: 1 }
-        },
-        { 
-          id: "delegue", 
-          label: "Clé en main",
-          subtitle: "Je veux que ce soit fait pour moi",
-          score: { fondations: 0, acceleration: 1, vip: 3 }
-        }
-      ]
-    },
-    {
-      id: 2,
-      question: "Quel est votre niveau technique ?",
-      icon: Gauge,
-      options: [
-        { 
-          id: "debutant", 
-          label: "Débutant",
-          subtitle: "Les outils techniques me font peur",
-          score: { fondations: 0, acceleration: 2, vip: 3 }
-        },
-        { 
-          id: "intermediaire", 
-          label: "Intermédiaire",
-          subtitle: "Je me débrouille avec un peu d'aide",
-          score: { fondations: 2, acceleration: 3, vip: 1 }
-        },
-        { 
-          id: "expert", 
-          label: "À l'aise",
-          subtitle: "J'aime comprendre et implémenter",
-          score: { fondations: 3, acceleration: 2, vip: 0 }
-        }
-      ]
-    },
-    {
-      id: 3,
-      question: "Combien de temps pouvez-vous y consacrer ?",
-      icon: Clock,
-      options: [
-        { 
-          id: "beaucoup", 
-          label: "Plusieurs heures par semaine",
-          subtitle: "Je veux vraiment m'y investir",
-          score: { fondations: 3, acceleration: 2, vip: 0 }
-        },
-        { 
-          id: "moyen", 
-          label: "1-2 heures par semaine",
-          subtitle: "Je veux avancer à mon rythme",
-          score: { fondations: 2, acceleration: 3, vip: 1 }
-        },
-        { 
-          id: "peu", 
-          label: "Le strict minimum",
-          subtitle: "Mon temps est très limité",
-          score: { fondations: 0, acceleration: 1, vip: 3 }
-        }
-      ]
-    },
-    {
-      id: 4,
-      question: "Quelle est votre priorité absolue ?",
-      icon: Target,
-      options: [
-        { 
-          id: "apprendre", 
-          label: "Comprendre chaque détail",
-          subtitle: "Je veux maîtriser le système",
-          score: { fondations: 3, acceleration: 2, vip: 0 }
-        },
-        { 
-          id: "equilibre", 
-          label: "Avancer sans me perdre",
-          subtitle: "Un bon compromis autonomie/soutien",
-          score: { fondations: 1, acceleration: 3, vip: 1 }
-        },
-        { 
-          id: "resultats", 
-          label: "Obtenir des résultats rapides",
-          subtitle: "Je veux un système opérationnel maintenant",
-          score: { fondations: 0, acceleration: 1, vip: 3 }
-        }
-      ]
-    }
-  ]
-};
+// Les 3 Personas (Concept 4)
+const personas = [
+  {
+    id: "alex",
+    name: "Alex",
+    role: "L'Architecte",
+    avatar: "🧑‍💻",
+    quote: "Je veux maîtriser le système",
+    personality: [
+      "Aime comprendre chaque détail",
+      "Préfère implémenter soi-même",
+      "Besoin de contrôle total"
+    ],
+    values: ["Autonomie", "Maîtrise", "Contrôle"],
+    offer: "fondations",
+    color: "emerald",
+    icon: Brain
+  },
+  {
+    id: "sarah",
+    name: "Sarah",
+    role: "La Stratège",
+    avatar: "👩‍💼",
+    quote: "Je veux un équilibre autonomie/soutien",
+    personality: [
+      "Aime être guidée sans être seule",
+      "Cherche un cadre rassurant",
+      "Veut poser des questions"
+    ],
+    values: ["Équilibre", "Guidance", "Clarté"],
+    offer: "acceleration",
+    color: "gold",
+    icon: Zap,
+    popular: true
+  },
+  {
+    id: "thomas",
+    name: "Thomas",
+    role: "Le Visionnaire",
+    avatar: "🧔‍♂️",
+    quote: "Je veux la libération totale",
+    personality: [
+      "Préfère déléguer l'exécution",
+      "Cherche des résultats rapides",
+      "Valorise son temps au maximum"
+    ],
+    values: ["Délégation", "Rapidité", "Excellence"],
+    offer: "vip",
+    color: "dark",
+    icon: Rocket
+  }
+];
+
+// Les 3 Portes (Concept 2)
+const doors = [
+  {
+    id: "solo",
+    title: "SOLO",
+    subtitle: "Je veux tout faire",
+    description: "Vous",
+    icon: User,
+    metaphor: "Le chemin de l'apprentissage",
+    details: "Vous construisez votre système pierre par pierre, avec une compréhension profonde de chaque élément.",
+    offer: "fondations",
+    color: "emerald",
+    emoji: "🚪"
+  },
+  {
+    id: "accompagne",
+    title: "ACCOMPAGNÉ",
+    subtitle: "Je veux un guide",
+    description: "Vous + Nous",
+    icon: Users,
+    metaphor: "Le chemin de la co-construction",
+    details: "Vous avancez avec un cadre clair et des réponses à vos questions, sans jamais être seul.",
+    offer: "acceleration",
+    color: "gold",
+    emoji: "🚪",
+    popular: true
+  },
+  {
+    id: "premium",
+    title: "PREMIUM",
+    subtitle: "Je délègue tout",
+    description: "Nous pour vous",
+    icon: Crown,
+    metaphor: "Le chemin de la libération",
+    details: "Nous installons votre système complet pendant que vous vous concentrez sur votre expertise.",
+    offer: "vip",
+    color: "dark",
+    emoji: "🚪"
+  }
+];
 
 const offers = [
   {
@@ -148,9 +137,7 @@ const offers = [
     baseline: "Le socle indispensable sur lequel reposent toutes les autres offres, y compris le VIP.",
     cta: "Commencer",
     link: "/le-programme",
-    color: "emerald",
-    icon: Brain,
-    perfectFor: "Vous êtes autonome, à l'aise avec les outils, et vous voulez comprendre chaque détail."
+    color: "emerald"
   },
   {
     id: "acceleration",
@@ -172,9 +159,7 @@ const offers = [
     baseline: "Le meilleur équilibre entre autonomie et accompagnement.",
     cta: "Rejoindre",
     link: "https://tally.so/r/acceleration-echo-ia",
-    color: "gold",
-    icon: Zap,
-    perfectFor: "Vous voulez être guidé sans être seul, avec un cadre rassurant et des réponses à vos questions."
+    color: "gold"
   },
   {
     id: "vip",
@@ -197,74 +182,22 @@ const offers = [
     baseline: "Pensé pour celles et ceux qui veulent déléguer sans perdre le contrôle.",
     cta: "Postuler",
     link: "/candidature-vip",
-    color: "dark",
-    icon: Rocket,
-    perfectFor: "Votre temps est précieux et vous voulez un système opérationnel sans y passer vos soirées."
+    color: "dark"
   }
 ];
 
 export default function OffresPage() {
   const [mounted, setMounted] = useState(false);
-  const [quizStarted, setQuizStarted] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [showResults, setShowResults] = useState(false);
-  const [scores, setScores] = useState({ fondations: 0, acceleration: 0, vip: 0 });
-  const [recommendedOffer, setRecommendedOffer] = useState<string | null>(null);
+  const [selectedPersona, setSelectedPersona] = useState<string | null>(null);
+  const [hoveredDoor, setHoveredDoor] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const handleAnswer = (optionId: string) => {
-    const question = quiz.questions[currentQuestion];
-    const option = question.options.find(o => o.id === optionId);
-    
-    if (option) {
-      // Enregistrer la réponse
-      setAnswers(prev => ({ ...prev, [question.id]: optionId }));
-      
-      // Mettre à jour les scores
-      setScores(prev => ({
-        fondations: prev.fondations + option.score.fondations,
-        acceleration: prev.acceleration + option.score.acceleration,
-        vip: prev.vip + option.score.vip
-      }));
-      
-      // Passer à la question suivante ou afficher les résultats
-      if (currentQuestion < quiz.questions.length - 1) {
-        setTimeout(() => {
-          setCurrentQuestion(prev => prev + 1);
-        }, 300);
-      } else {
-        // Calculer l'offre recommandée
-        setTimeout(() => {
-          const newScores = {
-            fondations: scores.fondations + option.score.fondations,
-            acceleration: scores.acceleration + option.score.acceleration,
-            vip: scores.vip + option.score.vip
-          };
-          
-          const maxScore = Math.max(newScores.fondations, newScores.acceleration, newScores.vip);
-          let recommended = 'acceleration'; // Par défaut
-          
-          if (newScores.fondations === maxScore) recommended = 'fondations';
-          else if (newScores.vip === maxScore) recommended = 'vip';
-          
-          setRecommendedOffer(recommended);
-          setShowResults(true);
-        }, 300);
-      }
-    }
-  };
-
-  const resetQuiz = () => {
-    setQuizStarted(false);
-    setCurrentQuestion(0);
-    setAnswers({});
-    setShowResults(false);
-    setScores({ fondations: 0, acceleration: 0, vip: 0 });
-    setRecommendedOffer(null);
+  const scrollToOffer = (offerId: string) => {
+    const element = document.getElementById(`offer-${offerId}`);
+    element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
   if (!mounted) return null;
@@ -275,9 +208,9 @@ export default function OffresPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="pt-48 pb-12 px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          <Badge className="mb-8">Trouvez votre chemin</Badge>
+      <section className="pt-48 pb-20 px-6">
+        <div className="max-w-6xl mx-auto text-center">
+          <Badge className="mb-8">Deux approches pour trouver votre offre</Badge>
           
           <motion.h1 
             className="text-5xl md:text-7xl font-light uppercase tracking-tighter mb-6"
@@ -289,314 +222,373 @@ export default function OffresPage() {
           </motion.h1>
           
           <motion.p 
-            className="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed"
+            className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed mb-12"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            {!quizStarted && !showResults ? 
-              "Répondez à 4 questions pour découvrir l'offre parfaitement adaptée à vos besoins." :
-              showResults ? 
-              "Voici votre recommandation personnalisée !" :
-              `Question ${currentQuestion + 1} sur ${quiz.questions.length}`
-            }
+            Explorez les deux méthodes ci-dessous pour découvrir l'offre <br />
+            parfaitement adaptée à votre situation et vos objectifs.
           </motion.p>
         </div>
       </section>
 
-      {/* Quiz or Results */}
-      <section className="pb-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          
-          {!quizStarted && !showResults && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center"
-            >
-              <div className="max-w-3xl mx-auto">
-                <div className="p-12 rounded-3xl glass-card border border-[var(--border-subtle)]">
-                  <div className="w-24 h-24 rounded-full bg-[var(--emerald-deep)]/10 flex items-center justify-center mx-auto mb-8">
-                    <Target className="w-12 h-12 text-[var(--emerald-deep)]" />
+      {/* CONCEPT 4 : LES 3 PERSONAS */}
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="mb-6 border-[var(--emerald-deep)]/30">Concept 1 : Identification</Badge>
+            <h2 className="text-4xl md:text-5xl font-light uppercase tracking-tighter mb-4">
+              Avec qui vous <span className="font-serif italic text-[var(--emerald-deep)]">identifiez-vous</span> ?
+            </h2>
+            <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+              Trois profils, trois façons d'aborder votre transformation.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {personas.map((persona, i) => {
+              const PersonaIcon = persona.icon;
+              const isSelected = selectedPersona === persona.id;
+              
+              return (
+                <motion.div
+                  key={persona.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  onClick={() => {
+                    setSelectedPersona(persona.id);
+                    setTimeout(() => scrollToOffer(persona.offer), 300);
+                  }}
+                  className={cn(
+                    "relative p-8 rounded-3xl border-2 cursor-pointer transition-all",
+                    isSelected 
+                      ? "border-[var(--gold-vivid)] shadow-2xl bg-gradient-to-br from-white to-[var(--gold-vivid)]/5 scale-105" 
+                      : "border-[var(--border-subtle)] bg-white hover:border-[var(--emerald-deep)]/30 hover:shadow-xl"
+                  )}
+                  whileHover={{ y: -5 }}
+                >
+                  {persona.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <Badge className="bg-[var(--gold-vivid)] text-white border-[var(--gold-vivid)]">
+                        Le plus choisi
+                      </Badge>
+                    </div>
+                  )}
+
+                  {/* Avatar */}
+                  <div className="text-center mb-6">
+                    <div className="w-24 h-24 mx-auto rounded-full bg-[var(--emerald-deep)]/10 flex items-center justify-center text-5xl mb-4">
+                      {persona.avatar}
+                    </div>
+                    <h3 className="text-2xl font-light uppercase tracking-tight mb-1">
+                      {persona.name}
+                    </h3>
+                    <div className="text-sm font-serif italic text-[var(--gold-vivid)]">
+                      {persona.role}
+                    </div>
                   </div>
-                  
-                  <h2 className="text-3xl font-light mb-6">Commençons par mieux vous connaître</h2>
-                  <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
-                    4 questions simples pour identifier l'offre qui matchera <br />
-                    parfaitement avec votre situation et vos objectifs.
-                  </p>
-                  
+
+                  {/* Quote */}
+                  <div className="mb-6 p-4 rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10">
+                    <p className="text-sm font-medium text-[var(--emerald-deep)] text-center italic">
+                      "{persona.quote}"
+                    </p>
+                  </div>
+
+                  {/* Personality */}
+                  <div className="mb-6">
+                    <div className="text-[10px] font-black uppercase tracking-widest mb-3 text-[var(--text-secondary)]/40">
+                      Profil
+                    </div>
+                    <ul className="space-y-2">
+                      {persona.personality.map((trait, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+                          <CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] shrink-0 mt-0.5" />
+                          <span>{trait}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Values */}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {persona.values.map((value, idx) => (
+                      <span 
+                        key={idx}
+                        className="px-3 py-1 rounded-full bg-[var(--emerald-deep)]/10 text-[10px] font-bold uppercase tracking-wider text-[var(--emerald-deep)]"
+                      >
+                        {value}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* CTA */}
                   <button
-                    onClick={() => setQuizStarted(true)}
-                    className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[var(--emerald-deep)] text-white font-bold uppercase tracking-wider hover:bg-[var(--emerald-deep)]/90 transition-all shadow-lg"
+                    className={cn(
+                      "w-full py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2",
+                      isSelected
+                        ? "bg-[var(--gold-vivid)] text-white shadow-lg"
+                        : "bg-[var(--emerald-deep)] text-white hover:bg-[var(--emerald-deep)]/90"
+                    )}
                   >
-                    Démarrer le quiz
+                    {isSelected ? "Sélectionné" : "C'est moi"}
+                    {isSelected && <CheckCircle2 className="w-5 h-5" />}
+                    {!isSelected && <ArrowRight className="w-5 h-5" />}
+                  </button>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Séparateur visuel */}
+      <div className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="h-px bg-gradient-to-r from-transparent via-[var(--border-subtle)] to-transparent" />
+          <div className="text-center py-8">
+            <p className="text-sm font-black uppercase tracking-[0.3em] text-[var(--text-secondary)]/40">
+              Ou
+            </p>
+          </div>
+          <div className="h-px bg-gradient-to-r from-transparent via-[var(--border-subtle)] to-transparent" />
+        </div>
+      </div>
+
+      {/* CONCEPT 2 : LES 3 PORTES */}
+      <section className="py-20 px-6 bg-gradient-to-br from-[var(--emerald-deep)]/5 to-transparent">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="mb-6 border-[var(--gold-vivid)]/30">Concept 2 : Métaphore</Badge>
+            <h2 className="text-4xl md:text-5xl font-light uppercase tracking-tighter mb-4">
+              Choisissez <span className="font-serif italic text-[var(--gold-vivid)]">votre chemin</span>
+            </h2>
+            <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+              Trois portes, trois destinations. Quelle porte ouvrirez-vous ?
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {doors.map((door, i) => {
+              const DoorIcon = door.icon;
+              const isHovered = hoveredDoor === door.id;
+              
+              return (
+                <motion.div
+                  key={door.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.15 }}
+                  onMouseEnter={() => setHoveredDoor(door.id)}
+                  onMouseLeave={() => setHoveredDoor(null)}
+                  onClick={() => scrollToOffer(door.offer)}
+                  className={cn(
+                    "relative p-10 rounded-3xl border-2 cursor-pointer transition-all group",
+                    isHovered
+                      ? "border-[var(--gold-vivid)] shadow-2xl bg-white scale-105"
+                      : "border-[var(--border-subtle)] bg-white/80 hover:bg-white"
+                  )}
+                >
+                  {door.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <Badge className="bg-[var(--gold-vivid)] text-white border-[var(--gold-vivid)]">
+                        Équilibre parfait
+                      </Badge>
+                    </div>
+                  )}
+
+                  {/* Door Visual */}
+                  <div className="text-center mb-6">
+                    <motion.div 
+                      className="text-7xl mb-4"
+                      animate={{
+                        rotateY: isHovered ? 30 : 0,
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {door.emoji}
+                    </motion.div>
+                    
+                    <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--emerald-deep)]/10 flex items-center justify-center mb-4">
+                      <DoorIcon className="w-8 h-8 text-[var(--emerald-deep)]" />
+                    </div>
+
+                    <h3 className="text-3xl font-light uppercase tracking-tight mb-2">
+                      {door.title}
+                    </h3>
+                    <p className="text-sm text-[var(--text-secondary)] italic mb-1">
+                      {door.subtitle}
+                    </p>
+                    <div className="text-lg font-medium text-[var(--emerald-deep)]">
+                      {door.description}
+                    </div>
+                  </div>
+
+                  {/* Metaphor */}
+                  <div className="mb-6 p-4 rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10">
+                    <p className="text-xs font-bold uppercase tracking-wider text-[var(--emerald-deep)] mb-2 text-center">
+                      {door.metaphor}
+                    </p>
+                    <p className="text-sm text-[var(--text-secondary)] text-center leading-relaxed">
+                      {door.details}
+                    </p>
+                  </div>
+
+                  {/* CTA */}
+                  <button
+                    className={cn(
+                      "w-full py-4 rounded-full font-bold text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2",
+                      isHovered
+                        ? "bg-[var(--gold-vivid)] text-white shadow-lg"
+                        : "bg-[var(--emerald-deep)] text-white group-hover:bg-[var(--emerald-deep)]/90"
+                    )}
+                  >
+                    <DoorOpen className={cn(
+                      "w-5 h-5 transition-transform",
+                      isHovered && "rotate-12"
+                    )} />
+                    Entrer
                     <ArrowRight className="w-5 h-5" />
                   </button>
-                </div>
-              </div>
-            </motion.div>
-          )}
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
-          {quizStarted && !showResults && (
-            <AnimatePresence mode="wait">
+      {/* Les 3 offres détaillées */}
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-light uppercase tracking-tighter mb-4">
+              Les <span className="font-serif italic text-[var(--emerald-deep)]">offres</span> en détail
+            </h2>
+            <p className="text-lg text-[var(--text-secondary)]">
+              Toutes donnent accès au même système. Seul le niveau d'accompagnement change.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {offers.map((offer, i) => (
               <motion.div
-                key={currentQuestion}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.3 }}
-                className="max-w-4xl mx-auto"
+                key={offer.id}
+                id={`offer-${offer.id}`}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className={cn(
+                  "relative p-8 rounded-3xl border-2 transition-all",
+                  offer.popular
+                    ? "border-[var(--gold-vivid)] shadow-xl bg-gradient-to-br from-white to-[var(--gold-vivid)]/5"
+                    : "border-[var(--border-subtle)] bg-white"
+                )}
               >
-                {/* Progress */}
-                <div className="mb-12">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-sm font-bold text-[var(--text-secondary)]">
-                      Question {currentQuestion + 1}/{quiz.questions.length}
-                    </span>
-                    <span className="text-sm text-[var(--text-secondary)]">
-                      {Math.round(((currentQuestion + 1) / quiz.questions.length) * 100)}%
-                    </span>
-                  </div>
-                  <div className="h-2 rounded-full bg-gray-200">
-                    <motion.div
-                      className="h-full rounded-full bg-[var(--emerald-deep)]"
-                      initial={{ width: 0 }}
-                      animate={{ 
-                        width: `${((currentQuestion + 1) / quiz.questions.length) * 100}%` 
-                      }}
-                      transition={{ duration: 0.5 }}
-                    />
-                  </div>
-                </div>
-
-                {/* Question */}
-                <div className="p-12 rounded-3xl glass-card border border-[var(--border-subtle)] mb-8">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-16 h-16 rounded-full bg-[var(--emerald-deep)]/10 flex items-center justify-center shrink-0">
-                      {React.createElement(quiz.questions[currentQuestion].icon, {
-                        className: "w-8 h-8 text-[var(--emerald-deep)]"
-                      })}
+                {offer.popular && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <div className="px-6 py-2 rounded-full bg-[var(--gold-vivid)] text-white text-xs font-black uppercase tracking-wider flex items-center gap-2">
+                      <Sparkles className="w-4 h-4" />
+                      Le plus choisi
                     </div>
-                    <h3 className="text-3xl font-light">
-                      {quiz.questions[currentQuestion].question}
-                    </h3>
+                  </div>
+                )}
+
+                <div className="text-[8px] font-black tracking-[0.4em] text-[var(--text-secondary)]/40 mb-4 uppercase">
+                  {offer.badge}
+                </div>
+
+                <h3 className="text-2xl font-light uppercase tracking-tight mb-2">
+                  {offer.title}
+                </h3>
+                <p className="text-sm text-[var(--text-secondary)] italic mb-6">
+                  {offer.subtitle}
+                </p>
+
+                <div className="mb-6">
+                  <div className={cn(
+                    "text-3xl font-bold tracking-tight",
+                    offer.popular ? "text-[var(--gold-vivid)]" : "text-[var(--emerald-deep)]"
+                  )}>
+                    {offer.price}
+                  </div>
+                  <div className="text-sm text-[var(--text-secondary)] mt-2">
+                    {offer.priceMonthly}
                   </div>
                 </div>
 
-                {/* Options */}
-                <div className="grid gap-6">
-                  {quiz.questions[currentQuestion].options.map((option, idx) => (
-                    <motion.button
-                      key={option.id}
-                      onClick={() => handleAnswer(option.id)}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.1 }}
-                      whileHover={{ scale: 1.02, x: 10 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="p-8 rounded-3xl glass-card border-2 border-[var(--border-subtle)] hover:border-[var(--gold-vivid)]/40 hover:shadow-xl transition-all text-left group"
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="text-xl font-medium text-[var(--text-primary)] mb-2 group-hover:text-[var(--emerald-deep)] transition-colors">
-                            {option.label}
-                          </div>
-                          <div className="text-sm text-[var(--text-secondary)]">
-                            {option.subtitle}
-                          </div>
-                        </div>
-                        <ArrowRight className="w-6 h-6 text-[var(--text-secondary)] group-hover:text-[var(--gold-vivid)] transition-colors shrink-0 ml-4" />
-                      </div>
-                    </motion.button>
-                  ))}
+                <div className="mb-6">
+                  <div className="text-[10px] font-black uppercase tracking-widest mb-4 text-[var(--text-secondary)]/40">
+                    Inclus
+                  </div>
+                  <ul className="space-y-3">
+                    {offer.includes.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-sm">
+                        <CheckCircle2 className={cn(
+                          "w-4 h-4 shrink-0 mt-0.5",
+                          offer.popular ? "text-[var(--gold-vivid)]" : "text-[var(--emerald-deep)]"
+                        )} />
+                        <span className="text-[var(--text-secondary)]">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+
+                <div className="mb-6">
+                  <div className="text-[10px] font-black uppercase tracking-widest mb-3 text-[var(--text-secondary)]/40">
+                    À savoir
+                  </div>
+                  <ul className="space-y-2">
+                    {offer.notes.map((note, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
+                        <span>👉</span>
+                        <span>{note}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className={cn(
+                  "p-4 rounded-xl mb-8",
+                  offer.popular
+                    ? "bg-[var(--gold-vivid)]/10 border border-[var(--gold-vivid)]/20"
+                    : "bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10"
+                )}>
+                  <p className={cn(
+                    "text-[10px] font-medium leading-relaxed",
+                    offer.popular ? "text-[var(--gold-vivid)]" : "text-[var(--emerald-deep)]"
+                  )}>
+                    {offer.baseline}
+                  </p>
+                </div>
+
+                {offer.link.startsWith('http') ? (
+                  <a href={offer.link} target="_blank" rel="noopener noreferrer" className="block">
+                    <button className={cn(
+                      "w-full py-4 rounded-full font-bold text-sm uppercase tracking-wider transition-all",
+                      offer.popular
+                        ? "bg-[var(--gold-vivid)] text-white hover:bg-[var(--gold-vivid)]/90 shadow-lg"
+                        : "bg-[var(--emerald-deep)] text-white hover:bg-[var(--emerald-deep)]/90"
+                    )}>
+                      {offer.cta}
+                    </button>
+                  </a>
+                ) : (
+                  <Link href={offer.link} className="block">
+                    <button className={cn(
+                      "w-full py-4 rounded-full font-bold text-sm uppercase tracking-wider transition-all",
+                      offer.popular
+                        ? "bg-[var(--gold-vivid)] text-white hover:bg-[var(--gold-vivid)]/90 shadow-lg"
+                        : "bg-[var(--emerald-deep)] text-white hover:bg-[var(--emerald-deep)]/90"
+                    )}>
+                      {offer.cta}
+                    </button>
+                  </Link>
+                )}
               </motion.div>
-            </AnimatePresence>
-          )}
-
-          {showResults && recommendedOffer && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
-              {/* Résultat personnalisé */}
-              <div className="max-w-4xl mx-auto mb-12">
-                <div className="p-12 rounded-3xl bg-gradient-to-br from-[var(--emerald-deep)] to-[var(--emerald-deep)]/90 text-white relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--gold-vivid)]/10 rounded-full blur-3xl" />
-                  
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="w-16 h-16 rounded-full bg-[var(--gold-vivid)]/20 flex items-center justify-center">
-                        <Sparkles className="w-8 h-8 text-[var(--gold-sand)]" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-black uppercase tracking-wider text-[var(--gold-sand)] mb-1">
-                          Votre recommandation
-                        </div>
-                        <h2 className="text-4xl font-light">
-                          {offers.find(o => o.id === recommendedOffer)?.title}
-                        </h2>
-                      </div>
-                    </div>
-                    
-                    <p className="text-xl text-white/90 mb-8 leading-relaxed">
-                      {offers.find(o => o.id === recommendedOffer)?.perfectFor}
-                    </p>
-
-                    <div className="flex flex-wrap gap-4">
-                      <button
-                        onClick={() => {
-                          const element = document.getElementById(`offer-${recommendedOffer}`);
-                          element?.scrollIntoView({ behavior: 'smooth' });
-                        }}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[var(--emerald-deep)] font-bold uppercase tracking-wider hover:bg-white/90 transition-all"
-                      >
-                        Voir l'offre
-                        <ArrowRight className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={resetQuiz}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-white/30 text-white font-bold uppercase tracking-wider hover:bg-white/10 transition-all"
-                      >
-                        Refaire le quiz
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Toutes les offres avec recommandation */}
-              <div className="grid md:grid-cols-3 gap-6">
-                {offers.map((offer, i) => {
-                  const isRecommended = offer.id === recommendedOffer;
-                  const OfferIcon = offer.icon;
-                  
-                  return (
-                    <motion.div
-                      key={offer.id}
-                      id={`offer-${offer.id}`}
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      className={cn(
-                        "relative p-8 rounded-3xl border-2 transition-all",
-                        isRecommended 
-                          ? "border-[var(--gold-vivid)] shadow-2xl bg-gradient-to-br from-white to-[var(--gold-vivid)]/5" 
-                          : "border-[var(--border-subtle)] bg-white hover:border-[var(--gold-vivid)]/40"
-                      )}
-                    >
-                      {isRecommended && (
-                        <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                          <div className="px-6 py-2 rounded-full bg-[var(--gold-vivid)] text-white text-xs font-black uppercase tracking-wider flex items-center gap-2">
-                            <Sparkles className="w-4 h-4" />
-                            Recommandé pour vous
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="text-[8px] font-black tracking-[0.4em] text-[var(--text-secondary)]/40 mb-4 uppercase">
-                        {offer.badge}
-                      </div>
-                      
-                      <div className="w-12 h-12 rounded-2xl bg-[var(--emerald-deep)]/10 flex items-center justify-center mb-6">
-                        <OfferIcon className="w-6 h-6 text-[var(--emerald-deep)]" />
-                      </div>
-
-                      <h3 className="text-2xl font-light uppercase tracking-tight mb-2">
-                        {offer.title}
-                      </h3>
-                      <p className="text-sm text-[var(--text-secondary)] italic mb-6">
-                        {offer.subtitle}
-                      </p>
-
-                      <div className="mb-6">
-                        <div className={cn(
-                          "text-3xl font-bold tracking-tight",
-                          isRecommended ? "text-[var(--gold-vivid)]" : "text-[var(--emerald-deep)]"
-                        )}>
-                          {offer.price}
-                        </div>
-                        <div className="text-sm text-[var(--text-secondary)] mt-2">
-                          {offer.priceMonthly}
-                        </div>
-                      </div>
-
-                      <div className="mb-6">
-                        <div className="text-[10px] font-black uppercase tracking-widest mb-4 text-[var(--text-secondary)]/40">
-                          Inclus
-                        </div>
-                        <ul className="space-y-3">
-                          {offer.includes.map((item, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm">
-                              <CheckCircle2 className={cn(
-                                "w-4 h-4 shrink-0 mt-0.5",
-                                isRecommended ? "text-[var(--gold-vivid)]" : "text-[var(--emerald-deep)]"
-                              )} />
-                              <span className="text-[var(--text-secondary)]">{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className="mb-6">
-                        <div className="text-[10px] font-black uppercase tracking-widest mb-3 text-[var(--text-secondary)]/40">
-                          À savoir
-                        </div>
-                        <ul className="space-y-2">
-                          {offer.notes.map((note, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
-                              <span>👉</span>
-                              <span>{note}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className={cn(
-                        "p-4 rounded-xl mb-8",
-                        isRecommended 
-                          ? "bg-[var(--gold-vivid)]/10 border border-[var(--gold-vivid)]/20"
-                          : "bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10"
-                      )}>
-                        <p className={cn(
-                          "text-[10px] font-medium leading-relaxed",
-                          isRecommended ? "text-[var(--gold-vivid)]" : "text-[var(--emerald-deep)]"
-                        )}>
-                          {offer.baseline}
-                        </p>
-                      </div>
-
-                      {offer.link.startsWith('http') ? (
-                        <a href={offer.link} target="_blank" rel="noopener noreferrer" className="block">
-                          <button className={cn(
-                            "w-full py-4 rounded-full font-bold text-sm uppercase tracking-wider transition-all",
-                            isRecommended
-                              ? "bg-[var(--gold-vivid)] text-white hover:bg-[var(--gold-vivid)]/90 shadow-lg"
-                              : "bg-[var(--emerald-deep)] text-white hover:bg-[var(--emerald-deep)]/90"
-                          )}>
-                            {offer.cta}
-                          </button>
-                        </a>
-                      ) : (
-                        <Link href={offer.link} className="block">
-                          <button className={cn(
-                            "w-full py-4 rounded-full font-bold text-sm uppercase tracking-wider transition-all",
-                            isRecommended
-                              ? "bg-[var(--gold-vivid)] text-white hover:bg-[var(--gold-vivid)]/90 shadow-lg"
-                              : "bg-[var(--emerald-deep)] text-white hover:bg-[var(--emerald-deep)]/90"
-                          )}>
-                            {offer.cta}
-                          </button>
-                        </Link>
-                      )}
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          )}
-
+            ))}
+          </div>
         </div>
       </section>
 
