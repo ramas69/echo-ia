@@ -178,155 +178,288 @@ const QualificationSection = () => (
 );
 
 const ImmersionSection = () => {
-  const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = React.useState<number>(0);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
 
   const benefits = [
     {
       title: "Vos clients trouvent des réponses",
       subtitle: "sans vous solliciter",
-      icon: ShieldCheck
+      icon: CheckCircle2,
+      color: "emerald"
     },
     {
       title: "Votre message continue de circuler",
       subtitle: "quand vous êtes hors ligne",
-      icon: Zap
+      icon: Zap,
+      color: "gold"
     },
     {
       title: "Vos paiements, contrats et accès",
       subtitle: "se gèrent seuls",
-      icon: CheckCircle2
+      icon: ShieldCheck,
+      color: "emerald"
     },
     {
       title: "Votre agenda se remplit",
       subtitle: "avec des personnes déjà alignées",
-      icon: Target
+      icon: Target,
+      color: "gold"
     },
     {
       title: "Votre énergie",
       subtitle: "est protégée",
-      icon: Sparkles
+      icon: Sparkles,
+      color: "emerald"
     }
   ];
 
+  // Auto-rotate through benefits
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % benefits.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [benefits.length]);
+
+  // Mouse move effect
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      setMousePosition({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
+    }
+  };
+
   return (
-    <section className="py-32 px-6 bg-[var(--bg-primary)] relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--gold-vivid)]/20 to-transparent" />
+    <section 
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      className="py-32 px-6 bg-[var(--bg-primary)] relative overflow-hidden"
+    >
+      {/* Animated background particles */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-[var(--gold-vivid)]/20"
+            initial={{ 
+              x: Math.random() * 100 + '%',
+              y: Math.random() * 100 + '%',
+            }}
+            animate={{
+              x: [
+                Math.random() * 100 + '%',
+                Math.random() * 100 + '%',
+                Math.random() * 100 + '%'
+              ],
+              y: [
+                Math.random() * 100 + '%',
+                Math.random() * 100 + '%',
+                Math.random() * 100 + '%'
+              ],
+              scale: [1, 1.5, 1],
+              opacity: [0.2, 0.5, 0.2]
+            }}
+            transition={{
+              duration: 10 + i * 2,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Mouse follower glow */}
+      <motion.div
+        className="absolute w-96 h-96 rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 70%)',
+          left: mousePosition.x - 192,
+          top: mousePosition.y - 192,
+        }}
+        animate={{
+          opacity: [0.3, 0.5, 0.3]
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
       
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
-        <div className="text-center mb-24">
+        <motion.div 
+          className="text-center mb-20"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
           <Badge className="mb-8 border-[var(--gold-vivid)]/30">IMMERSION</Badge>
           <h2 className="text-5xl md:text-7xl font-light uppercase tracking-tighter text-balance mb-6 leading-tight">
             À quoi ressemble votre quotidien <br />
             <span className="font-serif italic text-[var(--gold-vivid)]">après ?</span>
           </h2>
-        </div>
+        </motion.div>
         
-        {/* Grid de bénéfices */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-1 mb-20">
-          {benefits.map((benefit, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08, duration: 0.6 }}
-              viewport={{ once: true }}
-              onMouseEnter={() => setHoveredIndex(i)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className="relative group"
-            >
-              <div className={`
-                relative h-full min-h-[320px] p-8 
-                border-l border-[var(--border-subtle)]
-                transition-all duration-700
-                ${hoveredIndex === i 
-                  ? 'bg-gradient-to-b from-[var(--emerald-deep)] to-[var(--emerald-deep)]/95' 
-                  : 'bg-transparent hover:bg-[var(--bg-secondary)]'
-                }
-              `}>
-                {/* Number indicator */}
-                <div className={`
-                  absolute top-8 left-8 text-[10px] font-black tracking-[0.5em] 
-                  transition-all duration-700
-                  ${hoveredIndex === i 
-                    ? 'text-[var(--gold-vivid)]' 
-                    : 'text-[var(--text-secondary)]/20'
-                  }
-                `}>
-                  0{i + 1}
-                </div>
-
-                {/* Icon */}
-                <div className="absolute top-8 right-8">
+        {/* Main interactive display */}
+        <div className="mb-20">
+          <div className="relative min-h-[400px] flex items-center justify-center">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0, scale: 0.8, rotateY: -90 }}
+                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                exit={{ opacity: 0, scale: 0.8, rotateY: 90 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="text-center max-w-4xl"
+              >
+                {/* Animated icon */}
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1, rotate: 360 }}
+                  transition={{ 
+                    scale: { duration: 0.5, ease: "backOut" },
+                    rotate: { duration: 0.8, ease: "easeOut" }
+                  }}
+                  className="mb-12 inline-flex"
+                >
                   <div className={`
-                    w-12 h-12 rounded-full flex items-center justify-center
-                    transition-all duration-700
-                    ${hoveredIndex === i 
-                      ? 'bg-[var(--gold-vivid)]/20 backdrop-blur-sm scale-110' 
-                      : 'bg-[var(--emerald-deep)]/5'
+                    w-32 h-32 rounded-full flex items-center justify-center
+                    ${benefits[activeIndex].color === 'gold' 
+                      ? 'bg-[var(--gold-vivid)]/10 border-2 border-[var(--gold-vivid)]/30' 
+                      : 'bg-[var(--emerald-deep)]/10 border-2 border-[var(--emerald-deep)]/30'
                     }
+                    shadow-2xl backdrop-blur-sm
                   `}>
-                    {React.createElement(benefit.icon, {
-                      className: `w-6 h-6 transition-all duration-700 ${
-                        hoveredIndex === i 
-                          ? 'text-[var(--gold-sand)]' 
-                          : 'text-[var(--emerald-deep)]/40'
+                    {React.createElement(benefits[activeIndex].icon, {
+                      className: `w-16 h-16 ${
+                        benefits[activeIndex].color === 'gold'
+                          ? 'text-[var(--gold-vivid)]'
+                          : 'text-[var(--emerald-deep)]'
                       }`
                     })}
                   </div>
-                </div>
+                </motion.div>
 
-                {/* Content */}
-                <div className="flex flex-col justify-end h-full pt-24">
-                  <div className="space-y-2">
-                    <h3 className={`
-                      text-lg font-light leading-tight transition-all duration-700
-                      ${hoveredIndex === i 
-                        ? 'text-white' 
-                        : 'text-[var(--text-primary)]'
-                      }
-                    `}>
-                      {benefit.title}
-                    </h3>
-                    <p className={`
-                      text-base font-light italic transition-all duration-700
-                      ${hoveredIndex === i 
-                        ? 'text-[var(--gold-sand)]' 
-                        : 'text-[var(--text-secondary)]'
-                      }
-                    `}>
-                      {benefit.subtitle}
-                    </p>
-                  </div>
+                {/* Animated text */}
+                <motion.h3 
+                  className="text-4xl md:text-5xl font-light mb-6 text-[var(--text-primary)]"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  {benefits[activeIndex].title}
+                </motion.h3>
+                <motion.p 
+                  className="text-2xl md:text-3xl font-light italic text-[var(--gold-vivid)]"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  {benefits[activeIndex].subtitle}
+                </motion.p>
 
-                  {/* Hover indicator */}
-                  <div className={`
-                    mt-8 w-full h-0.5 transition-all duration-700
-                    ${hoveredIndex === i 
-                      ? 'bg-[var(--gold-vivid)]' 
-                      : 'bg-transparent'
-                    }
-                  `} />
-                </div>
+                {/* Animated underline */}
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="h-1 w-32 mx-auto mt-12 bg-gradient-to-r from-transparent via-[var(--gold-vivid)] to-transparent"
+                />
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-                {/* Gradient overlay on hover */}
-                {hoveredIndex === i && (
+          {/* Navigation dots */}
+          <div className="flex justify-center gap-3 mt-12">
+            {benefits.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveIndex(i)}
+                className="group relative"
+              >
+                <div className={`
+                  w-3 h-3 rounded-full transition-all duration-300
+                  ${activeIndex === i 
+                    ? 'bg-[var(--gold-vivid)] scale-125' 
+                    : 'bg-gray-300 hover:bg-[var(--gold-vivid)]/50'
+                  }
+                `} />
+                {activeIndex === i && (
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="absolute inset-0 bg-gradient-to-t from-[var(--emerald-deep)] via-transparent to-transparent pointer-events-none"
+                    layoutId="activeDot"
+                    className="absolute inset-0 rounded-full border-2 border-[var(--gold-vivid)]"
+                    style={{ scale: 1.8 }}
                   />
                 )}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick preview cards */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-20">
+          {benefits.map((benefit, i) => (
+            <motion.button
+              key={i}
+              onClick={() => setActiveIndex(i)}
+              whileHover={{ scale: 1.05, y: -5 }}
+              whileTap={{ scale: 0.95 }}
+              className={`
+                p-6 rounded-2xl border-2 transition-all duration-300
+                ${activeIndex === i
+                  ? 'bg-[var(--emerald-deep)] border-[var(--gold-vivid)] shadow-2xl'
+                  : 'glass-card border-[var(--border-subtle)] hover:border-[var(--gold-vivid)]/40'
+                }
+              `}
+            >
+              <div className="flex flex-col items-center gap-3">
+                {React.createElement(benefit.icon, {
+                  className: `w-8 h-8 ${
+                    activeIndex === i
+                      ? 'text-[var(--gold-sand)]'
+                      : 'text-[var(--emerald-deep)]/40'
+                  }`
+                })}
+                <span className={`
+                  text-xs font-bold text-center
+                  ${activeIndex === i
+                    ? 'text-white'
+                    : 'text-[var(--text-secondary)]'
+                  }
+                `}>
+                  {benefit.title.split(' ').slice(0, 2).join(' ')}...
+                </span>
               </div>
-            </motion.div>
+            </motion.button>
           ))}
         </div>
         
         {/* Conclusion */}
-        <div className="text-center">
+        <motion.div 
+          className="text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
           <div className="max-w-4xl mx-auto">
-            <div className="h-px w-24 bg-gradient-to-r from-transparent via-[var(--gold-vivid)] to-transparent mx-auto mb-12" />
+            <motion.div 
+              className="h-px w-24 bg-gradient-to-r from-transparent via-[var(--gold-vivid)] to-transparent mx-auto mb-12"
+              animate={{
+                scaleX: [1, 1.5, 1],
+                opacity: [0.5, 1, 0.5]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
             <p className="text-3xl md:text-5xl font-light text-[var(--text-primary)] leading-tight">
               Pendant que vous accompagnez, <br />
               <span className="font-serif italic text-[var(--gold-vivid)]">
@@ -334,7 +467,7 @@ const ImmersionSection = () => {
               </span>
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
