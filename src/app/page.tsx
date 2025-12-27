@@ -678,11 +678,13 @@ const PromiseSection = () => (
         Votre système est prêt à être construit. <br />
         Il ne manque qu'une chose : votre décision.
       </p>
-      <Link href="/offres">
-        <SophisticatedButton>
-          Choisir mon chemin
-        </SophisticatedButton>
-      </Link>
+      <div className="flex justify-center">
+        <Link href="/offres">
+          <SophisticatedButton>
+            Choisir mon chemin
+          </SophisticatedButton>
+        </Link>
+      </div>
     </div>
   </section>
 );
