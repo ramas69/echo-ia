@@ -295,12 +295,16 @@ const ImmersionSection = () => (
 
 const DemoLive = () => {
   const [isPlaying, setIsPlaying] = React.useState(false);
+  const [hasError, setHasError] = React.useState(false);
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
   const handlePlayVideo = () => {
     if (videoRef.current) {
       if (videoRef.current.paused) {
-        videoRef.current.play();
+        videoRef.current.play().catch(err => {
+          console.error("Erreur de lecture vidéo:", err);
+          setHasError(true);
+        });
         setIsPlaying(true);
       } else {
         videoRef.current.pause();
@@ -330,7 +334,10 @@ const DemoLive = () => {
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
             onEnded={() => setIsPlaying(false)}
+            onError={() => setHasError(true)}
             controls={isPlaying}
+            preload="metadata"
+            playsInline
           >
             <source src="/video-echo.mp4" type="video/mp4" />
             Votre navigateur ne supporte pas la lecture de vidéos.
@@ -340,16 +347,33 @@ const DemoLive = () => {
             <>
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--emerald-deep)]/40 to-transparent z-10 opacity-60 group-hover:opacity-20 transition-opacity" />
               <div className="absolute inset-0 z-15 flex items-center justify-center">
-                <div className="w-24 h-24 rounded-full bg-[var(--gold-vivid)] flex items-center justify-center shadow-[0_0_50px_rgba(212,175,55,0.4)] group-hover:scale-110 group-hover:shadow-[0_0_70px_rgba(212,175,55,0.6)] transition-all duration-500">
-                  <Play className="w-10 h-10 text-white fill-white" />
-                </div>
+                {hasError ? (
+                  <div className="text-center px-6">
+                    <div className="text-white/80 text-sm mb-4">
+                      La vidéo n'a pas pu être chargée
+                    </div>
+                    <a 
+                      href="/video-echo.mp4" 
+                      download
+                      className="px-6 py-3 bg-[var(--gold-vivid)] text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-[var(--gold-vivid)]/90 transition-colors inline-block"
+                    >
+                      Télécharger la vidéo
+                    </a>
+                  </div>
+                ) : (
+                  <div className="w-24 h-24 rounded-full bg-[var(--gold-vivid)] flex items-center justify-center shadow-[0_0_50px_rgba(212,175,55,0.4)] group-hover:scale-110 group-hover:shadow-[0_0_70px_rgba(212,175,55,0.6)] transition-all duration-500">
+                    <Play className="w-10 h-10 text-white fill-white" />
+                  </div>
+                )}
               </div>
-              <div className="absolute bottom-8 left-8 z-20">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/80 text-balance">DÉMO LIVE // LIBÉRATION DU TEMPS</span>
+              {!hasError && (
+                <div className="absolute bottom-8 left-8 z-20">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/80 text-balance">DÉMO LIVE // LIBÉRATION DU TEMPS</span>
+                  </div>
                 </div>
-              </div>
+              )}
             </>
           )}
         </motion.div>
