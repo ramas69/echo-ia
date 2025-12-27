@@ -142,14 +142,23 @@ const offers = [
 export default function OffresPage() {
   const [mounted, setMounted] = useState(false);
   const [selectedPersona, setSelectedPersona] = useState<string | null>(null);
+  const [highlightedOffer, setHighlightedOffer] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const scrollToOffer = (offerId: string) => {
-    const element = document.getElementById(`offer-${offerId}`);
-    element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setHighlightedOffer(offerId);
+    setTimeout(() => {
+      const element = document.getElementById(`offer-${offerId}`);
+      element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+    
+    // Retirer le highlight après 5 secondes
+    setTimeout(() => {
+      setHighlightedOffer(null);
+    }, 5000);
   };
 
   if (!mounted) return null;
@@ -308,28 +317,54 @@ export default function OffresPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {offers.map((offer, i) => (
-              <motion.div
-                key={offer.id}
-                id={`offer-${offer.id}`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className={cn(
-                  "relative p-8 rounded-3xl border-2 transition-all",
-                  offer.popular
-                    ? "border-[var(--gold-vivid)] shadow-xl bg-gradient-to-br from-white to-[var(--gold-vivid)]/5"
-                    : "border-[var(--border-subtle)] bg-white"
-                )}
-              >
-                {offer.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <div className="px-6 py-2 rounded-full bg-[var(--gold-vivid)] text-white text-xs font-black uppercase tracking-wider flex items-center gap-2">
-                      <Sparkles className="w-4 h-4" />
-                      Le plus choisi
+            {offers.map((offer, i) => {
+              const isHighlighted = highlightedOffer === offer.id;
+              
+              return (
+                <motion.div
+                  key={offer.id}
+                  id={`offer-${offer.id}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: 0,
+                    scale: isHighlighted ? [1, 1.05, 1.05, 1] : 1,
+                  }}
+                  transition={{ 
+                    delay: i * 0.1,
+                    scale: { duration: 0.6, times: [0, 0.3, 0.7, 1] }
+                  }}
+                  className={cn(
+                    "relative p-8 rounded-3xl border-2 transition-all duration-500",
+                    isHighlighted && "ring-4 ring-[var(--gold-vivid)]/50 shadow-2xl",
+                    offer.popular
+                      ? "border-[var(--gold-vivid)] shadow-xl bg-gradient-to-br from-white to-[var(--gold-vivid)]/5"
+                      : isHighlighted 
+                      ? "border-[var(--gold-vivid)] bg-gradient-to-br from-white to-[var(--gold-vivid)]/5"
+                      : "border-[var(--border-subtle)] bg-white"
+                  )}
+                >
+                  {isHighlighted && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                      <motion.div 
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="px-6 py-2 rounded-full bg-[var(--gold-vivid)] text-white text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg"
+                      >
+                        <Sparkles className="w-4 h-4" />
+                        Votre choix
+                      </motion.div>
                     </div>
-                  </div>
-                )}
+                  )}
+                  
+                  {offer.popular && !isHighlighted && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                      <div className="px-6 py-2 rounded-full bg-[var(--gold-vivid)] text-white text-xs font-black uppercase tracking-wider flex items-center gap-2">
+                        <Sparkles className="w-4 h-4" />
+                        Le plus choisi
+                      </div>
+                    </div>
+                  )}
 
                 <div className="text-[8px] font-black tracking-[0.4em] text-[var(--text-secondary)]/40 mb-4 uppercase">
                   {offer.badge}
@@ -423,7 +458,8 @@ export default function OffresPage() {
                   </Link>
                 )}
               </motion.div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
