@@ -238,7 +238,7 @@ const ImmersionSection = () => {
     <section 
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className="py-32 px-6 bg-[var(--bg-primary)] relative overflow-hidden"
+      className="py-16 px-6 bg-[var(--bg-primary)] relative overflow-hidden"
     >
       {/* Animated background particles */}
       <div className="absolute inset-0 pointer-events-none">
@@ -294,21 +294,21 @@ const ImmersionSection = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <motion.div 
-          className="text-center mb-20"
+          className="text-center mb-12"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <Badge className="mb-8 border-[var(--gold-vivid)]/30">IMMERSION</Badge>
-          <h2 className="text-5xl md:text-7xl font-light uppercase tracking-tighter text-balance mb-6 leading-tight">
+          <Badge className="mb-6 border-[var(--gold-vivid)]/30">IMMERSION</Badge>
+          <h2 className="text-5xl md:text-7xl font-light uppercase tracking-tighter text-balance mb-4 leading-tight">
             À quoi ressemble votre quotidien <br />
             <span className="font-serif italic text-[var(--gold-vivid)]">après ?</span>
           </h2>
         </motion.div>
         
         {/* Main interactive display */}
-        <div className="mb-20">
-          <div className="relative min-h-[400px] flex items-center justify-center">
+        <div className="mb-12">
+          <div className="relative min-h-[300px] flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeIndex}
@@ -326,10 +326,10 @@ const ImmersionSection = () => {
                     scale: { duration: 0.5, ease: "backOut" },
                     rotate: { duration: 0.8, ease: "easeOut" }
                   }}
-                  className="mb-12 inline-flex"
+                  className="mb-8 inline-flex"
                 >
                   <div className={`
-                    w-32 h-32 rounded-full flex items-center justify-center
+                    w-24 h-24 rounded-full flex items-center justify-center
                     ${benefits[activeIndex].color === 'gold' 
                       ? 'bg-[var(--gold-vivid)]/10 border-2 border-[var(--gold-vivid)]/30' 
                       : 'bg-[var(--emerald-deep)]/10 border-2 border-[var(--emerald-deep)]/30'
@@ -337,7 +337,7 @@ const ImmersionSection = () => {
                     shadow-2xl backdrop-blur-sm
                   `}>
                     {React.createElement(benefits[activeIndex].icon, {
-                      className: `w-16 h-16 ${
+                      className: `w-12 h-12 ${
                         benefits[activeIndex].color === 'gold'
                           ? 'text-[var(--gold-vivid)]'
                           : 'text-[var(--emerald-deep)]'
@@ -369,14 +369,14 @@ const ImmersionSection = () => {
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ delay: 0.4, duration: 0.6 }}
-                  className="h-1 w-32 mx-auto mt-12 bg-gradient-to-r from-transparent via-[var(--gold-vivid)] to-transparent"
+                  className="h-1 w-32 mx-auto mt-8 bg-gradient-to-r from-transparent via-[var(--gold-vivid)] to-transparent"
                 />
               </motion.div>
             </AnimatePresence>
           </div>
 
           {/* Navigation dots */}
-          <div className="flex justify-center gap-3 mt-12">
+          <div className="flex justify-center gap-3 mt-8">
             {benefits.map((_, i) => (
               <button
                 key={i}
@@ -403,7 +403,7 @@ const ImmersionSection = () => {
         </div>
 
         {/* Quick preview cards */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-20">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
           {benefits.map((benefit, i) => (
             <motion.button
               key={i}
@@ -449,7 +449,7 @@ const ImmersionSection = () => {
         >
           <div className="max-w-4xl mx-auto">
             <motion.div 
-              className="h-px w-24 bg-gradient-to-r from-transparent via-[var(--gold-vivid)] to-transparent mx-auto mb-12"
+              className="h-px w-24 bg-gradient-to-r from-transparent via-[var(--gold-vivid)] to-transparent mx-auto mb-8"
               animate={{
                 scaleX: [1, 1.5, 1],
                 opacity: [0.5, 1, 0.5]
