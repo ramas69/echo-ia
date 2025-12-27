@@ -107,6 +107,7 @@ const tabs = [
 export default function FormationPage() {
   const [activeTab, setActiveTab] = useState('modes');
   const [mounted, setMounted] = useState(false);
+  const [openModal, setOpenModal] = useState<'fondations' | 'acceleration' | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -297,12 +298,13 @@ export default function FormationPage() {
                       <p className="text-sm text-[var(--emerald-deep)] font-bold text-center">
                         👉 C'est le socle sur lequel repose toute la méthode
                       </p>
-                      <Link href="/offres" className="block">
-                        <button className="w-full py-3 rounded-full bg-[var(--emerald-deep)] text-white font-bold text-sm uppercase tracking-wider hover:bg-[var(--emerald-deep)]/90 transition-all flex items-center justify-center gap-2">
-                          Voir l'offre Fondations
-                          <ArrowRight className="w-4 h-4" />
-                        </button>
-                      </Link>
+                      <button 
+                        onClick={() => setOpenModal('fondations')}
+                        className="w-full py-3 rounded-full bg-[var(--emerald-deep)] text-white font-bold text-sm uppercase tracking-wider hover:bg-[var(--emerald-deep)]/90 transition-all flex items-center justify-center gap-2"
+                      >
+                        Voir l'offre Fondations
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
                     </div>
                   </motion.div>
 
@@ -361,12 +363,13 @@ export default function FormationPage() {
                       <p className="text-sm text-[var(--gold-vivid)] font-bold text-center">
                         ✨ Le meilleur équilibre autonomie / accompagnement
                       </p>
-                      <Link href="/offres" className="block">
-                        <button className="w-full py-3 rounded-full bg-[var(--gold-vivid)] text-white font-bold text-sm uppercase tracking-wider hover:bg-[var(--gold-vivid)]/90 transition-all flex items-center justify-center gap-2 shadow-lg">
-                          Voir l'offre Accélération
-                          <ArrowRight className="w-4 h-4" />
-                        </button>
-                      </Link>
+                      <button 
+                        onClick={() => setOpenModal('acceleration')}
+                        className="w-full py-3 rounded-full bg-[var(--gold-vivid)] text-white font-bold text-sm uppercase tracking-wider hover:bg-[var(--gold-vivid)]/90 transition-all flex items-center justify-center gap-2 shadow-lg"
+                      >
+                        Voir l'offre Accélération
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
                     </div>
                   </motion.div>
                 </div>
@@ -639,6 +642,173 @@ export default function FormationPage() {
           )}
         </div>
       </section>
+
+      {/* Modales Offres */}
+      <AnimatePresence>
+        {openModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setOpenModal(null)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setOpenModal(null)}
+                className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[var(--border-subtle)] hover:bg-[var(--text-secondary)]/20 flex items-center justify-center transition-colors z-10"
+              >
+                <span className="text-2xl text-[var(--text-secondary)]">×</span>
+              </button>
+
+              {/* Modal FONDATIONS */}
+              {openModal === 'fondations' && (
+                <div className="p-10">
+                  <div className="text-[8px] font-black tracking-[0.4em] text-[var(--text-secondary)]/40 mb-6 uppercase">
+                    🥉 OFFRE 01
+                  </div>
+                  
+                  <h2 className="text-4xl font-light uppercase tracking-tight mb-2">Fondations</h2>
+                  <p className="text-sm text-[var(--text-secondary)] italic mb-8">
+                    Construire votre infrastructure en autonomie
+                  </p>
+
+                  <div className="mb-8">
+                    <div className="text-5xl font-bold text-[var(--emerald-deep)] tracking-tight mb-2">997 €</div>
+                    <div className="text-lg text-[var(--text-secondary)]">
+                      ou <span className="font-bold text-[var(--emerald-deep)]">3 × 349 €</span>
+                    </div>
+                  </div>
+
+                  <div className="mb-8">
+                    <div className="text-[10px] font-black uppercase tracking-widest mb-4 text-[var(--text-secondary)]/40">
+                      Inclus
+                    </div>
+                    <ul className="space-y-3">
+                      <li className="flex items-start gap-3 text-sm">
+                        <CheckCircle2 className="w-5 h-5 text-[var(--emerald-deep)] shrink-0 mt-0.5" />
+                        <span className="text-[var(--text-secondary)]">Accès aux 5 modules vidéo</span>
+                      </li>
+                      <li className="flex items-start gap-3 text-sm">
+                        <CheckCircle2 className="w-5 h-5 text-[var(--emerald-deep)] shrink-0 mt-0.5" />
+                        <span className="text-[var(--text-secondary)]">Templates et blueprints prêts à l'emploi</span>
+                      </li>
+                      <li className="flex items-start gap-3 text-sm">
+                        <CheckCircle2 className="w-5 h-5 text-[var(--emerald-deep)] shrink-0 mt-0.5" />
+                        <span className="text-[var(--text-secondary)]">Communauté d'entraide</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="mb-8">
+                    <div className="text-[10px] font-black uppercase tracking-widest mb-3 text-[var(--text-secondary)]/40">
+                      À savoir
+                    </div>
+                    <ul className="space-y-2">
+                      <li className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
+                        <span>👉</span>
+                        <span>100 % asynchrone</span>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
+                        <span>👉</span>
+                        <span>Aucun support individuel</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="p-6 rounded-2xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10 mb-8">
+                    <p className="text-xs text-[var(--emerald-deep)] font-medium leading-relaxed">
+                      <strong>Le socle indispensable</strong> sur lequel reposent toutes les autres offres, y compris le VIP.
+                    </p>
+                  </div>
+
+                  <Link href="/offres" className="block">
+                    <button className="w-full py-4 rounded-full bg-[var(--emerald-deep)] text-white font-bold text-sm uppercase tracking-wider hover:bg-[var(--emerald-deep)]/90 transition-all">
+                      Commencer
+                    </button>
+                  </Link>
+                </div>
+              )}
+
+              {/* Modal ACCÉLÉRATION */}
+              {openModal === 'acceleration' && (
+                <div className="p-10 bg-gradient-to-br from-[var(--gold-vivid)]/10 to-white">
+                  <div className="text-[8px] font-black tracking-[0.4em] text-[var(--gold-vivid)]/60 mb-6 uppercase flex items-center gap-2">
+                    🥈 OFFRE 02 <Sparkles className="w-3 h-3" />
+                  </div>
+                  
+                  <h2 className="text-4xl font-light uppercase tracking-tight mb-2">Accélération</h2>
+                  <p className="text-sm text-[var(--text-secondary)] italic mb-8">
+                    Avancer sans se perdre
+                  </p>
+
+                  <div className="mb-8">
+                    <div className="text-5xl font-bold text-[var(--gold-vivid)] tracking-tight mb-2">1 490 €</div>
+                    <div className="text-lg text-[var(--text-secondary)]">
+                      ou <span className="font-bold text-[var(--gold-vivid)]">3 × 530 €</span>
+                    </div>
+                  </div>
+
+                  <div className="mb-8">
+                    <div className="text-[10px] font-black uppercase tracking-widest mb-4 text-[var(--text-secondary)]/40">
+                      Inclus
+                    </div>
+                    <ul className="space-y-3">
+                      <li className="flex items-start gap-3 text-sm">
+                        <CheckCircle2 className="w-5 h-5 text-[var(--gold-vivid)] shrink-0 mt-0.5" />
+                        <span className="text-[var(--text-secondary)]">Tout FONDATIONS</span>
+                      </li>
+                      <li className="flex items-start gap-3 text-sm">
+                        <CheckCircle2 className="w-5 h-5 text-[var(--gold-vivid)] shrink-0 mt-0.5" />
+                        <span className="text-[var(--text-secondary)]">1 live collectif par mois (Q&A)</span>
+                      </li>
+                      <li className="flex items-start gap-3 text-sm">
+                        <CheckCircle2 className="w-5 h-5 text-[var(--gold-vivid)] shrink-0 mt-0.5" />
+                        <span className="text-[var(--text-secondary)]">Cadre clair, temps mutualisé</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="mb-8">
+                    <div className="text-[10px] font-black uppercase tracking-widest mb-3 text-[var(--text-secondary)]/40">
+                      À savoir
+                    </div>
+                    <ul className="space-y-2">
+                      <li className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
+                        <span>👉</span>
+                        <span>Idéal pour les profils non techniques</span>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
+                        <span>👉</span>
+                        <span>Sans surcharge mentale</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="p-6 rounded-2xl bg-[var(--gold-vivid)]/10 border border-[var(--gold-vivid)]/20 mb-8">
+                    <p className="text-xs text-[var(--gold-vivid)] font-medium leading-relaxed">
+                      <strong>Le meilleur équilibre</strong> entre autonomie et accompagnement.
+                    </p>
+                  </div>
+
+                  <a href="https://tally.so/r/acceleration-echo-ia" target="_blank" rel="noopener noreferrer" className="block">
+                    <button className="w-full py-4 rounded-full bg-[var(--gold-vivid)] text-white font-bold text-sm uppercase tracking-wider hover:bg-[var(--gold-vivid)]/90 transition-all shadow-lg">
+                      Rejoindre
+                    </button>
+                  </a>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </div>
