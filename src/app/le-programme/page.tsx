@@ -155,14 +155,12 @@ export default function FormationPage() {
             </Link>
           </div>
 
-          <a 
-            href="https://tally.so/r/vIP-echo-ia"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link 
+            href="/candidature-vip"
             className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)] border-b-2 border-[var(--gold-vivid)] pb-1 hover:text-[var(--gold-vivid)] transition-all"
           >
             Candidature VIP
-          </a>
+          </Link>
         </div>
       </nav>
 

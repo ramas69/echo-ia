@@ -112,14 +112,12 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <a 
-          href="https://tally.so/r/vIP-echo-ia"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link 
+          href="/candidature-vip"
           className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)] border-b-2 border-[var(--gold-vivid)] pb-1 hover:text-[var(--gold-vivid)] transition-all"
         >
           Candidature VIP
-        </a>
+        </Link>
       </div>
     </nav>
   );
@@ -653,9 +651,9 @@ const Pricing = () => (
             <p>👉 Sur candidature uniquement</p>
           </div>
           
-          <a href="https://tally.so/r/vIP-echo-ia" target="_blank" rel="noopener noreferrer" className="block w-full">
+          <Link href="/candidature-vip" className="block w-full">
             <SophisticatedButton variant="secondary" className="w-full border-none justify-center">Postuler</SophisticatedButton>
-          </a>
+          </Link>
           
           {/* Internal Glow Effect */}
           <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-[var(--gold-vivid)]/20 rounded-full blur-[100px] pointer-events-none" />
