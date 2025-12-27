@@ -293,10 +293,16 @@ export default function FormationPage() {
                       </div>
                     </div>
 
-                    <div className="pt-6 border-t border-[var(--border-subtle)]">
+                    <div className="pt-6 border-t border-[var(--border-subtle)] space-y-4">
                       <p className="text-sm text-[var(--emerald-deep)] font-bold text-center">
                         👉 C'est le socle sur lequel repose toute la méthode
                       </p>
+                      <Link href="/offres" className="block">
+                        <button className="w-full py-3 rounded-full bg-[var(--emerald-deep)] text-white font-bold text-sm uppercase tracking-wider hover:bg-[var(--emerald-deep)]/90 transition-all flex items-center justify-center gap-2">
+                          Voir l'offre Fondations
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </Link>
                     </div>
                   </motion.div>
 
@@ -351,10 +357,16 @@ export default function FormationPage() {
                       </div>
                     </div>
 
-                    <div className="pt-6 border-t border-[var(--gold-vivid)]/30">
+                    <div className="pt-6 border-t border-[var(--gold-vivid)]/30 space-y-4">
                       <p className="text-sm text-[var(--gold-vivid)] font-bold text-center">
                         ✨ Le meilleur équilibre autonomie / accompagnement
                       </p>
+                      <Link href="/offres" className="block">
+                        <button className="w-full py-3 rounded-full bg-[var(--gold-vivid)] text-white font-bold text-sm uppercase tracking-wider hover:bg-[var(--gold-vivid)]/90 transition-all flex items-center justify-center gap-2 shadow-lg">
+                          Voir l'offre Accélération
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </Link>
                     </div>
                   </motion.div>
                 </div>
@@ -571,13 +583,19 @@ export default function FormationPage() {
                       <p className="text-2xl font-light text-[var(--text-primary)] mb-4">
                         Ce cadre est une <span className="font-serif italic text-[var(--emerald-deep)]">protection</span>,
                       </p>
-                      <p className="text-xl text-[var(--text-secondary)]">
+                      <p className="text-xl text-[var(--text-secondary)] mb-6">
                         pas une contrainte.
                       </p>
-                      <div className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--emerald-deep)]/10 border border-[var(--emerald-deep)]/20">
+                      <div className="mb-8 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--emerald-deep)]/10 border border-[var(--emerald-deep)]/20">
                         <ShieldCheck className="w-5 h-5 text-[var(--emerald-deep)]" />
                         <span className="text-sm font-bold text-[var(--emerald-deep)]">Conçu pour votre réussite</span>
                       </div>
+                      <Link href="/offres">
+                        <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[var(--emerald-deep)] text-white font-bold text-sm uppercase tracking-wider hover:bg-[var(--emerald-deep)]/90 transition-all shadow-lg">
+                          Choisir mon offre
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </Link>
                     </motion.div>
                   </div>
                 </div>
