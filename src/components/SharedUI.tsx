@@ -162,7 +162,7 @@ export const Navbar = () => {
             className="fixed inset-0 z-[90] bg-white md:hidden"
             style={{ top: '56px' }}
           >
-            <div className="flex flex-col h-full px-6 py-12">
+            <div className="flex flex-col h-full px-6 pt-24 pb-12">
               {/* Menu Items */}
               <div className="flex-1 flex flex-col gap-8">
                 {menuItems.map((item, index) => (
