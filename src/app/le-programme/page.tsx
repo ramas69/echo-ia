@@ -156,17 +156,16 @@ export default function FormationPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="pt-48 pb-12 px-6 relative overflow-hidden">
+      <section className="pt-48 pb-16 px-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-white via-[var(--emerald-deep)]/5 to-transparent pointer-events-none" />
         
         <div className="max-w-5xl mx-auto text-center relative z-10">
-          <Badge className="mb-8 border-[var(--gold-vivid)]/30">VOTRE SYSTÈME AU SERVICE DE L'HUMAIN</Badge>
-          <h1 className="text-5xl md:text-8xl font-light uppercase tracking-tighter mb-8 leading-[0.85]">
+          <h1 className="text-5xl md:text-8xl font-light uppercase tracking-tighter mb-6 leading-[0.85]">
             LA CARTE DE <br />
             <span className="font-serif italic text-[var(--gold-vivid)] drop-shadow-sm">VOTRE LIBERTÉ</span>
           </h1>
-          <p className="text-xl md:text-2xl text-[var(--emerald-deep)] font-medium leading-relaxed max-w-3xl mx-auto mb-12">
-            Le chemin exact pour ne plus choisir <br />entre votre impact et votre épuisement
+          <p className="text-lg md:text-xl text-[var(--text-secondary)] font-light leading-relaxed max-w-3xl mx-auto">
+            Le chemin exact pour ne plus choisir entre votre impact et votre épuisement
           </p>
         </div>
       </section>
@@ -472,79 +471,114 @@ export default function FormationPage() {
               >
                 <div className="max-w-4xl mx-auto">
                   <div className="text-center mb-12">
-                    <div className="flex items-center justify-center gap-3 mb-6">
-                      <AlertCircle className="w-8 h-8 text-red-600" />
-                      <Badge className="bg-red-600 text-white border-red-600 text-base py-3 px-6">
-                        ⚠️ LE CADRE (TRÈS IMPORTANT)
-                      </Badge>
-                      <AlertCircle className="w-8 h-8 text-red-600" />
+                    <div className="flex justify-center mb-6">
+                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[var(--emerald-deep)] to-[var(--emerald-deep)]/70 flex items-center justify-center shadow-xl">
+                        <ShieldCheck className="w-10 h-10 text-white" />
+                      </div>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-tight mb-4 text-red-900">
-                      UNE PROTECTION, <br />PAS UNE LIMITE
+                    <Badge className="mb-6 border-[var(--emerald-deep)]/30 bg-[var(--emerald-deep)]/10 text-[var(--emerald-deep)]">
+                      LE CADRE DU PROGRAMME
+                    </Badge>
+                    <h2 className="text-4xl md:text-6xl font-light uppercase tracking-tighter mb-6 leading-tight">
+                      Une <span className="font-serif italic text-[var(--gold-vivid)]">protection</span>, <br />
+                      pas une limite
                     </h2>
+                    <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+                      Ce cadre existe pour <strong className="text-[var(--emerald-deep)]">préserver votre expérience</strong> et garantir la qualité pour tous.
+                    </p>
                   </div>
 
-                  <div className="bg-white rounded-3xl p-10 md:p-12 border-4 border-red-200 shadow-2xl">
-                    <div className="space-y-8">
-                      {/* Ce programme est structuré pour */}
-                      <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="p-6 rounded-2xl bg-green-50 border-2 border-green-200"
-                      >
-                        <p className="text-lg font-bold text-green-900 mb-4 flex items-center gap-2">
-                          <CheckCircle2 className="w-6 h-6" />
-                          Ce programme est volontairement structuré pour :
-                        </p>
-                        <ul className="space-y-3 pl-8">
-                          <li className="text-green-800 font-medium flex items-start gap-3">
-                            <div className="w-2 h-2 bg-green-600 rounded-full mt-2 shrink-0" />
-                            préserver votre énergie
-                          </li>
-                          <li className="text-green-800 font-medium flex items-start gap-3">
-                            <div className="w-2 h-2 bg-green-600 rounded-full mt-2 shrink-0" />
-                            préserver la qualité
-                          </li>
-                          <li className="text-green-800 font-medium flex items-start gap-3">
-                            <div className="w-2 h-2 bg-green-600 rounded-full mt-2 shrink-0" />
-                            éviter toute dépendance
-                          </li>
-                        </ul>
-                      </motion.div>
+                  <div className="space-y-8">
+                    {/* Ce programme est structuré pour */}
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 }}
+                      className="glass-card rounded-3xl p-10 border-2 border-[var(--emerald-deep)]/20"
+                    >
+                      <div className="flex items-start gap-4 mb-6">
+                        <div className="w-12 h-12 rounded-2xl bg-[var(--emerald-deep)]/10 flex items-center justify-center shrink-0">
+                          <CheckCircle2 className="w-6 h-6 text-[var(--emerald-deep)]" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">
+                            Ce programme est volontairement structuré pour :
+                          </h3>
+                        </div>
+                      </div>
+                      <div className="grid md:grid-cols-3 gap-6">
+                        <div className="p-6 rounded-2xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10">
+                          <Heart className="w-8 h-8 text-[var(--emerald-deep)] mb-4" />
+                          <h4 className="font-bold text-sm text-[var(--text-primary)] mb-2">Préserver votre énergie</h4>
+                          <p className="text-xs text-[var(--text-secondary)]">Vous ne vous épuisez pas</p>
+                        </div>
+                        <div className="p-6 rounded-2xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10">
+                          <Sparkles className="w-8 h-8 text-[var(--emerald-deep)] mb-4" />
+                          <h4 className="font-bold text-sm text-[var(--text-primary)] mb-2">Préserver la qualité</h4>
+                          <p className="text-xs text-[var(--text-secondary)]">Excellence maintenue</p>
+                        </div>
+                        <div className="p-6 rounded-2xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10">
+                          <Target className="w-8 h-8 text-[var(--emerald-deep)] mb-4" />
+                          <h4 className="font-bold text-sm text-[var(--text-primary)] mb-2">Éviter toute dépendance</h4>
+                          <p className="text-xs text-[var(--text-secondary)]">Autonomie garantie</p>
+                        </div>
+                      </div>
+                    </motion.div>
 
-                      {/* Tout ce qui n'est pas inclus */}
-                      <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="p-6 rounded-2xl bg-red-50 border-2 border-red-300"
-                      >
-                        <p className="text-lg font-bold text-red-900 mb-4 flex items-center gap-2">
-                          <AlertCircle className="w-6 h-6" />
-                          Tout ce qui n'est pas explicitement inclus :
-                        </p>
-                        <ul className="space-y-3 pl-8">
-                          <li className="text-red-800 font-medium flex items-start gap-3">
-                            <div className="w-2 h-2 bg-red-600 rounded-full mt-2 shrink-0" />
-                            n'est <strong>PAS</strong> pris en charge
-                          </li>
-                          <li className="text-red-800 font-medium flex items-start gap-3">
-                            <div className="w-2 h-2 bg-red-600 rounded-full mt-2 shrink-0" />
-                            ne fait <strong>PAS</strong> l'objet de support individuel
-                          </li>
-                        </ul>
-                      </motion.div>
+                    {/* Clarté des limites */}
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="glass-card rounded-3xl p-10 border-2 border-[var(--gold-vivid)]/20 bg-gradient-to-br from-white to-[var(--gold-vivid)]/5"
+                    >
+                      <div className="flex items-start gap-4 mb-6">
+                        <div className="w-12 h-12 rounded-2xl bg-[var(--gold-vivid)]/10 flex items-center justify-center shrink-0">
+                          <AlertCircle className="w-6 h-6 text-[var(--gold-vivid)]" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">
+                            Pour être transparent avec vous :
+                          </h3>
+                          <p className="text-sm text-[var(--text-secondary)]">
+                            Tout ce qui n'est pas <strong>explicitement inclus</strong> dans votre offre :
+                          </p>
+                        </div>
+                      </div>
+                      <div className="space-y-4 pl-16">
+                        <div className="flex items-start gap-3 p-4 rounded-xl bg-white border border-[var(--border-subtle)]">
+                          <div className="w-1.5 h-1.5 rounded-full bg-[var(--text-secondary)] mt-2 shrink-0" />
+                          <p className="text-sm text-[var(--text-secondary)]">
+                            n'est <strong className="text-[var(--text-primary)]">pas pris en charge</strong>
+                          </p>
+                        </div>
+                        <div className="flex items-start gap-3 p-4 rounded-xl bg-white border border-[var(--border-subtle)]">
+                          <div className="w-1.5 h-1.5 rounded-full bg-[var(--text-secondary)] mt-2 shrink-0" />
+                          <p className="text-sm text-[var(--text-secondary)]">
+                            ne fait <strong className="text-[var(--text-primary)]">pas l'objet de support individuel</strong>
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
 
-                      <motion.p 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                        className="text-center text-xl font-bold text-[var(--emerald-deep)] pt-6 italic"
-                      >
-                        Ce cadre est une protection, pas une contrainte.
-                      </motion.p>
-                    </div>
+                    {/* Message final */}
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                      className="text-center p-8 rounded-3xl bg-gradient-to-br from-[var(--emerald-deep)]/5 to-transparent"
+                    >
+                      <p className="text-2xl font-light text-[var(--text-primary)] mb-4">
+                        Ce cadre est une <span className="font-serif italic text-[var(--emerald-deep)]">protection</span>,
+                      </p>
+                      <p className="text-xl text-[var(--text-secondary)]">
+                        pas une contrainte.
+                      </p>
+                      <div className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--emerald-deep)]/10 border border-[var(--emerald-deep)]/20">
+                        <ShieldCheck className="w-5 h-5 text-[var(--emerald-deep)]" />
+                        <span className="text-sm font-bold text-[var(--emerald-deep)]">Conçu pour votre réussite</span>
+                      </div>
+                    </motion.div>
                   </div>
                 </div>
               </motion.div>
