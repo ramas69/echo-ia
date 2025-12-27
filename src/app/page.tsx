@@ -293,39 +293,70 @@ const ImmersionSection = () => (
   </section>
 );
 
-const DemoLive = () => (
-  <section className="py-32 px-6 bg-white">
-    <div className="max-w-5xl mx-auto">
-      <div className="text-center mb-16">
-        <Badge className="mb-6 border-[var(--gold-vivid)]/30">DÉMO LIVE</Badge>
-        <h2 className="text-4xl md:text-6xl font-light uppercase tracking-tighter text-balance">Regardez comment le système gère <br /><span className="font-serif italic text-[var(--gold-vivid)]">le travail ingrat à votre place.</span></h2>
+const DemoLive = () => {
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  const handlePlayVideo = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+        setIsPlaying(true);
+      } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+  };
+
+  return (
+    <section className="py-32 px-6 bg-white">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-16">
+          <Badge className="mb-6 border-[var(--gold-vivid)]/30">DÉMO LIVE</Badge>
+          <h2 className="text-4xl md:text-6xl font-light uppercase tracking-tighter text-balance">Regardez comment le système gère <br /><span className="font-serif italic text-[var(--gold-vivid)]">le travail ingrat à votre place.</span></h2>
+        </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          whileHover={{ scale: 1.01, boxShadow: "0 30px 60px rgba(0,0,0,0.1)" }}
+          className="relative aspect-video rounded-3xl border-4 border-[var(--emerald-deep)] overflow-hidden shadow-2xl bg-black group cursor-pointer transition-all duration-700"
+          onClick={handlePlayVideo}
+        >
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover"
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            onEnded={() => setIsPlaying(false)}
+            controls={isPlaying}
+          >
+            <source src="/video-echo.mp4" type="video/mp4" />
+            Votre navigateur ne supporte pas la lecture de vidéos.
+          </video>
+          
+          {!isPlaying && (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--emerald-deep)]/40 to-transparent z-10 opacity-60 group-hover:opacity-20 transition-opacity" />
+              <div className="absolute inset-0 z-15 flex items-center justify-center">
+                <div className="w-24 h-24 rounded-full bg-[var(--gold-vivid)] flex items-center justify-center shadow-[0_0_50px_rgba(212,175,55,0.4)] group-hover:scale-110 group-hover:shadow-[0_0_70px_rgba(212,175,55,0.6)] transition-all duration-500">
+                  <Play className="w-10 h-10 text-white fill-white" />
+                </div>
+              </div>
+              <div className="absolute bottom-8 left-8 z-20">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/80 text-balance">DÉMO LIVE // LIBÉRATION DU TEMPS</span>
+                </div>
+              </div>
+            </>
+          )}
+        </motion.div>
       </div>
-      <motion.div 
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        whileHover={{ scale: 1.01, boxShadow: "0 30px 60px rgba(0,0,0,0.1)" }}
-        className="relative aspect-video rounded-3xl border-4 border-[var(--emerald-deep)] overflow-hidden shadow-2xl bg-[var(--text-primary)] flex items-center justify-center group cursor-pointer transition-all duration-700"
-      >
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--emerald-deep)]/40 to-transparent z-10 opacity-60 group-hover:opacity-20 transition-opacity" />
-        <img 
-          src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=2000" 
-          alt="Dashboard Preview" 
-          className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000"
-        />
-        <div className="relative z-20 w-24 h-24 rounded-full bg-[var(--gold-vivid)] flex items-center justify-center shadow-[0_0_50px_rgba(212,175,55,0.4)] group-hover:scale-110 group-hover:shadow-[0_0_70px_rgba(212,175,55,0.6)] transition-all duration-500">
-          <Play className="w-10 h-10 text-white fill-white" />
-        </div>
-        <div className="absolute bottom-8 left-8 z-20">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/80 text-balance">DÉMO LIVE // LIBÉRATION DU TEMPS</span>
-          </div>
-        </div>
-      </motion.div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const Infrastructure = () => {
   const cards = [
