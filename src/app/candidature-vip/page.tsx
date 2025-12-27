@@ -586,6 +586,33 @@ export default function CandidatureVIPPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="py-32 px-6 border-t border-[var(--border-subtle)] bg-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-16 relative z-10">
+          <div className="flex flex-col items-center md:items-start gap-6">
+            <div className="flex items-center gap-2 group cursor-default">
+              <div className="w-6 h-6 bg-[var(--emerald-deep)] rounded-full group-hover:bg-[var(--gold-vivid)] transition-colors" />
+              <span className="font-black tracking-[0.5em] text-[12px] text-[var(--emerald-deep)] uppercase group-hover:text-[var(--gold-vivid)] transition-colors">
+                L'ÉCHO IA
+              </span>
+            </div>
+            <p className="text-[9px] uppercase tracking-[0.4em] text-[var(--text-secondary)]/40 text-center md:text-left leading-loose">
+              Le futur de l'accompagnement est plus humain, car mieux automatisé.<br />
+              Créé en France · © 2026
+            </p>
+          </div>
+          
+          <div className="flex gap-16 text-[9px] font-black uppercase tracking-[0.5em] text-[var(--text-secondary)]/40">
+            {['Privacy', 'Legal', 'Contact'].map((item) => (
+              <a key={item} href="#" className="hover:text-[var(--gold-vivid)] transition-colors">
+                {item}
+              </a>
+            ))}
+          </div>
+        </div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-[var(--gold-vivid)]/20 to-transparent" />
+      </footer>
     </div>
   );
 }
