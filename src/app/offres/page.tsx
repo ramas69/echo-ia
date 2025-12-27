@@ -319,6 +319,7 @@ export default function OffresPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {offers.map((offer, i) => {
               const isHighlighted = highlightedOffer === offer.id;
+              const isDimmed = highlightedOffer && highlightedOffer !== offer.id;
               
               return (
                 <motion.div
@@ -326,21 +327,22 @@ export default function OffresPage() {
                   id={`offer-${offer.id}`}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ 
-                    opacity: 1, 
+                    opacity: isDimmed ? 0.3 : 1,
                     y: 0,
-                    scale: isHighlighted ? [1, 1.05, 1.05, 1] : 1,
+                    scale: isHighlighted ? [1, 1.08, 1.08, 1.05] : isDimmed ? 0.95 : 1,
                   }}
                   transition={{ 
                     delay: i * 0.1,
-                    scale: { duration: 0.6, times: [0, 0.3, 0.7, 1] }
+                    scale: { duration: 0.6, times: [0, 0.3, 0.7, 1] },
+                    opacity: { duration: 0.3 }
                   }}
                   className={cn(
                     "relative p-8 rounded-3xl border-2 transition-all duration-500",
-                    isHighlighted && "ring-4 ring-[var(--gold-vivid)]/50 shadow-2xl",
+                    isHighlighted && "ring-8 ring-[var(--gold-vivid)] shadow-[0_0_50px_rgba(212,175,55,0.5)] z-10",
                     offer.popular
                       ? "border-[var(--gold-vivid)] shadow-xl bg-gradient-to-br from-white to-[var(--gold-vivid)]/5"
                       : isHighlighted 
-                      ? "border-[var(--gold-vivid)] bg-gradient-to-br from-white to-[var(--gold-vivid)]/5"
+                      ? "border-[var(--gold-vivid)] bg-gradient-to-br from-[var(--gold-vivid)]/10 via-white to-[var(--gold-vivid)]/20"
                       : "border-[var(--border-subtle)] bg-white"
                   )}
                 >
