@@ -13,7 +13,10 @@ import {
   Cpu, 
   ShieldCheck,
   Heart,
-  Lock
+  Lock,
+  Users,
+  Calendar,
+  TrendingUp
 } from 'lucide-react';
 import { Badge, SophisticatedButton, TopBar, Navbar, Footer } from '@/components/SharedUI';
 import Link from 'next/link';
@@ -120,32 +123,119 @@ export default function FormationPage() {
         </div>
       </section>
 
-      {/* Comment fonctionne le programme */}
-      <section className="py-16 px-6 bg-white/50 border-y border-[var(--border-subtle)]">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-light uppercase tracking-tighter mb-12">
-            Comment fonctionne <br /><span className="font-serif italic text-[var(--gold-vivid)]">le programme</span>
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8 text-left">
-            <div className="p-6 rounded-2xl glass-card border border-[var(--border-subtle)]">
-              <CheckCircle2 className="w-8 h-8 text-[var(--emerald-deep)] mb-4" />
-              <h3 className="text-sm font-black uppercase tracking-widest text-[var(--emerald-deep)] mb-2">100 % EN LIGNE</h3>
-              <p className="text-sm text-[var(--text-secondary)]">Progression claire, étape par étape</p>
+      {/* Comment vous avancez */}
+      <section className="py-20 px-6 bg-white/50 border-y border-[var(--border-subtle)]">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-6xl font-light uppercase tracking-tighter mb-6">
+              Comment vous <span className="font-serif italic text-[var(--emerald-deep)]">avancez</span> <br />dans le programme
+            </h2>
+          </div>
+
+          <div className="space-y-8 max-w-3xl mx-auto">
+            <div className="glass-card rounded-3xl p-10 border border-[var(--border-subtle)]">
+              <p className="text-lg text-[var(--text-secondary)] leading-relaxed mb-6">
+                Le programme a été conçu pour pouvoir être suivi en <strong className="text-[var(--emerald-deep)]">autonomie complète</strong>.
+              </p>
+              
+              <p className="text-lg text-[var(--text-secondary)] leading-relaxed mb-6">
+                Vous avancez à votre rythme, en vous appuyant sur les vidéos, les templates et les blueprints fournis.
+              </p>
+
+              <div className="space-y-3 mb-6">
+                <p className="text-sm font-bold text-[var(--emerald-deep)]">👉 C'est le socle du programme.</p>
+                <p className="text-sm font-bold text-[var(--emerald-deep)]">👉 Celui sur lequel repose toute la méthode.</p>
+              </div>
+
+              <div className="pt-6 border-t border-[var(--border-subtle)]">
+                <p className="text-sm text-[var(--text-secondary)] italic">
+                  Ce mode d'avancement convient si vous êtes autonome et à l'aise avec une mise en place guidée, sans accompagnement.
+                </p>
+              </div>
             </div>
-            <div className="p-6 rounded-2xl glass-card border border-[var(--border-subtle)]">
-              <ShieldCheck className="w-8 h-8 text-[var(--emerald-deep)] mb-4" />
-              <h3 className="text-sm font-black uppercase tracking-widest text-[var(--emerald-deep)] mb-2">AUCUN PRÉREQUIS TECHNIQUE</h3>
-              <p className="text-sm text-[var(--text-secondary)]">Un cadre précis pour éviter la surcharge</p>
+
+            {/* ET SI VOUS NE VOULIEZ PAS... */}
+            <div className="text-center py-12">
+              <h3 className="text-3xl md:text-4xl font-light uppercase tracking-tighter mb-4">
+                Et si vous ne vouliez pas <br />
+                <span className="font-serif italic text-[var(--gold-vivid)]">avancer seul(e)</span> ?
+              </h3>
+              <p className="text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl mx-auto">
+                Certaines personnes préfèrent avancer avec un cadre, pour ne pas rester bloquées trop longtemps ou simplement pour se poser les bonnes questions au bon moment.
+              </p>
+              <p className="text-lg text-[var(--emerald-deep)] font-medium mt-6">
+                C'est pour cela qu'un mode d'avancement collectif existe.
+              </p>
+            </div>
+
+            {/* LE MODE ACCÉLÉRATION */}
+            <div className="glass-card rounded-3xl p-10 border-2 border-[var(--gold-vivid)]/30 bg-gradient-to-br from-white to-[var(--gold-vivid)]/5 shadow-xl relative">
+              <div className="absolute top-6 right-6">
+                <Sparkles className="w-6 h-6 text-[var(--gold-vivid)]" />
+              </div>
+
+              <div className="text-center mb-8">
+                <Badge className="mb-4 border-[var(--gold-vivid)]/30 bg-[var(--gold-vivid)]/10 text-[var(--gold-vivid)]">
+                  LE MODE ACCÉLÉRATION
+                </Badge>
+                <p className="text-lg text-[var(--text-secondary)] leading-relaxed">
+                  Dans ce mode, le programme reste <strong>strictement le même</strong>.
+                </p>
+                <p className="text-base text-[var(--text-secondary)]/80 mt-2">
+                  Les 5 phases, les contenus et les livrables ne changent pas.
+                </p>
+                <p className="text-base text-[var(--emerald-deep)] font-medium mt-4 italic">
+                  La valeur ajoutée ne se situe pas dans le contenu, mais dans la manière d'avancer.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-[var(--border-subtle)]">
+                  <Calendar className="w-6 h-6 text-[var(--gold-vivid)] shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-sm text-[var(--text-primary)] mb-2">1 session collective par mois (Q&A)</h4>
+                    <p className="text-xs text-[var(--text-secondary)]">Un rythme régulier pour éviter de remettre à plus tard</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-[var(--border-subtle)]">
+                  <Users className="w-6 h-6 text-[var(--gold-vivid)] shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-sm text-[var(--text-primary)] mb-2">Des réponses mutualisées</h4>
+                    <p className="text-xs text-[var(--text-secondary)]">Issues des situations réelles du groupe</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-[var(--border-subtle)]">
+                  <ShieldCheck className="w-6 h-6 text-[var(--gold-vivid)] shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-sm text-[var(--text-primary)] mb-2">Aucun suivi individuel</h4>
+                    <p className="text-xs text-[var(--text-secondary)]">Pour préserver l'autonomie et la clarté du cadre</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-[var(--border-subtle)]">
+                  <TrendingUp className="w-6 h-6 text-[var(--gold-vivid)] shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-sm text-[var(--text-primary)] mb-2">Sans surcharge mentale</h4>
+                    <p className="text-xs text-[var(--text-secondary)]">Sans dépendance</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3 pt-6 border-t border-[var(--border-subtle)]">
+                <p className="text-sm font-bold text-[var(--emerald-deep)]">👉 Vous avancez avec un repère mensuel clair,</p>
+                <p className="text-sm font-bold text-[var(--emerald-deep)]">👉 vous gagnez du temps grâce aux questions des autres,</p>
+                <p className="text-sm font-bold text-[var(--emerald-deep)]">👉 sans surcharge mentale,</p>
+                <p className="text-sm font-bold text-[var(--emerald-deep)]">👉 sans dépendance.</p>
+              </div>
             </div>
           </div>
-          <p className="text-base text-[var(--text-secondary)] mt-8 italic">
-            Chaque phase correspond à un pilier fondamental de votre futur système.
-          </p>
         </div>
       </section>
 
-      {/* Curriculum Grid */}
-      <section className="px-6 py-12">
+      {/* Les 5 Phases */}
+      <section className="px-6 py-20">
         <div className="max-w-6xl mx-auto space-y-24">
           {modules.map((mod, i) => (
             <motion.div 
@@ -224,121 +314,8 @@ export default function FormationPage() {
         </div>
       </section>
 
-      {/* Les 3 Offres */}
-      <section className="py-24 px-6 bg-white/50 border-y border-[var(--border-subtle)]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge className="mb-6 border-[var(--gold-vivid)]/30">LES 3 FAÇONS DE SUIVRE LE PROGRAMME</Badge>
-            <h2 className="text-4xl md:text-6xl font-light uppercase tracking-tighter">
-              Choisissez <span className="font-serif italic text-[var(--gold-vivid)]">votre rythme</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* FONDATIONS */}
-            <motion.div
-              whileHover={{ y: -10 }}
-              className="p-10 rounded-[2rem] glass-card border-[var(--border-subtle)] hover:border-[var(--gold-vivid)]/20 transition-all duration-700"
-            >
-              <div className="text-[8px] font-black tracking-[0.4em] text-[var(--text-secondary)]/40 mb-6 uppercase">🥉 OFFRE 01</div>
-              <h3 className="text-2xl font-light uppercase tracking-tighter mb-2">Fondations</h3>
-              <p className="text-xs text-[var(--text-secondary)] italic mb-6">Construire votre infrastructure en autonomie</p>
-              
-              <div className="mb-6">
-                <div className="text-4xl font-bold text-[var(--emerald-deep)] tracking-tighter">997 €</div>
-                <div className="text-sm text-[var(--text-secondary)] mt-2">ou <span className="font-bold text-[var(--emerald-deep)]">3 × 349 €</span></div>
-              </div>
-
-              <ul className="space-y-3 mb-6 text-xs text-[var(--text-secondary)]">
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] shrink-0 mt-0.5" /> Accès aux 5 modules vidéo</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] shrink-0 mt-0.5" /> Templates et blueprints prêts à l'emploi</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--emerald-deep)] shrink-0 mt-0.5" /> Communauté d'entraide</li>
-              </ul>
-
-              <div className="space-y-2 mb-6 text-[10px] text-[var(--text-secondary)]">
-                <p>👉 100 % asynchrone</p>
-                <p>👉 Aucun support individuel</p>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10">
-                <p className="text-[10px] text-[var(--emerald-deep)] font-medium leading-relaxed">
-                  <strong>Le socle indispensable</strong> sur lequel reposent toutes les autres offres, y compris le VIP.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* ACCÉLÉRATION */}
-            <motion.div
-              whileHover={{ y: -10 }}
-              className="p-10 rounded-[2rem] glass-card border-[var(--gold-vivid)]/30 shadow-lg transition-all duration-700 relative"
-            >
-              <div className="absolute top-4 right-4"><Sparkles className="w-4 h-4 text-[var(--gold-vivid)]" /></div>
-              <div className="text-[8px] font-black tracking-[0.4em] text-[var(--gold-vivid)]/60 mb-6 uppercase">🥈 OFFRE 02 • POPULAIRE</div>
-              <h3 className="text-2xl font-light uppercase tracking-tighter mb-2">Accélération</h3>
-              <p className="text-xs text-[var(--text-secondary)] italic mb-6">Avancer sans se perdre</p>
-              
-              <div className="mb-6">
-                <div className="text-4xl font-bold text-[var(--gold-vivid)] tracking-tighter">1 490 €</div>
-                <div className="text-sm text-[var(--text-secondary)] mt-2">ou <span className="font-bold text-[var(--gold-vivid)]">3 × 530 €</span></div>
-              </div>
-
-              <ul className="space-y-3 mb-6 text-xs text-[var(--text-secondary)]">
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-vivid)] shrink-0 mt-0.5" /> Tout FONDATIONS</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-vivid)] shrink-0 mt-0.5" /> 1 live collectif par mois (Q&A)</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-vivid)] shrink-0 mt-0.5" /> Cadre clair, temps mutualisé</li>
-              </ul>
-
-              <div className="space-y-2 mb-6 text-[10px] text-[var(--text-secondary)]">
-                <p>👉 Idéal pour les profils non techniques</p>
-                <p>👉 Sans surcharge mentale</p>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[var(--gold-vivid)]/10 border border-[var(--gold-vivid)]/20">
-                <p className="text-[10px] text-[var(--gold-vivid)] font-medium leading-relaxed">
-                  <strong>Le meilleur équilibre</strong> entre autonomie et accompagnement.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* VIP ARCHITECTE */}
-            <motion.div
-              whileHover={{ y: -10 }}
-              className="p-10 rounded-[2rem] bg-[var(--emerald-deep)] text-white shadow-2xl transition-all duration-700 border-2 border-[var(--gold-vivid)]/30 relative"
-            >
-              <div className="absolute top-4 right-4"><Lock className="w-5 h-5 text-[var(--gold-vivid)] animate-pulse" /></div>
-              <div className="text-[8px] font-black tracking-[0.4em] text-[var(--gold-vivid)]/60 mb-6 uppercase">🥇 OFFRE 03 • VIP</div>
-              <h3 className="text-2xl font-light uppercase tracking-tighter mb-2 italic text-[var(--gold-sand)]">VIP Architecte</h3>
-              <p className="text-xs text-white/70 italic mb-6">Libération maximale – Clé en main</p>
-              
-              <div className="mb-6">
-                <div className="text-4xl font-bold text-[var(--gold-sand)] tracking-tighter">À partir de 3 490 €</div>
-                <div className="text-sm text-white/70 mt-2">Prix défini après audit, <span className="font-bold text-white">aucune surprise</span></div>
-              </div>
-
-              <ul className="space-y-3 mb-6 text-xs text-white/80">
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] shrink-0 mt-0.5" /> Tout ACCÉLÉRATION</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] shrink-0 mt-0.5" /> <strong>Installation complète</strong> de votre infrastructure cœur</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] shrink-0 mt-0.5" /> Création de votre outil signature</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-[var(--gold-sand)] shrink-0 mt-0.5" /> Audit technique 1:1 (1h)</li>
-              </ul>
-
-              <div className="space-y-2 mb-6 text-[10px] text-white/70">
-                <p>👉 Limité à 2 clients par mois</p>
-                <p>👉 Sur candidature uniquement</p>
-              </div>
-
-              <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20">
-                <p className="text-[10px] text-white font-medium leading-relaxed">
-                  Pensé pour celles et ceux qui veulent <strong>déléguer sans perdre le contrôle</strong>.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* Le Cadre */}
-      <section className="py-24 px-6">
+      <section className="py-24 px-6 bg-white/50 border-y border-[var(--border-subtle)]">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <Badge className="mb-6 border-[var(--gold-vivid)]/30">LE CADRE (IMPORTANT)</Badge>
@@ -401,12 +378,12 @@ export default function FormationPage() {
             
             <div className="space-y-6">
               <h2 className="text-5xl md:text-7xl font-light uppercase tracking-tighter leading-none">
-                PRÊT À LIBÉRER <br /><span className="font-serif italic text-[var(--gold-vivid)]">VOTRE TEMPS ?</span>
+                PRÊT À AVANCER <br /><span className="font-serif italic text-[var(--gold-vivid)]">À VOTRE RYTHME ?</span>
               </h2>
               <div className="space-y-4 text-lg md:text-xl text-[var(--text-secondary)] font-light max-w-2xl mx-auto">
                 <p>Votre système est prêt à être construit.</p>
                 <p>Votre expertise mérite un cadre à sa hauteur.</p>
-                <p className="font-medium text-[var(--emerald-deep)]">Il ne manque qu'une chose : votre décision.</p>
+                <p className="font-medium text-[var(--emerald-deep)]">👉 Choisissez le mode d'avancement qui vous correspond.</p>
               </div>
             </div>
 
@@ -429,4 +406,3 @@ export default function FormationPage() {
     </div>
   );
 }
-
