@@ -652,7 +652,7 @@ export default function FormationPage() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={() => setOpenModal(null)}
-            className="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] flex items-center justify-center p-6"
+            className="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] flex items-center justify-center p-4 md:p-6"
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 30 }}
@@ -660,108 +660,108 @@ export default function FormationPage() {
               exit={{ scale: 0.95, opacity: 0, y: 30 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl ring-1 ring-black/5"
+              className="bg-white rounded-2xl md:rounded-3xl max-w-2xl w-full max-h-[95vh] md:max-h-[90vh] overflow-y-auto relative shadow-2xl ring-1 ring-black/5"
             >
-              {/* Close Button - Premium */}
+              {/* Close Button - Premium & Responsive */}
               <button
                 onClick={() => setOpenModal(null)}
-                className="absolute top-8 right-8 w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm hover:bg-[var(--text-secondary)]/10 flex items-center justify-center transition-all z-10 shadow-lg hover:shadow-xl hover:scale-110 border border-[var(--border-subtle)]"
+                className="absolute top-4 right-4 md:top-8 md:right-8 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/80 backdrop-blur-sm hover:bg-[var(--text-secondary)]/10 flex items-center justify-center transition-all z-10 shadow-lg hover:shadow-xl hover:scale-110 border border-[var(--border-subtle)]"
               >
-                <span className="text-2xl text-[var(--text-secondary)] font-light">×</span>
+                <span className="text-xl md:text-2xl text-[var(--text-secondary)] font-light">×</span>
               </button>
 
               {/* Modal FONDATIONS */}
               {openModal === 'fondations' && (
                 <div className="relative overflow-hidden">
                   {/* Gradient Background Decoration */}
-                  <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--emerald-deep)]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                  <div className="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-[var(--emerald-deep)]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                   
-                  <div className="relative p-12">
+                  <div className="relative p-6 md:p-10 lg:p-12">
                     {/* Badge Premium */}
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--emerald-deep)]/10 border border-[var(--emerald-deep)]/20 mb-8">
-                      <div className="w-2 h-2 rounded-full bg-[var(--emerald-deep)] animate-pulse" />
-                      <span className="text-[9px] font-black tracking-[0.3em] text-[var(--emerald-deep)] uppercase">
+                    <div className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-[var(--emerald-deep)]/10 border border-[var(--emerald-deep)]/20 mb-6 md:mb-8">
+                      <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[var(--emerald-deep)] animate-pulse" />
+                      <span className="text-[8px] md:text-[9px] font-black tracking-[0.3em] text-[var(--emerald-deep)] uppercase">
                         Offre 01
                       </span>
                     </div>
                     
                     {/* Titre */}
-                    <h2 className="text-5xl md:text-6xl font-light uppercase tracking-tight mb-3 leading-none">
+                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-light uppercase tracking-tight mb-2 md:mb-3 leading-none">
                       Fondations
                     </h2>
-                    <p className="text-lg text-[var(--text-secondary)] font-light mb-12">
+                    <p className="text-base md:text-lg text-[var(--text-secondary)] font-light mb-8 md:mb-12">
                       Construire votre infrastructure en autonomie
                     </p>
 
                     {/* Prix - Mise en valeur */}
-                    <div className="mb-12 p-8 rounded-2xl bg-gradient-to-br from-[var(--emerald-deep)]/10 to-transparent border-2 border-[var(--emerald-deep)]/20">
-                      <div className="flex items-baseline gap-3 mb-3">
-                        <span className="text-6xl font-bold text-[var(--emerald-deep)] tracking-tight">997 €</span>
+                    <div className="mb-8 md:mb-12 p-6 md:p-8 rounded-xl md:rounded-2xl bg-gradient-to-br from-[var(--emerald-deep)]/10 to-transparent border-2 border-[var(--emerald-deep)]/20">
+                      <div className="flex items-baseline gap-2 md:gap-3 mb-2 md:mb-3">
+                        <span className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--emerald-deep)] tracking-tight">997 €</span>
                       </div>
                       <div className="flex items-center gap-2 text-[var(--text-secondary)]">
-                        <span className="text-sm">ou</span>
-                        <span className="text-xl font-bold text-[var(--emerald-deep)]">3 × 349 €</span>
-                        <Sparkles className="w-4 h-4 text-[var(--emerald-deep)]" />
+                        <span className="text-xs md:text-sm">ou</span>
+                        <span className="text-lg md:text-xl font-bold text-[var(--emerald-deep)]">3 × 349 €</span>
+                        <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-[var(--emerald-deep)]" />
                       </div>
                     </div>
 
                     {/* Inclus - Design épuré */}
-                    <div className="mb-10">
-                      <h3 className="text-[11px] font-black uppercase tracking-[0.3em] mb-6 text-[var(--text-secondary)]/50">
+                    <div className="mb-8 md:mb-10">
+                      <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] mb-4 md:mb-6 text-[var(--text-secondary)]/50">
                         Inclus dans l'offre
                       </h3>
-                      <div className="space-y-4">
-                        <div className="flex items-start gap-4 p-4 rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10 hover:border-[var(--emerald-deep)]/30 transition-colors">
-                          <div className="w-10 h-10 rounded-full bg-[var(--emerald-deep)]/10 flex items-center justify-center shrink-0">
-                            <CheckCircle2 className="w-5 h-5 text-[var(--emerald-deep)]" />
+                      <div className="space-y-3 md:space-y-4">
+                        <div className="flex items-start gap-3 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10 hover:border-[var(--emerald-deep)]/30 transition-colors">
+                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[var(--emerald-deep)]/10 flex items-center justify-center shrink-0">
+                            <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-[var(--emerald-deep)]" />
                           </div>
-                          <span className="text-base text-[var(--text-primary)] pt-2">Accès aux 5 modules vidéo</span>
+                          <span className="text-sm md:text-base text-[var(--text-primary)] pt-1.5 md:pt-2">Accès aux 5 modules vidéo</span>
                         </div>
-                        <div className="flex items-start gap-4 p-4 rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10 hover:border-[var(--emerald-deep)]/30 transition-colors">
-                          <div className="w-10 h-10 rounded-full bg-[var(--emerald-deep)]/10 flex items-center justify-center shrink-0">
-                            <CheckCircle2 className="w-5 h-5 text-[var(--emerald-deep)]" />
+                        <div className="flex items-start gap-3 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10 hover:border-[var(--emerald-deep)]/30 transition-colors">
+                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[var(--emerald-deep)]/10 flex items-center justify-center shrink-0">
+                            <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-[var(--emerald-deep)]" />
                           </div>
-                          <span className="text-base text-[var(--text-primary)] pt-2">Templates et blueprints prêts à l'emploi</span>
+                          <span className="text-sm md:text-base text-[var(--text-primary)] pt-1.5 md:pt-2">Templates et blueprints prêts à l'emploi</span>
                         </div>
-                        <div className="flex items-start gap-4 p-4 rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10 hover:border-[var(--emerald-deep)]/30 transition-colors">
-                          <div className="w-10 h-10 rounded-full bg-[var(--emerald-deep)]/10 flex items-center justify-center shrink-0">
-                            <CheckCircle2 className="w-5 h-5 text-[var(--emerald-deep)]" />
+                        <div className="flex items-start gap-3 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10 hover:border-[var(--emerald-deep)]/30 transition-colors">
+                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[var(--emerald-deep)]/10 flex items-center justify-center shrink-0">
+                            <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-[var(--emerald-deep)]" />
                           </div>
-                          <span className="text-base text-[var(--text-primary)] pt-2">Communauté d'entraide</span>
+                          <span className="text-sm md:text-base text-[var(--text-primary)] pt-1.5 md:pt-2">Communauté d'entraide</span>
                         </div>
                       </div>
                     </div>
 
                     {/* À savoir - Subtil */}
-                    <div className="mb-10 p-6 rounded-xl bg-[var(--text-secondary)]/5 border border-[var(--border-subtle)]">
-                      <h3 className="text-[11px] font-black uppercase tracking-[0.3em] mb-4 text-[var(--text-secondary)]/50">
+                    <div className="mb-8 md:mb-10 p-4 md:p-6 rounded-lg md:rounded-xl bg-[var(--text-secondary)]/5 border border-[var(--border-subtle)]">
+                      <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] mb-3 md:mb-4 text-[var(--text-secondary)]/50">
                         À savoir
                       </h3>
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-3">
+                      <div className="space-y-2 md:space-y-3">
+                        <div className="flex items-center gap-2 md:gap-3">
                           <div className="w-1.5 h-1.5 rounded-full bg-[var(--text-secondary)]" />
-                          <span className="text-sm text-[var(--text-secondary)]">100 % asynchrone</span>
+                          <span className="text-xs md:text-sm text-[var(--text-secondary)]">100 % asynchrone</span>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 md:gap-3">
                           <div className="w-1.5 h-1.5 rounded-full bg-[var(--text-secondary)]" />
-                          <span className="text-sm text-[var(--text-secondary)]">Aucun support individuel</span>
+                          <span className="text-xs md:text-sm text-[var(--text-secondary)]">Aucun support individuel</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Message clé */}
-                    <div className="p-6 rounded-2xl bg-gradient-to-br from-[var(--emerald-deep)] to-[var(--emerald-deep)]/80 mb-10">
-                      <p className="text-sm text-white/90 leading-relaxed">
+                    <div className="p-5 md:p-6 rounded-xl md:rounded-2xl bg-gradient-to-br from-[var(--emerald-deep)] to-[var(--emerald-deep)]/80 mb-8 md:mb-10">
+                      <p className="text-xs md:text-sm text-white/90 leading-relaxed">
                         <strong className="text-white">Le socle indispensable</strong> sur lequel reposent toutes les autres offres, y compris le VIP.
                       </p>
                     </div>
 
                     {/* CTA Premium */}
                     <Link href="/offres" className="block">
-                      <button className="w-full group relative py-5 rounded-full bg-[var(--emerald-deep)] text-white font-bold text-base uppercase tracking-wider hover:bg-[var(--emerald-deep)]/90 transition-all overflow-hidden">
+                      <button className="w-full group relative py-4 md:py-5 rounded-full bg-[var(--emerald-deep)] text-white font-bold text-sm md:text-base uppercase tracking-wider hover:bg-[var(--emerald-deep)]/90 transition-all overflow-hidden">
                         <span className="relative z-10 flex items-center justify-center gap-2">
                           Commencer
-                          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                          <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                         </span>
                         <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                       </button>
@@ -774,91 +774,91 @@ export default function FormationPage() {
               {openModal === 'acceleration' && (
                 <div className="relative overflow-hidden">
                   {/* Gradient Background Decoration - Gold */}
-                  <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--gold-vivid)]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--gold-vivid)]/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+                  <div className="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-[var(--gold-vivid)]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                  <div className="absolute bottom-0 left-0 w-48 h-48 md:w-64 md:h-64 bg-[var(--gold-vivid)]/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
                   
-                  <div className="relative p-12">
+                  <div className="relative p-6 md:p-10 lg:p-12">
                     {/* Badge Premium avec Sparkles */}
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--gold-vivid)]/10 border border-[var(--gold-vivid)]/30 mb-8 shadow-lg shadow-[var(--gold-vivid)]/10">
-                      <Sparkles className="w-3.5 h-3.5 text-[var(--gold-vivid)] animate-pulse" />
-                      <span className="text-[9px] font-black tracking-[0.3em] text-[var(--gold-vivid)] uppercase">
+                    <div className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-[var(--gold-vivid)]/10 border border-[var(--gold-vivid)]/30 mb-6 md:mb-8 shadow-lg shadow-[var(--gold-vivid)]/10">
+                      <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5 text-[var(--gold-vivid)] animate-pulse" />
+                      <span className="text-[8px] md:text-[9px] font-black tracking-[0.3em] text-[var(--gold-vivid)] uppercase">
                         Offre 02
                       </span>
-                      <Sparkles className="w-3.5 h-3.5 text-[var(--gold-vivid)] animate-pulse" />
+                      <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5 text-[var(--gold-vivid)] animate-pulse" />
                     </div>
                     
                     {/* Titre */}
-                    <h2 className="text-5xl md:text-6xl font-light uppercase tracking-tight mb-3 leading-none">
+                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-light uppercase tracking-tight mb-2 md:mb-3 leading-none">
                       Accélération
                     </h2>
-                    <p className="text-lg text-[var(--text-secondary)] font-light mb-12">
+                    <p className="text-base md:text-lg text-[var(--text-secondary)] font-light mb-8 md:mb-12">
                       Avancer sans se perdre
                     </p>
 
                     {/* Prix - Mise en valeur Premium */}
-                    <div className="mb-12 p-8 rounded-2xl bg-gradient-to-br from-[var(--gold-vivid)]/15 via-[var(--gold-vivid)]/5 to-transparent border-2 border-[var(--gold-vivid)]/30 shadow-xl shadow-[var(--gold-vivid)]/10">
-                      <div className="flex items-baseline gap-3 mb-3">
-                        <span className="text-6xl font-bold text-[var(--gold-vivid)] tracking-tight">1 490 €</span>
+                    <div className="mb-8 md:mb-12 p-6 md:p-8 rounded-xl md:rounded-2xl bg-gradient-to-br from-[var(--gold-vivid)]/15 via-[var(--gold-vivid)]/5 to-transparent border-2 border-[var(--gold-vivid)]/30 shadow-xl shadow-[var(--gold-vivid)]/10">
+                      <div className="flex items-baseline gap-2 md:gap-3 mb-2 md:mb-3">
+                        <span className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--gold-vivid)] tracking-tight">1 490 €</span>
                       </div>
                       <div className="flex items-center gap-2 text-[var(--text-secondary)]">
-                        <span className="text-sm">ou</span>
-                        <span className="text-xl font-bold text-[var(--gold-vivid)]">3 × 530 €</span>
+                        <span className="text-xs md:text-sm">ou</span>
+                        <span className="text-lg md:text-xl font-bold text-[var(--gold-vivid)]">3 × 530 €</span>
                         <div className="flex gap-1 ml-1">
-                          <Sparkles className="w-4 h-4 text-[var(--gold-vivid)]" />
-                          <Sparkles className="w-3 h-3 text-[var(--gold-vivid)]" />
+                          <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-[var(--gold-vivid)]" />
+                          <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3 text-[var(--gold-vivid)]" />
                         </div>
                       </div>
                     </div>
 
                     {/* Inclus - Design Premium */}
-                    <div className="mb-10">
-                      <h3 className="text-[11px] font-black uppercase tracking-[0.3em] mb-6 text-[var(--text-secondary)]/50">
+                    <div className="mb-8 md:mb-10">
+                      <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] mb-4 md:mb-6 text-[var(--text-secondary)]/50">
                         Inclus dans l'offre
                       </h3>
-                      <div className="space-y-4">
-                        <div className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-[var(--gold-vivid)]/10 to-[var(--gold-vivid)]/5 border border-[var(--gold-vivid)]/20 hover:border-[var(--gold-vivid)]/40 transition-all hover:shadow-lg hover:shadow-[var(--gold-vivid)]/10">
-                          <div className="w-10 h-10 rounded-full bg-[var(--gold-vivid)]/20 flex items-center justify-center shrink-0">
-                            <CheckCircle2 className="w-5 h-5 text-[var(--gold-vivid)]" />
+                      <div className="space-y-3 md:space-y-4">
+                        <div className="flex items-start gap-3 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl bg-gradient-to-r from-[var(--gold-vivid)]/10 to-[var(--gold-vivid)]/5 border border-[var(--gold-vivid)]/20 hover:border-[var(--gold-vivid)]/40 transition-all hover:shadow-lg hover:shadow-[var(--gold-vivid)]/10">
+                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[var(--gold-vivid)]/20 flex items-center justify-center shrink-0">
+                            <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-[var(--gold-vivid)]" />
                           </div>
-                          <span className="text-base text-[var(--text-primary)] pt-2 font-medium">Tout FONDATIONS</span>
+                          <span className="text-sm md:text-base text-[var(--text-primary)] pt-1.5 md:pt-2 font-medium">Tout FONDATIONS</span>
                         </div>
-                        <div className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-[var(--gold-vivid)]/10 to-[var(--gold-vivid)]/5 border border-[var(--gold-vivid)]/20 hover:border-[var(--gold-vivid)]/40 transition-all hover:shadow-lg hover:shadow-[var(--gold-vivid)]/10">
-                          <div className="w-10 h-10 rounded-full bg-[var(--gold-vivid)]/20 flex items-center justify-center shrink-0">
-                            <CheckCircle2 className="w-5 h-5 text-[var(--gold-vivid)]" />
+                        <div className="flex items-start gap-3 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl bg-gradient-to-r from-[var(--gold-vivid)]/10 to-[var(--gold-vivid)]/5 border border-[var(--gold-vivid)]/20 hover:border-[var(--gold-vivid)]/40 transition-all hover:shadow-lg hover:shadow-[var(--gold-vivid)]/10">
+                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[var(--gold-vivid)]/20 flex items-center justify-center shrink-0">
+                            <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-[var(--gold-vivid)]" />
                           </div>
-                          <span className="text-base text-[var(--text-primary)] pt-2">1 live collectif par mois (Q&A)</span>
+                          <span className="text-sm md:text-base text-[var(--text-primary)] pt-1.5 md:pt-2">1 live collectif par mois (Q&A)</span>
                         </div>
-                        <div className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-[var(--gold-vivid)]/10 to-[var(--gold-vivid)]/5 border border-[var(--gold-vivid)]/20 hover:border-[var(--gold-vivid)]/40 transition-all hover:shadow-lg hover:shadow-[var(--gold-vivid)]/10">
-                          <div className="w-10 h-10 rounded-full bg-[var(--gold-vivid)]/20 flex items-center justify-center shrink-0">
-                            <CheckCircle2 className="w-5 h-5 text-[var(--gold-vivid)]" />
+                        <div className="flex items-start gap-3 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl bg-gradient-to-r from-[var(--gold-vivid)]/10 to-[var(--gold-vivid)]/5 border border-[var(--gold-vivid)]/20 hover:border-[var(--gold-vivid)]/40 transition-all hover:shadow-lg hover:shadow-[var(--gold-vivid)]/10">
+                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[var(--gold-vivid)]/20 flex items-center justify-center shrink-0">
+                            <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-[var(--gold-vivid)]" />
                           </div>
-                          <span className="text-base text-[var(--text-primary)] pt-2">Cadre clair, temps mutualisé</span>
+                          <span className="text-sm md:text-base text-[var(--text-primary)] pt-1.5 md:pt-2">Cadre clair, temps mutualisé</span>
                         </div>
                       </div>
                     </div>
 
                     {/* À savoir - Élégant */}
-                    <div className="mb-10 p-6 rounded-xl bg-gradient-to-br from-[var(--gold-vivid)]/5 to-transparent border border-[var(--gold-vivid)]/10">
-                      <h3 className="text-[11px] font-black uppercase tracking-[0.3em] mb-4 text-[var(--text-secondary)]/50">
+                    <div className="mb-8 md:mb-10 p-4 md:p-6 rounded-lg md:rounded-xl bg-gradient-to-br from-[var(--gold-vivid)]/5 to-transparent border border-[var(--gold-vivid)]/10">
+                      <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] mb-3 md:mb-4 text-[var(--text-secondary)]/50">
                         À savoir
                       </h3>
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-3">
+                      <div className="space-y-2 md:space-y-3">
+                        <div className="flex items-center gap-2 md:gap-3">
                           <div className="w-1.5 h-1.5 rounded-full bg-[var(--gold-vivid)]" />
-                          <span className="text-sm text-[var(--text-secondary)]">Idéal pour les profils non techniques</span>
+                          <span className="text-xs md:text-sm text-[var(--text-secondary)]">Idéal pour les profils non techniques</span>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 md:gap-3">
                           <div className="w-1.5 h-1.5 rounded-full bg-[var(--gold-vivid)]" />
-                          <span className="text-sm text-[var(--text-secondary)]">Sans surcharge mentale</span>
+                          <span className="text-xs md:text-sm text-[var(--text-secondary)]">Sans surcharge mentale</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Message clé - Gold Premium */}
-                    <div className="p-6 rounded-2xl bg-gradient-to-br from-[var(--gold-vivid)] via-[var(--gold-vivid)]/90 to-[var(--gold-vivid)]/70 mb-10 shadow-2xl shadow-[var(--gold-vivid)]/20">
-                      <div className="flex items-start gap-3">
-                        <Sparkles className="w-5 h-5 text-white shrink-0 mt-0.5" />
-                        <p className="text-sm text-white/95 leading-relaxed">
+                    <div className="p-5 md:p-6 rounded-xl md:rounded-2xl bg-gradient-to-br from-[var(--gold-vivid)] via-[var(--gold-vivid)]/90 to-[var(--gold-vivid)]/70 mb-8 md:mb-10 shadow-2xl shadow-[var(--gold-vivid)]/20">
+                      <div className="flex items-start gap-2 md:gap-3">
+                        <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-white shrink-0 mt-0.5" />
+                        <p className="text-xs md:text-sm text-white/95 leading-relaxed">
                           <strong className="text-white">Le meilleur équilibre</strong> entre autonomie et accompagnement.
                         </p>
                       </div>
@@ -866,10 +866,10 @@ export default function FormationPage() {
 
                     {/* CTA Premium Gold */}
                     <a href="https://tally.so/r/acceleration-echo-ia" target="_blank" rel="noopener noreferrer" className="block">
-                      <button className="w-full group relative py-5 rounded-full bg-[var(--gold-vivid)] text-white font-bold text-base uppercase tracking-wider hover:bg-[var(--gold-vivid)]/90 transition-all overflow-hidden shadow-xl shadow-[var(--gold-vivid)]/30 hover:shadow-2xl hover:shadow-[var(--gold-vivid)]/40">
+                      <button className="w-full group relative py-4 md:py-5 rounded-full bg-[var(--gold-vivid)] text-white font-bold text-sm md:text-base uppercase tracking-wider hover:bg-[var(--gold-vivid)]/90 transition-all overflow-hidden shadow-xl shadow-[var(--gold-vivid)]/30 hover:shadow-2xl hover:shadow-[var(--gold-vivid)]/40">
                         <span className="relative z-10 flex items-center justify-center gap-2">
                           Rejoindre
-                          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                          <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                         </span>
                         <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                       </button>
