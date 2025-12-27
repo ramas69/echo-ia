@@ -230,11 +230,15 @@ export const Footer = () => (
       </div>
       
       <div className="flex gap-8 md:gap-16 text-[8px] md:text-[9px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-[var(--text-secondary)]/40">
-        {['Privacy', 'Legal', 'Contact'].map((item) => (
-          <a key={item} href="#" className="hover:text-[var(--gold-vivid)] transition-colors">
-            {item}
-          </a>
-        ))}
+        <Link href="/mentions-legales#rgpd" className="hover:text-[var(--gold-vivid)] transition-colors">
+          Privacy
+        </Link>
+        <Link href="/mentions-legales" className="hover:text-[var(--gold-vivid)] transition-colors">
+          Legal
+        </Link>
+        <a href="mailto:contact@lechoia.com" className="hover:text-[var(--gold-vivid)] transition-colors">
+          Contact
+        </a>
       </div>
     </div>
     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-[var(--gold-vivid)]/20 to-transparent" />
