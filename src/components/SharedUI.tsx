@@ -229,14 +229,17 @@ export const Footer = () => (
         </p>
       </div>
       
-      <div className="flex gap-8 md:gap-16 text-[8px] md:text-[9px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-[var(--text-secondary)]/40">
-        <Link href="/mentions-legales#rgpd" className="hover:text-[var(--gold-vivid)] transition-colors">
+      <div className="flex flex-wrap gap-4 md:gap-8 lg:gap-16 text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] lg:tracking-[0.5em] text-[var(--text-secondary)]/40 justify-center md:justify-end">
+        <Link href="/mentions-legales#rgpd" className="hover:text-[var(--gold-vivid)] transition-colors whitespace-nowrap">
           Privacy
         </Link>
-        <Link href="/mentions-legales" className="hover:text-[var(--gold-vivid)] transition-colors">
-          Legal
+        <Link href="/mentions-legales" className="hover:text-[var(--gold-vivid)] transition-colors whitespace-nowrap">
+          Légal
         </Link>
-        <a href="mailto:contact@lechoia.com" className="hover:text-[var(--gold-vivid)] transition-colors">
+        <Link href="/cgv" className="hover:text-[var(--gold-vivid)] transition-colors whitespace-nowrap">
+          CGV
+        </Link>
+        <a href="mailto:contact@lechoia.com" className="hover:text-[var(--gold-vivid)] transition-colors whitespace-nowrap">
           Contact
         </a>
       </div>
