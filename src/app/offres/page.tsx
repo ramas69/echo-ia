@@ -8,22 +8,13 @@ import {
   Brain,
   Zap,
   Rocket,
-  User,
-  Users,
-  Crown,
-  Target,
-  Compass,
-  Sparkles,
-  Clock,
-  TrendingUp,
-  Shield,
-  DoorOpen
+  Sparkles
 } from 'lucide-react';
 import { Badge, TopBar, Navbar, Footer } from '@/components/SharedUI';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
-// Les 3 Personas (Concept 4)
+// Les 3 Personas
 const personas = [
   {
     id: "alex",
@@ -73,47 +64,6 @@ const personas = [
     offer: "vip",
     color: "dark",
     icon: Rocket
-  }
-];
-
-// Les 3 Portes (Concept 2)
-const doors = [
-  {
-    id: "solo",
-    title: "SOLO",
-    subtitle: "Je veux tout faire",
-    description: "Vous",
-    icon: User,
-    metaphor: "Le chemin de l'apprentissage",
-    details: "Vous construisez votre système pierre par pierre, avec une compréhension profonde de chaque élément.",
-    offer: "fondations",
-    color: "emerald",
-    emoji: "🚪"
-  },
-  {
-    id: "accompagne",
-    title: "ACCOMPAGNÉ",
-    subtitle: "Je veux un guide",
-    description: "Vous + Nous",
-    icon: Users,
-    metaphor: "Le chemin de la co-construction",
-    details: "Vous avancez avec un cadre clair et des réponses à vos questions, sans jamais être seul.",
-    offer: "acceleration",
-    color: "gold",
-    emoji: "🚪",
-    popular: true
-  },
-  {
-    id: "premium",
-    title: "PREMIUM",
-    subtitle: "Je délègue tout",
-    description: "Nous pour vous",
-    icon: Crown,
-    metaphor: "Le chemin de la libération",
-    details: "Nous installons votre système complet pendant que vous vous concentrez sur votre expertise.",
-    offer: "vip",
-    color: "dark",
-    emoji: "🚪"
   }
 ];
 
@@ -189,7 +139,6 @@ const offers = [
 export default function OffresPage() {
   const [mounted, setMounted] = useState(false);
   const [selectedPersona, setSelectedPersona] = useState<string | null>(null);
-  const [hoveredDoor, setHoveredDoor] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -210,7 +159,7 @@ export default function OffresPage() {
       {/* Hero */}
       <section className="pt-48 pb-20 px-6">
         <div className="max-w-6xl mx-auto text-center">
-          <Badge className="mb-8">Deux approches pour trouver votre offre</Badge>
+          <Badge className="mb-8">Trouvez votre chemin</Badge>
           
           <motion.h1 
             className="text-5xl md:text-7xl font-light uppercase tracking-tighter mb-6"
@@ -227,17 +176,16 @@ export default function OffresPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            Explorez les deux méthodes ci-dessous pour découvrir l'offre <br />
-            parfaitement adaptée à votre situation et vos objectifs.
+            Identifiez-vous à l'un de ces trois profils pour découvrir <br />
+            l'offre parfaitement adaptée à votre situation et vos objectifs.
           </motion.p>
         </div>
       </section>
 
-      {/* CONCEPT 4 : LES 3 PERSONAS */}
+      {/* LES 3 PERSONAS */}
       <section className="py-20 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <Badge className="mb-6 border-[var(--emerald-deep)]/30">Concept 1 : Identification</Badge>
             <h2 className="text-4xl md:text-5xl font-light uppercase tracking-tighter mb-4">
               Avec qui vous <span className="font-serif italic text-[var(--emerald-deep)]">identifiez-vous</span> ?
             </h2>
@@ -246,7 +194,7 @@ export default function OffresPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-20">
             {personas.map((persona, i) => {
               const PersonaIcon = persona.icon;
               const isSelected = selectedPersona === persona.id;
@@ -344,123 +292,8 @@ export default function OffresPage() {
         </div>
       </section>
 
-      {/* Séparateur visuel */}
-      <div className="py-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="h-px bg-gradient-to-r from-transparent via-[var(--border-subtle)] to-transparent" />
-          <div className="text-center py-8">
-            <p className="text-sm font-black uppercase tracking-[0.3em] text-[var(--text-secondary)]/40">
-              Ou
-            </p>
-          </div>
-          <div className="h-px bg-gradient-to-r from-transparent via-[var(--border-subtle)] to-transparent" />
-        </div>
-      </div>
-
-      {/* CONCEPT 2 : LES 3 PORTES */}
-      <section className="py-20 px-6 bg-gradient-to-br from-[var(--emerald-deep)]/5 to-transparent">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge className="mb-6 border-[var(--gold-vivid)]/30">Concept 2 : Métaphore</Badge>
-            <h2 className="text-4xl md:text-5xl font-light uppercase tracking-tighter mb-4">
-              Choisissez <span className="font-serif italic text-[var(--gold-vivid)]">votre chemin</span>
-            </h2>
-            <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-              Trois portes, trois destinations. Quelle porte ouvrirez-vous ?
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {doors.map((door, i) => {
-              const DoorIcon = door.icon;
-              const isHovered = hoveredDoor === door.id;
-              
-              return (
-                <motion.div
-                  key={door.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.15 }}
-                  onMouseEnter={() => setHoveredDoor(door.id)}
-                  onMouseLeave={() => setHoveredDoor(null)}
-                  onClick={() => scrollToOffer(door.offer)}
-                  className={cn(
-                    "relative p-10 rounded-3xl border-2 cursor-pointer transition-all group",
-                    isHovered
-                      ? "border-[var(--gold-vivid)] shadow-2xl bg-white scale-105"
-                      : "border-[var(--border-subtle)] bg-white/80 hover:bg-white"
-                  )}
-                >
-                  {door.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <Badge className="bg-[var(--gold-vivid)] text-white border-[var(--gold-vivid)]">
-                        Équilibre parfait
-                      </Badge>
-                    </div>
-                  )}
-
-                  {/* Door Visual */}
-                  <div className="text-center mb-6">
-                    <motion.div 
-                      className="text-7xl mb-4"
-                      animate={{
-                        rotateY: isHovered ? 30 : 0,
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {door.emoji}
-                    </motion.div>
-                    
-                    <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--emerald-deep)]/10 flex items-center justify-center mb-4">
-                      <DoorIcon className="w-8 h-8 text-[var(--emerald-deep)]" />
-                    </div>
-
-                    <h3 className="text-3xl font-light uppercase tracking-tight mb-2">
-                      {door.title}
-                    </h3>
-                    <p className="text-sm text-[var(--text-secondary)] italic mb-1">
-                      {door.subtitle}
-                    </p>
-                    <div className="text-lg font-medium text-[var(--emerald-deep)]">
-                      {door.description}
-                    </div>
-                  </div>
-
-                  {/* Metaphor */}
-                  <div className="mb-6 p-4 rounded-xl bg-[var(--emerald-deep)]/5 border border-[var(--emerald-deep)]/10">
-                    <p className="text-xs font-bold uppercase tracking-wider text-[var(--emerald-deep)] mb-2 text-center">
-                      {door.metaphor}
-                    </p>
-                    <p className="text-sm text-[var(--text-secondary)] text-center leading-relaxed">
-                      {door.details}
-                    </p>
-                  </div>
-
-                  {/* CTA */}
-                  <button
-                    className={cn(
-                      "w-full py-4 rounded-full font-bold text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2",
-                      isHovered
-                        ? "bg-[var(--gold-vivid)] text-white shadow-lg"
-                        : "bg-[var(--emerald-deep)] text-white group-hover:bg-[var(--emerald-deep)]/90"
-                    )}
-                  >
-                    <DoorOpen className={cn(
-                      "w-5 h-5 transition-transform",
-                      isHovered && "rotate-12"
-                    )} />
-                    Entrer
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* Les 3 offres détaillées */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-20 px-6 bg-gradient-to-br from-[var(--emerald-deep)]/5 to-transparent">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-light uppercase tracking-tighter mb-4">
