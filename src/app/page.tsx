@@ -177,47 +177,157 @@ const QualificationSection = () => (
   </section>
 );
 
-const ImmersionSection = () => (
-  <section className="py-32 px-6 bg-[var(--bg-primary)]">
-    <div className="max-w-5xl mx-auto">
-      <div className="text-center mb-16">
-        <Badge className="mb-6 border-[var(--gold-vivid)]/30">IMMERSION</Badge>
-        <h2 className="text-4xl md:text-6xl font-light uppercase tracking-tighter text-balance mb-12">
-          À quoi ressemble votre quotidien <br /><span className="font-serif italic text-[var(--gold-vivid)]">après ?</span>
-        </h2>
-      </div>
+const ImmersionSection = () => {
+  const [activeCards, setActiveCards] = React.useState<number[]>([]);
+
+  const benefits = [
+    "Vos clients trouvent des réponses sans vous solliciter",
+    "Votre message continue de circuler quand vous êtes hors ligne",
+    "Vos paiements, contrats et accès se gèrent seuls",
+    "Votre agenda se remplit avec des personnes déjà alignées",
+    "Votre énergie est protégée"
+  ];
+
+  const toggleCard = (index: number) => {
+    setActiveCards(prev => 
+      prev.includes(index) 
+        ? prev.filter(i => i !== index)
+        : [...prev, index]
+    );
+  };
+
+  return (
+    <section className="py-32 px-6 bg-[var(--bg-primary)] relative overflow-hidden">
+      {/* Background glow effects */}
+      <div className="absolute top-20 left-10 w-96 h-96 bg-[var(--emerald-deep)]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-[var(--gold-vivid)]/5 rounded-full blur-3xl pointer-events-none" />
       
-      <div className="max-w-3xl mx-auto space-y-6 mb-16">
-        {[
-          "Vos clients trouvent des réponses sans vous solliciter",
-          "Votre message continue de circuler quand vous êtes hors ligne",
-          "Vos paiements, contrats et accès se gèrent seuls",
-          "Votre agenda se remplit avec des personnes déjà alignées",
-          "Votre énergie est protégée"
-        ].map((benefit, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.1 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-4 p-6 rounded-2xl glass-card hover:border-[var(--gold-vivid)]/20 transition-all"
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="text-center mb-16">
+          <Badge className="mb-6 border-[var(--gold-vivid)]/30">IMMERSION</Badge>
+          <h2 className="text-4xl md:text-6xl font-light uppercase tracking-tighter text-balance mb-6">
+            À quoi ressemble votre quotidien <br /><span className="font-serif italic text-[var(--gold-vivid)]">après ?</span>
+          </h2>
+          <p className="text-sm text-[var(--text-secondary)] uppercase tracking-wider">
+            Cliquez pour activer chaque bénéfice
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {benefits.map((benefit, i) => {
+            const isActive = activeCards.includes(i);
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+                onClick={() => toggleCard(i)}
+                className="group cursor-pointer"
+              >
+                <div className={`
+                  relative h-full p-8 rounded-3xl border-2 transition-all duration-500
+                  ${isActive 
+                    ? 'bg-gradient-to-br from-[var(--emerald-deep)] to-[var(--emerald-deep)]/90 border-[var(--gold-vivid)] shadow-2xl scale-105' 
+                    : 'glass-card border-[var(--border-subtle)] hover:border-[var(--gold-vivid)]/30'
+                  }
+                `}>
+                  {/* Glow effect when active */}
+                  {isActive && (
+                    <>
+                      <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="absolute inset-0 rounded-3xl bg-[var(--gold-vivid)]/20 blur-xl -z-10"
+                      />
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", duration: 0.5 }}
+                        className="absolute -top-2 -right-2"
+                      >
+                        <div className="w-6 h-6 rounded-full bg-[var(--gold-vivid)] flex items-center justify-center shadow-lg">
+                          <CheckCircle2 className="w-4 h-4 text-white" />
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                  
+                  {/* Icon */}
+                  <div className={`
+                    w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500
+                    ${isActive 
+                      ? 'bg-white/20 backdrop-blur-sm' 
+                      : 'bg-[var(--emerald-deep)]/5 group-hover:bg-[var(--emerald-deep)]/10'
+                    }
+                  `}>
+                    {isActive ? (
+                      <Zap className="w-6 h-6 text-[var(--gold-sand)]" />
+                    ) : (
+                      <div className="w-3 h-3 rounded-full border-2 border-[var(--emerald-deep)]/40 group-hover:border-[var(--emerald-deep)]" />
+                    )}
+                  </div>
+                  
+                  {/* Text */}
+                  <p className={`
+                    text-sm leading-relaxed transition-all duration-500
+                    ${isActive 
+                      ? 'text-white font-medium' 
+                      : 'text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]'
+                    }
+                  `}>
+                    {benefit}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+        
+        {/* Counter */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full glass-card border border-[var(--gold-vivid)]/20">
+            <div className="flex items-center gap-2">
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    activeCards.includes(i)
+                      ? 'bg-[var(--gold-vivid)] scale-125'
+                      : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-xs font-bold text-[var(--text-secondary)]">
+              {activeCards.length}/5 activés
+            </span>
+          </div>
+        </div>
+        
+        <div className="text-center">
+          <motion.p 
+            className="text-2xl md:text-4xl font-light text-[var(--text-primary)] italic"
+            animate={activeCards.length === 5 ? {
+              scale: [1, 1.05, 1],
+              transition: { duration: 0.5 }
+            } : {}}
           >
-            <CheckCircle2 className="w-6 h-6 text-[var(--emerald-deep)] flex-shrink-0" />
-            <p className="text-base text-[var(--text-secondary)]">{benefit}</p>
-          </motion.div>
-        ))}
+            Pendant que vous accompagnez, <br />
+            <span className={`font-serif transition-all duration-500 ${
+              activeCards.length === 5 
+                ? 'text-[var(--gold-vivid)] drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]' 
+                : 'text-[var(--gold-vivid)]'
+            }`}>
+              le système s'occupe du reste.
+            </span>
+          </motion.p>
+        </div>
       </div>
-      
-      <div className="text-center">
-        <p className="text-2xl md:text-4xl font-light text-[var(--text-primary)] italic">
-          Pendant que vous accompagnez, <br />
-          <span className="font-serif text-[var(--gold-vivid)]">le système s'occupe du reste.</span>
-        </p>
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const DemoLive = () => {
   const [isPlaying, setIsPlaying] = React.useState(false);
