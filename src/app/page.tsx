@@ -178,119 +178,162 @@ const QualificationSection = () => (
 );
 
 const ImmersionSection = () => {
-  const [activeCards, setActiveCards] = React.useState<number[]>([]);
+  const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null);
 
   const benefits = [
-    "Vos clients trouvent des réponses sans vous solliciter",
-    "Votre message continue de circuler quand vous êtes hors ligne",
-    "Vos paiements, contrats et accès se gèrent seuls",
-    "Votre agenda se remplit avec des personnes déjà alignées",
-    "Votre énergie est protégée"
+    {
+      title: "Vos clients trouvent des réponses",
+      subtitle: "sans vous solliciter",
+      icon: ShieldCheck
+    },
+    {
+      title: "Votre message continue de circuler",
+      subtitle: "quand vous êtes hors ligne",
+      icon: Zap
+    },
+    {
+      title: "Vos paiements, contrats et accès",
+      subtitle: "se gèrent seuls",
+      icon: CheckCircle2
+    },
+    {
+      title: "Votre agenda se remplit",
+      subtitle: "avec des personnes déjà alignées",
+      icon: Target
+    },
+    {
+      title: "Votre énergie",
+      subtitle: "est protégée",
+      icon: Sparkles
+    }
   ];
 
-  const toggleCard = (index: number) => {
-    setActiveCards(prev => 
-      prev.includes(index) 
-        ? prev.filter(i => i !== index)
-        : [...prev, index]
-    );
-  };
-
   return (
-    <section className="py-32 px-6 bg-[var(--bg-primary)]">
+    <section className="py-32 px-6 bg-[var(--bg-primary)] relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--gold-vivid)]/20 to-transparent" />
+      
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <Badge className="mb-6 border-[var(--gold-vivid)]/30">IMMERSION</Badge>
-          <h2 className="text-4xl md:text-6xl font-light uppercase tracking-tighter text-balance mb-6">
-            À quoi ressemble votre quotidien <br /><span className="font-serif italic text-[var(--gold-vivid)]">après ?</span>
+        {/* Header */}
+        <div className="text-center mb-24">
+          <Badge className="mb-8 border-[var(--gold-vivid)]/30">IMMERSION</Badge>
+          <h2 className="text-5xl md:text-7xl font-light uppercase tracking-tighter text-balance mb-6 leading-tight">
+            À quoi ressemble votre quotidien <br />
+            <span className="font-serif italic text-[var(--gold-vivid)]">après ?</span>
           </h2>
         </div>
         
-        {/* Cards horizontales */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {benefits.map((benefit, i) => {
-            const isActive = activeCards.includes(i);
-            return (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-                onClick={() => toggleCard(i)}
-                className="group cursor-pointer"
-              >
+        {/* Grid de bénéfices */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-1 mb-20">
+          {benefits.map((benefit, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08, duration: 0.6 }}
+              viewport={{ once: true }}
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className="relative group"
+            >
+              <div className={`
+                relative h-full min-h-[320px] p-8 
+                border-l border-[var(--border-subtle)]
+                transition-all duration-700
+                ${hoveredIndex === i 
+                  ? 'bg-gradient-to-b from-[var(--emerald-deep)] to-[var(--emerald-deep)]/95' 
+                  : 'bg-transparent hover:bg-[var(--bg-secondary)]'
+                }
+              `}>
+                {/* Number indicator */}
                 <div className={`
-                  relative h-full min-h-[200px] p-6 rounded-3xl transition-all duration-500
-                  flex flex-col justify-between
-                  ${isActive 
-                    ? 'bg-[var(--emerald-deep)] border-2 border-[var(--gold-vivid)] shadow-2xl' 
-                    : 'bg-white/50 border-2 border-gray-200 hover:border-[var(--gold-vivid)]/40 hover:shadow-lg'
+                  absolute top-8 left-8 text-[10px] font-black tracking-[0.5em] 
+                  transition-all duration-700
+                  ${hoveredIndex === i 
+                    ? 'text-[var(--gold-vivid)]' 
+                    : 'text-[var(--text-secondary)]/20'
                   }
                 `}>
-                  
-                  {/* Text */}
-                  <p className={`
-                    text-base leading-relaxed transition-all duration-500 mb-12
-                    ${isActive 
-                      ? 'text-white font-medium' 
-                      : 'text-[var(--text-secondary)]'
+                  0{i + 1}
+                </div>
+
+                {/* Icon */}
+                <div className="absolute top-8 right-8">
+                  <div className={`
+                    w-12 h-12 rounded-full flex items-center justify-center
+                    transition-all duration-700
+                    ${hoveredIndex === i 
+                      ? 'bg-[var(--gold-vivid)]/20 backdrop-blur-sm scale-110' 
+                      : 'bg-[var(--emerald-deep)]/5'
                     }
                   `}>
-                    {benefit}
-                  </p>
-                  
-                  {/* Arrow button bottom right */}
-                  <div className="flex justify-end">
-                    <div className={`
-                      w-10 h-10 rounded-full flex items-center justify-center
-                      transition-all duration-500
-                      ${isActive 
-                        ? 'bg-white/20 backdrop-blur-sm' 
-                        : 'bg-gray-200 group-hover:bg-[var(--emerald-deep)]/10'
+                    {React.createElement(benefit.icon, {
+                      className: `w-6 h-6 transition-all duration-700 ${
+                        hoveredIndex === i 
+                          ? 'text-[var(--gold-sand)]' 
+                          : 'text-[var(--emerald-deep)]/40'
+                      }`
+                    })}
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-col justify-end h-full pt-24">
+                  <div className="space-y-2">
+                    <h3 className={`
+                      text-lg font-light leading-tight transition-all duration-700
+                      ${hoveredIndex === i 
+                        ? 'text-white' 
+                        : 'text-[var(--text-primary)]'
                       }
                     `}>
-                      <ArrowUpRight className={`
-                        w-5 h-5 transition-all duration-500
-                        ${isActive 
-                          ? 'text-white' 
-                          : 'text-[var(--text-secondary)] group-hover:text-[var(--emerald-deep)]'
-                        }
-                      `} />
-                    </div>
+                      {benefit.title}
+                    </h3>
+                    <p className={`
+                      text-base font-light italic transition-all duration-700
+                      ${hoveredIndex === i 
+                        ? 'text-[var(--gold-sand)]' 
+                        : 'text-[var(--text-secondary)]'
+                      }
+                    `}>
+                      {benefit.subtitle}
+                    </p>
                   </div>
 
-                  {/* Glow effect when active */}
-                  {isActive && (
-                    <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="absolute inset-0 rounded-3xl bg-[var(--gold-vivid)]/20 blur-xl -z-10"
-                    />
-                  )}
+                  {/* Hover indicator */}
+                  <div className={`
+                    mt-8 w-full h-0.5 transition-all duration-700
+                    ${hoveredIndex === i 
+                      ? 'bg-[var(--gold-vivid)]' 
+                      : 'bg-transparent'
+                    }
+                  `} />
                 </div>
-              </motion.div>
-            );
-          })}
+
+                {/* Gradient overlay on hover */}
+                {hoveredIndex === i && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="absolute inset-0 bg-gradient-to-t from-[var(--emerald-deep)] via-transparent to-transparent pointer-events-none"
+                  />
+                )}
+              </div>
+            </motion.div>
+          ))}
         </div>
         
+        {/* Conclusion */}
         <div className="text-center">
-          <motion.p 
-            className="text-2xl md:text-4xl font-light text-[var(--text-primary)] italic"
-            animate={activeCards.length === 5 ? {
-              scale: [1, 1.05, 1],
-              transition: { duration: 0.5 }
-            } : {}}
-          >
-            Pendant que vous accompagnez, <br />
-            <span className={`font-serif transition-all duration-500 ${
-              activeCards.length === 5 
-                ? 'text-[var(--gold-vivid)] drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]' 
-                : 'text-[var(--gold-vivid)]'
-            }`}>
-              le système s'occupe du reste.
-            </span>
-          </motion.p>
+          <div className="max-w-4xl mx-auto">
+            <div className="h-px w-24 bg-gradient-to-r from-transparent via-[var(--gold-vivid)] to-transparent mx-auto mb-12" />
+            <p className="text-3xl md:text-5xl font-light text-[var(--text-primary)] leading-tight">
+              Pendant que vous accompagnez, <br />
+              <span className="font-serif italic text-[var(--gold-vivid)]">
+                le système s'occupe du reste.
+              </span>
+            </p>
+          </div>
         </div>
       </div>
     </section>
