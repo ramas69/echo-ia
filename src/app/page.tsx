@@ -895,7 +895,7 @@ const PromiseSection = () => (
           </SophisticatedButton>
         </Link>
       </div>
-    </div>
+        </div>
   </section>
 );
 
