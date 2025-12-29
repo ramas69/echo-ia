@@ -39,7 +39,7 @@ export default function LoginPage() {
         // Récupérer la session pour obtenir le rôle de l'utilisateur
         const session = await getSession();
         console.log('👤 Session récupérée:', session);
-        const userRole = session?.user?.role;
+        const userRole = (session?.user as any)?.role as "ADMIN" | "STUDENT" | undefined;
         
         // Redirection selon le rôle
         const redirectUrl = userRole === 'ADMIN' ? "/admin" : "/academie";
