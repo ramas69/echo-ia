@@ -60,6 +60,42 @@ interface UnitEditorProps {
   initialUnit: any;
 }
 
+// Helper pour extraire l'ID vidéo depuis une URL
+const extractVideoId = (input: string, provider: string): string => {
+  if (!input) return '';
+  
+  // Si ça ne ressemble pas à une URL, retourner tel quel (c'est déjà un ID)
+  if (!input.includes('http') && !input.includes('www.')) {
+    return input.trim();
+  }
+
+  try {
+    if (provider === 'YOUTUBE') {
+      // Supporte: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/embed/ID
+      const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+        /^([a-zA-Z0-9_-]{11})$/ // ID YouTube direct
+      ];
+      for (const pattern of patterns) {
+        const match = input.match(pattern);
+        if (match) return match[1];
+      }
+    } else if (provider === 'VIMEO') {
+      // Supporte: vimeo.com/ID, player.vimeo.com/video/ID
+      const match = input.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+      if (match) return match[1];
+    } else if (provider === 'LOOM') {
+      // Supporte: loom.com/share/ID, loom.com/embed/ID
+      const match = input.match(/loom\.com\/(?:share|embed)\/([a-zA-Z0-9]+)/);
+      if (match) return match[1];
+    }
+  } catch (e) {
+    console.error('Erreur extraction ID vidéo:', e);
+  }
+  
+  return input.trim(); // Fallback: retourner l'input nettoyé
+};
+
 export default function UnitEditor({ initialUnit }: UnitEditorProps) {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
@@ -79,15 +115,16 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
   });
 
   const formData = watch(); // Surveille tous les champs pour l'aperçu
+  const title = watch("title");
+  const videoProvider = watch("videoProvider");
 
-  // Fonction pour régénérer le slug depuis le titre
-  const regenerateSlug = () => {
-    const currentTitle = watch("title");
-    if (currentTitle) {
-      const newSlug = slugify(currentTitle);
+  // Génération automatique du slug depuis le titre
+  useEffect(() => {
+    if (title) {
+      const newSlug = slugify(title);
       setValue("slug", newSlug);
     }
-  };
+  }, [title, setValue]);
 
   // Effet pour logger les erreurs dès qu'elles changent
   useEffect(() => {
@@ -207,23 +244,13 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
                 {errors.title && <p className="text-red-500 text-[9px] uppercase font-black">{String(errors.title.message)}</p>}
               </div>
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Slug URL</label>
-                  <button
-                    type="button"
-                    onClick={regenerateSlug}
-                    className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--bg-secondary)] text-[9px] font-black uppercase tracking-widest text-[var(--emerald-deep)]/60 hover:text-[var(--emerald-deep)] transition-all"
-                    title="Générer automatiquement depuis le titre"
-                  >
-                    <RefreshCw className="w-3 h-3" />
-                    Générer
-                  </button>
-                </div>
+                <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Slug URL (généré automatiquement)</label>
                 <input 
                   {...register("slug")}
                   className="w-full bg-[var(--bg-secondary)] border border-transparent rounded-xl py-3 px-4 text-sm font-bold focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
+                  readOnly
                 />
-                <p className="text-[9px] uppercase tracking-widest opacity-30">⚠️ Changer le slug cassera les liens existants</p>
+                <p className="text-[9px] uppercase tracking-widest opacity-30">✨ Mis à jour automatiquement depuis le titre</p>
               </div>
 
               <div className="space-y-2">
@@ -239,14 +266,21 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest opacity-40">ID Vidéo / URL</label>
+                <label className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                  URL Vidéo ou ID
+                  <span className="ml-2 text-[8px] opacity-40 normal-case font-normal">(Collez l'URL complète, l'ID sera extrait automatiquement)</span>
+                </label>
                 <input 
                   {...register("videoId")}
+                  onChange={(e) => {
+                    const extractedId = extractVideoId(e.target.value, videoProvider);
+                    setValue("videoId", extractedId);
+                  }}
                   className={cn(
                     "w-full bg-[var(--bg-secondary)] border border-transparent rounded-xl py-3 px-4 text-sm font-bold focus:outline-none focus:border-[var(--gold-vivid)] transition-all",
                     errors.videoId && "border-red-500 bg-red-50"
                   )}
-                  placeholder="Ex: dQw4w9WgXcQ"
+                  placeholder="Ex: https://www.youtube.com/watch?v=dQw4w9WgXcQ ou dQw4w9WgXcQ"
                 />
                 {errors.videoId && <p className="text-red-500 text-[9px] uppercase font-black">{String(errors.videoId.message)}</p>}
               </div>

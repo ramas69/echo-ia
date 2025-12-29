@@ -5,12 +5,14 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Démarrage du Seed LMS...");
 
-  // 1. PHASE 1
+  // 1. PILIER 1
   const phase1 = await prisma.phase.upsert({
     where: { slug: 'second-cerveau' },
-    update: {},
+    update: {
+      title: "PILIER 1 // LE SECOND CERVEAU",
+    },
     create: {
-      title: "PHASE 1 // LE SECOND CERVEAU",
+      title: "PILIER 1 // LE SECOND CERVEAU",
       slug: "second-cerveau",
       description: "Organiser votre expertise pour ne plus jamais vous répéter.",
       outcome: "Votre sagesse est organisée, protégée et disponible 24/7 pour ceux que vous aidez.",
@@ -66,12 +68,14 @@ async function main() {
     skipDuplicates: true
   });
 
-  // 2. PHASE 2
+  // 2. PILIER 2
   const phase2 = await prisma.phase.upsert({
     where: { slug: 'usine-contenu' },
-    update: {},
+    update: {
+      title: "PILIER 2 // L'USINE À CONTENU",
+    },
     create: {
-      title: "PHASE 2 // L'USINE À CONTENU",
+      title: "PILIER 2 // L'USINE À CONTENU",
       slug: "usine-contenu",
       description: "Amplifiez votre message authentique sans y laisser votre énergie vitale.",
       outcome: "Amplifiez votre message authentique sans y laisser votre énergie vitale.",

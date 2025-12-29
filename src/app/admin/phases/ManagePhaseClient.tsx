@@ -48,22 +48,15 @@ export default function ManagePhaseClient({ phase }: ManagePhaseClientProps) {
     },
   });
 
-  // Fonction pour régénérer le slug depuis le titre
-  const regenerateSlug = () => {
-    const currentTitle = watch("title");
-    if (currentTitle) {
-      const newSlug = slugify(currentTitle);
+  const title = watch("title");
+
+  // Génération automatique du slug depuis le titre
+  React.useEffect(() => {
+    if (title) {
+      const newSlug = slugify(title);
       setValue("slug", newSlug);
     }
-  };
-
-  // Auto-generate slug from title ONLY for new phases
-  const title = watch("title");
-  React.useEffect(() => {
-    if (phase.id === 'new' && title) {
-      regenerateSlug();
-    }
-  }, [title, phase.id]);
+  }, [title, setValue]);
 
   const onSubmit = async (data: PhaseFormValues) => {
     setIsSaving(true);
@@ -137,25 +130,15 @@ export default function ManagePhaseClient({ phase }: ManagePhaseClientProps) {
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Slug URL</label>
-                <button
-                  type="button"
-                  onClick={regenerateSlug}
-                  className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-[var(--bg-secondary)] text-[9px] font-black uppercase tracking-widest text-[var(--emerald-deep)]/60 hover:text-[var(--emerald-deep)] transition-all"
-                  title="Générer automatiquement depuis le titre"
-                >
-                  <RefreshCw className="w-3 h-3" />
-                  Générer
-                </button>
-              </div>
+              <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Slug URL (généré automatiquement)</label>
               <input 
                 {...register("slug")}
                 className="w-full bg-[var(--bg-secondary)] border border-transparent rounded-xl py-3 px-4 text-sm font-bold focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
                 placeholder="ex: second-cerveau"
+                readOnly
               />
               {errors.slug && <p className="text-red-500 text-[9px] uppercase font-black">{errors.slug.message}</p>}
-              <p className="text-[9px] uppercase tracking-widest opacity-30">⚠️ Changer le slug cassera les liens existants</p>
+              <p className="text-[9px] uppercase tracking-widest opacity-30">✨ Mis à jour automatiquement depuis le titre</p>
             </div>
           </div>
         </section>

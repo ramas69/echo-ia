@@ -256,77 +256,83 @@ const SortablePhase = ({ phase, index, isExpanded, onToggleExpand, onEdit, onDel
   return (
     <div ref={setNodeRef} style={style} className="space-y-4">
       <div className={cn(
-        "group flex items-center justify-between p-6 bg-white border rounded-[2rem] shadow-sm transition-all",
+        "group bg-white border rounded-[2rem] shadow-sm transition-all overflow-hidden",
         phase.isPublished ? "border-[var(--border-subtle)] hover:shadow-md" : "border-dashed border-gray-200 opacity-70 shadow-none",
         isDragging && "opacity-50 border-[var(--gold-vivid)]"
       )}>
-        <div className="flex items-center gap-6">
-          <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing p-2 opacity-20 group-hover:opacity-100 transition-opacity">
-            <GripVertical className="w-5 h-5" />
-          </button>
-          
-          <button 
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onToggleExpand();
-            }}
-            className="p-2 hover:bg-[var(--bg-secondary)] rounded-full transition-colors"
-          >
-            {isExpanded ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-          </button>
-          
-          <div className="flex flex-col">
-            <div className="flex items-center gap-3">
-              <span className="text-xl font-black text-[var(--emerald-deep)]/10 uppercase italic tabular-nums">Phase {index + 1}</span>
-              <h3 className="text-lg font-bold uppercase tracking-tight">{phase.title}</h3>
-              <div className="px-3 py-1 rounded-full bg-[var(--bg-secondary)] text-[9px] font-black uppercase tracking-widest text-[var(--emerald-deep)]/40 tabular-nums">
-                {totalUnits} Unité{totalUnits > 1 ? 's' : ''} • {formatDuration(totalDuration)}
+        {/* En-tête principale */}
+        <div className="flex items-center justify-between p-6">
+          <div className="flex items-center gap-5 flex-1 min-w-0">
+            <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing p-2 opacity-20 group-hover:opacity-100 transition-opacity flex-shrink-0">
+              <GripVertical className="w-5 h-5" />
+            </button>
+            
+            <button 
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onToggleExpand();
+              }}
+              className="p-2 hover:bg-[var(--bg-secondary)] rounded-full transition-colors flex-shrink-0"
+            >
+              {isExpanded ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+            </button>
+            
+            <div className="flex flex-col flex-1 min-w-0">
+              <div className="flex items-baseline gap-3 flex-wrap">
+                <span className="text-xs font-black text-[var(--emerald-deep)]/30 uppercase tracking-wider tabular-nums flex-shrink-0">
+                  Phase {index + 1}
+                </span>
+                <h3 className="text-lg font-bold uppercase tracking-tight flex-shrink-0">{phase.title}</h3>
+                <div className="px-3 py-1 rounded-full bg-[var(--bg-secondary)] text-[9px] font-black uppercase tracking-widest text-[var(--emerald-deep)]/40 tabular-nums flex-shrink-0">
+                  {totalUnits} Unité{totalUnits > 1 ? 's' : ''} • {formatDuration(totalDuration)}
+                </div>
               </div>
+              <p className="text-xs text-[var(--text-secondary)]/60 line-clamp-1 mt-1">{phase.description}</p>
             </div>
-            <p className="text-xs text-[var(--text-secondary)]/60 line-clamp-1 max-w-xl">{phase.description}</p>
           </div>
-        </div>
 
-        <div className="flex items-center gap-4">
-          {/* Toggle Published */}
+          {/* Statut de publication */}
           <button 
             type="button"
             onClick={() => onTogglePhasePublish(phase)}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all",
+              "flex items-center gap-2 px-4 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all flex-shrink-0 ml-4",
               phase.isPublished 
-                ? "bg-[var(--emerald-deep)] text-white shadow-xl shadow-emerald-900/30" 
+                ? "bg-[var(--emerald-deep)] text-white shadow-lg shadow-emerald-900/20" 
                 : "bg-gray-100 text-gray-400 hover:bg-gray-200"
             )}
           >
             <div className={cn("w-1.5 h-1.5 rounded-full", phase.isPublished ? "bg-white animate-pulse" : "bg-gray-300")} />
             {phase.isPublished ? "En Ligne" : "Brouillon"}
           </button>
+        </div>
 
-          <div className="h-8 w-px bg-[var(--border-subtle)] mx-2" />
-
+        {/* Barre d'actions */}
+        <div className="flex items-center justify-between px-6 pb-6 pt-0">
           <button 
             type="button"
             onClick={() => onAddUnit(phase.id)}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--emerald-deep)]/5 text-[var(--emerald-deep)] hover:bg-[var(--emerald-deep)] hover:text-white transition-all text-[10px] font-black uppercase tracking-widest"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--emerald-deep)]/5 text-[var(--emerald-deep)] hover:bg-[var(--emerald-deep)] hover:text-white transition-all text-[10px] font-black uppercase tracking-widest shadow-sm hover:shadow-md"
           >
-            <Plus className="w-3 h-3" /> Ajouter une unité
+            <Plus className="w-3.5 h-3.5" /> Ajouter une unité
           </button>
 
-          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <button 
               type="button"
               onClick={() => onEdit(phase)}
-              className="p-3 hover:bg-[var(--bg-secondary)] rounded-xl text-[var(--emerald-deep)] transition-colors"
+              className="p-2.5 hover:bg-[var(--bg-secondary)] rounded-xl text-[var(--emerald-deep)] transition-colors"
+              title="Modifier la phase"
             >
               <Edit2 className="w-4 h-4" />
             </button>
             <button 
               type="button"
               onClick={() => onDelete(phase.id)}
-              className="p-3 hover:bg-red-50 rounded-xl text-red-500 transition-colors"
+              className="p-2.5 hover:bg-red-50 rounded-xl text-red-500 transition-colors"
+              title="Supprimer la phase"
             >
               <Trash2 className="w-4 h-4" />
             </button>

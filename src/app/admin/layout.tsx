@@ -5,12 +5,12 @@ import {
   LayoutDashboard, 
   Users, 
   ArrowLeft, 
-  LogOut, 
   Activity,
   Zap,
   ShieldAlert
 } from 'lucide-react';
 import Link from 'next/link';
+import LogoutButton from '@/components/LogoutButton';
 
 export default async function AdminLayout({
   children,
@@ -57,8 +57,9 @@ export default async function AdminLayout({
         <div className="pt-6 border-t border-[var(--border-subtle)] space-y-1">
           <Link href="/" className="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)] font-bold text-[10px] uppercase tracking-widest transition-all group">
             <ArrowLeft className="w-4 h-4" /> 
-            Quitter l'Admin
+            Retour au site
           </Link>
+          <LogoutButton />
         </div>
       </aside>
 

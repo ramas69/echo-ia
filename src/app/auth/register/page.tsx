@@ -17,26 +17,52 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("🔵 FRONTEND - Début de l'inscription...");
     setLoading(true);
     setError('');
 
     try {
+      console.log("📤 FRONTEND - Envoi des données:", { email, name, passwordLength: password.length });
+      
       const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name }),
       });
 
+      console.log("📥 FRONTEND - Réponse reçue:", res.status, res.statusText);
+      
+      // Lire le texte brut d'abord pour déboguer
+      const textResponse = await res.text();
+      console.log("📄 FRONTEND - Contenu brut de la réponse:", textResponse.substring(0, 500));
+
       if (res.ok) {
-        router.push('/auth/login');
+        try {
+          const data = JSON.parse(textResponse);
+          console.log("✅ FRONTEND - Inscription réussie!", data);
+          alert('✅ Inscription réussie ! Vous pouvez maintenant vous connecter.');
+          router.push('/auth/login');
+        } catch (parseError) {
+          console.error("❌ FRONTEND - Impossible de parser le JSON:", parseError);
+          console.error("📄 FRONTEND - Réponse complète:", textResponse);
+          setError('Erreur de parsing de la réponse du serveur');
+        }
       } else {
-        const data = await res.json();
-        setError(data.message || 'Une erreur est survenue.');
+        try {
+          const data = JSON.parse(textResponse);
+          console.error("❌ FRONTEND - Erreur:", data);
+          setError(data.message || 'Une erreur est survenue.');
+        } catch (parseError) {
+          console.error("❌ FRONTEND - Réponse non-JSON:", textResponse.substring(0, 200));
+          setError('Erreur du serveur: ' + textResponse.substring(0, 100));
+        }
       }
     } catch (err) {
-      setError('Une erreur est survenue.');
+      console.error("❌ FRONTEND - Exception:", err);
+      setError('Une erreur est survenue: ' + (err instanceof Error ? err.message : 'Inconnue'));
     } finally {
       setLoading(false);
+      console.log("🏁 FRONTEND - Fin du processus d'inscription");
     }
   };
 

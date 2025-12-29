@@ -20,6 +20,8 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
+    console.log('🔐 Tentative de connexion pour:', email);
+
     try {
       const result = await signIn('credentials', {
         email,
@@ -27,13 +29,30 @@ export default function LoginPage() {
         redirect: false,
       });
 
+      console.log('📥 Résultat signIn:', result);
+
       if (result?.error) {
+        console.log('❌ Erreur de connexion:', result.error);
         setError('Identifiants invalides.');
       } else {
-        // Redirection forcée pour déclencher le middleware
-        window.location.href = "/academie";
+        console.log('✅ Connexion réussie, récupération de la session...');
+        // Récupérer la session pour obtenir le rôle de l'utilisateur
+        const session = await getSession();
+        console.log('👤 Session récupérée:', session);
+        const userRole = session?.user?.role;
+        
+        // Redirection selon le rôle
+        const redirectUrl = userRole === 'ADMIN' ? "/admin" : "/academie";
+        console.log('🔄 Redirection vers:', redirectUrl);
+        
+        if (userRole === 'ADMIN') {
+          window.location.href = "/admin";
+        } else {
+          window.location.href = "/academie";
+        }
       }
     } catch (err) {
+      console.error('💥 Exception lors de la connexion:', err);
       setError('Une erreur est survenue.');
     } finally {
       setLoading(false);
@@ -101,9 +120,12 @@ export default function LoginPage() {
           </SophisticatedButton>
         </form>
 
-        <div className="mt-10 text-center">
+        <div className="mt-10 text-center space-y-4">
           <p className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)]">
             Pas encore membre ? <Link href="/auth/register" className="text-[var(--emerald-deep)] font-black hover:text-[var(--gold-vivid)] transition-colors">Postuler ici</Link>
+          </p>
+          <p className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)]">
+            Déjà connecté ? <Link href="/auth/logout" className="text-red-500 font-black hover:text-red-600 transition-colors">Se déconnecter d'abord</Link>
           </p>
         </div>
       </motion.div>

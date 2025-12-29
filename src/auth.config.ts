@@ -6,13 +6,11 @@ export const authConfig = {
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith('/admin') || nextUrl.pathname.startsWith('/academie');
-      
-      if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
-      }
+      console.log("🔑 AUTH.CONFIG authorized() appelé:", {
+        path: nextUrl.pathname,
+        isAuthenticated: !!auth
+      });
+      // Laisser le middleware gérer les redirections
       return true;
     },
     async session({ session, token }: any) {
