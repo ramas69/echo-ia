@@ -57,13 +57,18 @@ model User {
   role          String    @default("STUDENT") // STUDENT or ADMIN
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-
+  
+  // Avatar dynamique basé sur progression
+  avatarSeed    String?   @default(cuid()) // Seed pour générer l'avatar
+  
   accounts      Account[]
   sessions      Session[]
   
   // LMS Relationships
   progress      UserProgress[]
   phaseStatuses UserPhaseStatus[]
+  notes         UserNote[]
+  milestones    UserMilestone[]
 }
 
 model UserProgress {
@@ -128,6 +133,7 @@ model Unit {
   content     String? @db.Text 
   resources   Resource[]
   progress    UserProgress[]
+  notes       UserNote[]
 
   @@unique([phaseId, orderIndex])
   @@index([phaseId])
@@ -148,6 +154,52 @@ model Resource {
   textContent String?      @db.Text 
 }
 
+// --- NOTES PERSONNELLES ---
+
+model UserNote {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  unit      Unit     @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  unitId    String
+  
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([unitId])
+}
+
+// --- MILESTONES & OBJECTIFS ---
+
+model Milestone {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  icon        String   // Emoji ou nom d'icône
+  threshold   Int      // Pourcentage ou nombre requis
+  type        MilestoneType
+  orderIndex  Int
+  
+  userMilestones UserMilestone[]
+  
+  @@index([orderIndex])
+}
+
+model UserMilestone {
+  id          String    @id @default(cuid())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  milestoneId String
+  
+  unlockedAt  DateTime  @default(now())
+  
+  @@unique([userId, milestoneId])
+  @@index([userId])
+}
+
 // --- ENUMS ---
 
 enum PhaseStatus {
@@ -163,4 +215,12 @@ enum ResourceType {
   PROMPT_TEXT
   EXTERNAL_LINK
   FILE_DOWNLOAD
+}
+
+enum MilestoneType {
+  PROGRESSION      // Basé sur % global
+  STREAK           // Jours consécutifs
+  SPEED            // Activations en 1 jour
+  COMPLETION       // Pilier complété
+  DEDICATION       // Temps total investi
 }
