@@ -20,7 +20,8 @@ import {
   ArrowLeft,
   FileText,
   Lock,
-  ExternalLink
+  ExternalLink,
+  Settings
 } from 'lucide-react';
 import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import Link from 'next/link';
@@ -81,6 +82,13 @@ export default function AcademieClient({
               </div>
               <span className="text-[10px] font-black uppercase tracking-wider text-[var(--emerald-deep)]">{userName}</span>
             </div>
+            <Link 
+              href="/academie/parametres"
+              className="p-3 rounded-xl hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:text-[var(--emerald-deep)] transition-all group"
+              title="Paramètres"
+            >
+              <Settings className="w-4 h-4" />
+            </Link>
             <LogoutButton />
           </div>
         </div>

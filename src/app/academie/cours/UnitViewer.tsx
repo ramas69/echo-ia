@@ -17,7 +17,8 @@ import {
   ArrowRight,
   Zap,
   FileDown,
-  X
+  X,
+  Settings
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -326,8 +327,17 @@ export default function UnitViewerClient({
             </div>
               </Link>
           
-          <div className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)]/30">
-            {currentPhase.title}
+          <div className="flex items-center gap-4">
+            <div className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)]/30">
+              {currentPhase.title}
+            </div>
+            <Link 
+              href="/academie/parametres"
+              className="p-2 rounded-xl hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:text-[var(--emerald-deep)] transition-all"
+              title="Paramètres"
+            >
+              <Settings className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </header>
