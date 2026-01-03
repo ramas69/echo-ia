@@ -108,7 +108,15 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--emerald-deep)]/60">Mot de passe</label>
+            <div className="flex items-center justify-between">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--emerald-deep)]/60">Mot de passe</label>
+              <Link 
+                href="/auth/forgot-password"
+                className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] hover:text-[var(--gold-vivid)] transition-colors font-bold"
+              >
+                Oublié ?
+              </Link>
+            </div>
             <div className="relative group">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--emerald-deep)]/30 group-focus-within:text-[var(--gold-vivid)] transition-colors" />
               <input 
