@@ -126,3 +126,42 @@ export const forgotPasswordSchema = z.object({
   email: emailSchema,
 });
 
+/**
+ * Fonction utilitaire pour valider un email
+ */
+export const validateEmail = (email: string): { success: boolean; error: string | null; data?: string } => {
+  try {
+    const validatedEmail = emailSchema.parse(email);
+    return { success: true, error: null, data: validatedEmail };
+  } catch (error: any) {
+    const firstError = error.errors?.[0]?.message || 'Email invalide';
+    return { success: false, error: firstError };
+  }
+};
+
+/**
+ * Fonction utilitaire pour valider un mot de passe
+ */
+export const validatePassword = (password: string): { success: boolean; error: string | null; data?: string } => {
+  try {
+    const validatedPassword = passwordSchema.parse(password);
+    return { success: true, error: null, data: validatedPassword };
+  } catch (error: any) {
+    const firstError = error.errors?.[0]?.message || 'Mot de passe invalide';
+    return { success: false, error: firstError };
+  }
+};
+
+/**
+ * Fonction utilitaire pour valider un nom
+ */
+export const validateName = (name: string): { success: boolean; error: string | null; data?: string } => {
+  try {
+    const validatedName = nameSchema.parse(name);
+    return { success: true, error: null, data: validatedName };
+  } catch (error: any) {
+    const firstError = error.errors?.[0]?.message || 'Nom invalide';
+    return { success: false, error: firstError };
+  }
+};
+
