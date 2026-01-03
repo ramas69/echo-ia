@@ -260,7 +260,8 @@ export default function LoginPage() {
           <p className="text-xs text-[var(--text-secondary)] uppercase tracking-[0.2em]">Reprenez votre protocole.</p>
         </div>
 
-        {/* OAuth Google */}
+        {/* OAuth Google - Temporairement désactivé */}
+        {/* 
         <div className="mb-8">
           <button
             onClick={handleGoogleLogin}
@@ -279,7 +280,6 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {/* Divider */}
         <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-[var(--border-subtle)]"></div>
@@ -290,6 +290,7 @@ export default function LoginPage() {
             </span>
           </div>
         </div>
+        */}
 
         {/* Email/Password Form */}
         <form onSubmit={handlePasswordLogin} className="space-y-6">
@@ -348,7 +349,8 @@ export default function LoginPage() {
           </SophisticatedButton>
         </form>
 
-        {/* Magic Link Button */}
+        {/* Magic Link Button - Temporairement désactivé */}
+        {/*
         <div className="mt-6">
           <button
             onClick={() => setShowMagicLink(true)}
@@ -360,6 +362,7 @@ export default function LoginPage() {
             </span>
           </button>
         </div>
+        */}
 
         <div className="mt-10 text-center space-y-4">
           <p className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)]">
