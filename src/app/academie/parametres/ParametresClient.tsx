@@ -3,16 +3,23 @@
 import React, { useState } from 'react';
 import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import { motion } from 'framer-motion';
-import { User, Mail, Lock, Shield, TrendingUp, Clock, CheckCircle, AlertCircle, Save, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, Save, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import { createClient } from '@/lib/supabase-client';
 import { useRouter } from 'next/navigation';
 import { validateName, validatePassword } from '@/lib/validation';
+import DynamicAvatar from '@/components/DynamicAvatar';
+import ProgressChart from '@/components/ProgressChart';
+import TimeAnalysis from '@/components/TimeAnalysis';
+import MilestonesGrid from '@/components/MilestonesGrid';
+import NotesTimeline from '@/components/NotesTimeline';
+import AIRecommendations from '@/components/AIRecommendations';
 
 interface ParametresClientProps {
   user: {
     name: string;
     email: string;
     role: string;
+    avatarSeed: string;
   };
   stats: {
     totalUnits: number;
@@ -20,9 +27,16 @@ interface ParametresClientProps {
     progressPercent: number;
     totalMinutes: number;
   };
+  analytics: {
+    progressChartData: any[];
+    timeInsights: any;
+    aiRecommendations: any[];
+    milestones: any[];
+    notes: any[];
+  };
 }
 
-export default function ParametresClient({ user, stats }: ParametresClientProps) {
+export default function ParametresClient({ user, stats, analytics }: ParametresClientProps) {
   const [name, setName] = useState(user.name);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -41,7 +55,6 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
     setError('');
     setSuccess('');
 
-    // Valider le nom
     const nameValidation = validateName(name);
     if (!nameValidation.success) {
       setError(nameValidation.error);
@@ -79,7 +92,6 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
     setError('');
     setSuccess('');
 
-    // Valider le nouveau mot de passe
     const passwordValidation = validatePassword(newPassword);
     if (!passwordValidation.success) {
       setError(passwordValidation.error);
@@ -96,7 +108,6 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
     try {
       const supabase = createClient();
       
-      // Réauthentifier avec le mot de passe actuel
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: user.email,
         password: currentPassword,
@@ -107,7 +118,6 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
         return;
       }
 
-      // Mettre à jour le mot de passe
       const { error: updateError } = await supabase.auth.updateUser({
         password: newPassword,
       });
@@ -132,7 +142,7 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
     <div className="min-h-screen bg-[#FDFCFB] mesh-gradient">
       {/* Header */}
       <div className="border-b border-[var(--border-subtle)] bg-white/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-[1800px] mx-auto px-6 py-4 flex items-center justify-between">
           <div>
             <Badge className="mb-2">Paramètres</Badge>
             <h1 className="text-2xl font-light uppercase tracking-tighter">
@@ -148,116 +158,90 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Statistiques */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Carte Progression */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="glass-card p-8 rounded-[2rem] border border-[var(--border-subtle)]"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 bg-gradient-to-br from-[var(--emerald-deep)] to-[var(--emerald-vivid)] rounded-2xl">
-                  <TrendingUp className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Progression</p>
-                  <p className="text-2xl font-light">{stats.progressPercent}%</p>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-[var(--text-secondary)]">Activations</span>
-                  <span className="font-bold text-[var(--emerald-deep)]">{stats.completedUnits}/{stats.totalUnits}</span>
-                </div>
-                <div className="w-full bg-[var(--bg-secondary)] rounded-full h-2 overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-[var(--emerald-deep)] to-[var(--emerald-vivid)] transition-all duration-500"
-                    style={{ width: `${stats.progressPercent}%` }}
-                  />
-                </div>
-              </div>
-            </motion.div>
+      <div className="max-w-[1800px] mx-auto px-6 py-12">
+        {/* Messages globaux */}
+        {success && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3"
+          >
+            <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-emerald-700 leading-relaxed">{success}</p>
+          </motion.div>
+        )}
 
-            {/* Carte Temps Total */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="glass-card p-8 rounded-[2rem] border border-[var(--border-subtle)]"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl">
-                  <Clock className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Temps investi</p>
-                  <p className="text-2xl font-light">{Math.floor(stats.totalMinutes / 60)}h {stats.totalMinutes % 60}m</p>
-                </div>
-              </div>
-            </motion.div>
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 bg-red-50 border border-red-200 rounded-2xl p-4 flex items-start gap-3"
+          >
+            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-red-700 leading-relaxed">{error}</p>
+          </motion.div>
+        )}
 
-            {/* Carte Rôle */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="glass-card p-8 rounded-[2rem] border border-[var(--border-subtle)]"
-            >
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl">
-                  <Shield className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Statut</p>
-                  <p className="text-lg font-light">{user.role === 'ADMIN' ? 'Administrateur' : 'Étudiant'}</p>
-                </div>
+        {/* Avatar & Stats Hero */}
+        <div className="mb-12">
+          <div className="glass-card p-12 rounded-[2.5rem] border border-[var(--border-subtle)] text-center">
+            <div className="flex flex-col items-center gap-6">
+              <DynamicAvatar
+                name={user.name}
+                progressPercent={stats.progressPercent}
+                seed={user.avatarSeed}
+                size={120}
+              />
+              <div>
+                <h2 className="text-3xl font-light uppercase tracking-tight mb-2">{user.name}</h2>
+                <p className="text-sm text-[var(--text-secondary)]">{user.email}</p>
               </div>
-            </motion.div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Grid Layout */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+          
+          {/* Col 1: Analytics (Col 8) */}
+          <div className="xl:col-span-8 space-y-8">
+            {/* AI Recommendations */}
+            {analytics.aiRecommendations.length > 0 && (
+              <AIRecommendations recommendations={analytics.aiRecommendations} />
+            )}
+
+            {/* Progress Chart */}
+            <ProgressChart 
+              data={analytics.progressChartData}
+              title="Progression des 7 derniers jours"
+            />
+
+            {/* Time Analysis */}
+            <TimeAnalysis insights={analytics.timeInsights} />
+
+            {/* Milestones */}
+            <MilestonesGrid milestones={analytics.milestones} />
+
+            {/* Notes Timeline */}
+            {analytics.notes.length > 0 && (
+              <NotesTimeline notes={analytics.notes} />
+            )}
           </div>
 
-          {/* Formulaires */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Messages */}
-            {success && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3"
-              >
-                <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                <p className="text-xs text-emerald-700 leading-relaxed">{success}</p>
-              </motion.div>
-            )}
-
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-start gap-3"
-              >
-                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                <p className="text-xs text-red-700 leading-relaxed">{error}</p>
-              </motion.div>
-            )}
-
-            {/* Formulaire Informations Personnelles */}
+          {/* Col 2: Forms (Col 4) */}
+          <div className="xl:col-span-4 space-y-8">
+            {/* Formulaire Profil */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="glass-card p-10 rounded-[2.5rem] border border-[var(--border-subtle)]"
+              className="glass-card p-8 rounded-[2.5rem] border border-[var(--border-subtle)]"
             >
-              <div className="mb-8">
-                <Badge className="mb-4">Informations personnelles</Badge>
-                <h2 className="text-xl font-light uppercase tracking-tighter">
-                  Modifier mon <span className="font-serif italic text-[var(--emerald-deep)]">identité.</span>
-                </h2>
-              </div>
+              <Badge className="mb-4">Informations</Badge>
+              <h3 className="text-lg font-light uppercase tracking-tighter mb-6 text-[var(--emerald-deep)]">
+                Modifier mon identité
+              </h3>
 
-              <form onSubmit={handleUpdateProfile} className="space-y-6">
+              <form onSubmit={handleUpdateProfile} className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--emerald-deep)]/60">
                     Nom complet
@@ -269,8 +253,7 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
-                      className="w-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
-                      placeholder="Votre nom"
+                      className="w-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl py-3 pl-12 pr-4 text-sm focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
                     />
                   </div>
                 </div>
@@ -285,21 +268,18 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
                       type="email"
                       value={user.email}
                       disabled
-                      className="w-full bg-gray-100 border border-[var(--border-subtle)] rounded-2xl py-4 pl-12 pr-4 text-sm text-gray-500 cursor-not-allowed"
+                      className="w-full bg-gray-100 border border-[var(--border-subtle)] rounded-2xl py-3 pl-12 pr-4 text-sm text-gray-500 cursor-not-allowed"
                     />
                   </div>
-                  <p className="text-[10px] text-[var(--text-secondary)] italic">
-                    L'email ne peut pas être modifié.
-                  </p>
                 </div>
 
                 <SophisticatedButton
                   type="submit"
                   disabled={loading}
-                  className="w-full justify-center py-4 group"
+                  className="w-full justify-center py-3"
                 >
                   <Save className="w-4 h-4 mr-2" />
-                  <span>{loading ? 'Enregistrement...' : 'Enregistrer les modifications'}</span>
+                  {loading ? 'Enregistrement...' : 'Enregistrer'}
                 </SophisticatedButton>
               </form>
             </motion.div>
@@ -308,20 +288,18 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="glass-card p-10 rounded-[2.5rem] border border-[var(--border-subtle)]"
+              transition={{ delay: 0.1 }}
+              className="glass-card p-8 rounded-[2.5rem] border border-[var(--border-subtle)]"
             >
-              <div className="mb-8">
-                <Badge className="mb-4 bg-amber-50 text-amber-700 border-amber-200">Sécurité</Badge>
-                <h2 className="text-xl font-light uppercase tracking-tighter">
-                  Changer mon <span className="font-serif italic text-[var(--emerald-deep)]">mot de passe.</span>
-                </h2>
-              </div>
+              <Badge className="mb-4 bg-amber-50 text-amber-700 border-amber-200">Sécurité</Badge>
+              <h3 className="text-lg font-light uppercase tracking-tighter mb-6 text-[var(--emerald-deep)]">
+                Changer mot de passe
+              </h3>
 
-              <form onSubmit={handleUpdatePassword} className="space-y-6">
+              <form onSubmit={handleUpdatePassword} className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--emerald-deep)]/60">
-                    Mot de passe actuel
+                    Actuel
                   </label>
                   <div className="relative group">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--emerald-deep)]/30 group-focus-within:text-[var(--gold-vivid)] transition-colors" />
@@ -330,8 +308,7 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       required
-                      className="w-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl py-4 pl-12 pr-12 text-sm focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
-                      placeholder="••••••••"
+                      className="w-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl py-3 pl-12 pr-12 text-sm focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
                     />
                     <button
                       type="button"
@@ -345,7 +322,7 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--emerald-deep)]/60">
-                    Nouveau mot de passe
+                    Nouveau
                   </label>
                   <div className="relative group">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--emerald-deep)]/30 group-focus-within:text-[var(--gold-vivid)] transition-colors" />
@@ -354,8 +331,7 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       required
-                      className="w-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl py-4 pl-12 pr-12 text-sm focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
-                      placeholder="••••••••"
+                      className="w-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl py-3 pl-12 pr-12 text-sm focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
                     />
                     <button
                       type="button"
@@ -369,7 +345,7 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--emerald-deep)]/60">
-                    Confirmer le nouveau mot de passe
+                    Confirmer
                   </label>
                   <div className="relative group">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--emerald-deep)]/30 group-focus-within:text-[var(--gold-vivid)] transition-colors" />
@@ -378,8 +354,7 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
-                      className="w-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl py-4 pl-12 pr-12 text-sm focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
-                      placeholder="••••••••"
+                      className="w-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl py-3 pl-12 pr-12 text-sm focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
                     />
                     <button
                       type="button"
@@ -391,22 +366,13 @@ export default function ParametresClient({ user, stats }: ParametresClientProps)
                   </div>
                 </div>
 
-                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
-                  <p className="text-[10px] text-amber-800 leading-relaxed">
-                    <strong>Votre mot de passe doit contenir :</strong><br />
-                    • Au moins 8 caractères<br />
-                    • Une majuscule et une minuscule<br />
-                    • Un chiffre et un caractère spécial
-                  </p>
-                </div>
-
                 <SophisticatedButton
                   type="submit"
                   disabled={loading}
-                  className="w-full justify-center py-4 group bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
+                  className="w-full justify-center py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
                 >
                   <Lock className="w-4 h-4 mr-2" />
-                  <span>{loading ? 'Modification...' : 'Changer le mot de passe'}</span>
+                  {loading ? 'Modification...' : 'Changer'}
                 </SophisticatedButton>
               </form>
             </motion.div>
