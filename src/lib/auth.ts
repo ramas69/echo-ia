@@ -1,29 +1,43 @@
-import { createClient } from '@supabase/supabase-js';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export async function auth() {
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get('sb-access-token')?.value;
-  const refreshToken = cookieStore.get('sb-refresh-token')?.value;
 
-  if (!accessToken || !refreshToken) {
-    return null;
-  }
-
-  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      persistSession: false,
-    },
-  });
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          try {
+            cookieStore.set({ name, value, ...options });
+          } catch (error) {
+            // Ignore les erreurs (dans certains contextes, set n'est pas autorisé)
+          }
+        },
+        remove(name: string, options: CookieOptions) {
+          try {
+            cookieStore.set({ name, value: '', ...options });
+          } catch (error) {
+            // Ignore les erreurs
+          }
+        },
+      },
+    }
+  );
 
   const { data: { session }, error } = await supabase.auth.getSession();
 
   if (error || !session) {
+    console.log('🔍 AUTH - Pas de session:', error?.message);
     return null;
   }
+
+  console.log('🔍 AUTH - Session trouvée:', session.user.email);
 
   // Récupérer le rôle de l'utilisateur
   const { data: userData } = await supabase
