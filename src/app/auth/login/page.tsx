@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import { motion } from 'framer-motion';
@@ -8,7 +8,7 @@ import { Mail, Lock, ArrowRight, Sparkles, AlertCircle, CheckCircle } from 'luci
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase-client';
 
-export default function LoginPage() {
+function LoginPageContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -379,5 +379,17 @@ export default function LoginPage() {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#FDFCFB] flex items-center justify-center">
+        <div className="text-sm text-[var(--text-secondary)]">Chargement...</div>
+      </div>
+    }>
+      <LoginPageContent />
+    </Suspense>
   );
 }

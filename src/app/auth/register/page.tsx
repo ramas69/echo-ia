@@ -43,6 +43,7 @@ export default function RegisterPage() {
       // Données validées
       const { email: validEmail, password: validPassword, name: validName } = validationResult.data;
 
+      const supabase = createClient();
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: validEmail,
         password: validPassword,

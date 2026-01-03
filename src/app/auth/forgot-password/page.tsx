@@ -33,6 +33,7 @@ export default function ForgotPasswordPage() {
         return;
       }
 
+      const supabase = createClient();
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(
         validationResult.data.email,
         {

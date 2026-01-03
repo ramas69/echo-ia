@@ -20,6 +20,7 @@ export default function ResetPasswordPage() {
   useEffect(() => {
     // Vérifier qu'on a bien un token de récupération
     const checkToken = async () => {
+      const supabase = createClient();
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
         setValidToken(true);
@@ -49,6 +50,7 @@ export default function ResetPasswordPage() {
         return;
       }
 
+      const supabase = createClient();
       const { error: updateError } = await supabase.auth.updateUser({
         password: validationResult.data.password,
       });

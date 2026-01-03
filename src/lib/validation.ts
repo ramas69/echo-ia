@@ -129,7 +129,7 @@ export const forgotPasswordSchema = z.object({
 /**
  * Fonction utilitaire pour valider un email
  */
-export const validateEmail = (email: string): { success: boolean; error: string | null; data?: string } => {
+export const validateEmail = (email: string): { success: true; error: null; data: string } | { success: false; error: string } => {
   try {
     const validatedEmail = emailSchema.parse(email);
     return { success: true, error: null, data: validatedEmail };
@@ -142,7 +142,7 @@ export const validateEmail = (email: string): { success: boolean; error: string 
 /**
  * Fonction utilitaire pour valider un mot de passe
  */
-export const validatePassword = (password: string): { success: boolean; error: string | null; data?: string } => {
+export const validatePassword = (password: string): { success: true; error: null; data: string } | { success: false; error: string } => {
   try {
     const validatedPassword = passwordSchema.parse(password);
     return { success: true, error: null, data: validatedPassword };
@@ -155,7 +155,7 @@ export const validatePassword = (password: string): { success: boolean; error: s
 /**
  * Fonction utilitaire pour valider un nom
  */
-export const validateName = (name: string): { success: boolean; error: string | null; data?: string } => {
+export const validateName = (name: string): { success: true; error: null; data: string } | { success: false; error: string } => {
   try {
     const validatedName = nameSchema.parse(name);
     return { success: true, error: null, data: validatedName };
