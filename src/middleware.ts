@@ -1,26 +1,61 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 export async function middleware(request: NextRequest) {
-  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      persistSession: false,
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
     },
   });
 
-  // Récupérer le token depuis les cookies
-  const token = request.cookies.get('sb-access-token')?.value;
-  
-  let session = null;
-  if (token) {
-    const { data: { session: userSession } } = await supabase.auth.getSession();
-    session = userSession;
-  }
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+        },
+        remove(name: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value: '',
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value: '',
+            ...options,
+          });
+        },
+      },
+    }
+  );
 
+  const { data: { session } } = await supabase.auth.getSession();
   const { pathname } = request.nextUrl;
 
   // Routes publiques
@@ -39,8 +74,8 @@ export async function middleware(request: NextRequest) {
   ];
 
   // Routes API publiques
-  if (pathname.startsWith('/api/auth') || pathname === '/api/register') {
-    return NextResponse.next();
+  if (pathname.startsWith('/api/') || pathname.startsWith('/_next/')) {
+    return response;
   }
 
   // Si pas de session et route protégée
@@ -75,7 +110,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {
