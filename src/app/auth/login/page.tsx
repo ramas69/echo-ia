@@ -6,7 +6,7 @@ import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight, Sparkles, AlertCircle, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -29,6 +29,7 @@ export default function LoginPage() {
     setError('');
 
     try {
+      const supabase = createClient();
       const { error: signInError } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -51,43 +52,63 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
+    console.log('🔐 LOGIN - Début de la connexion pour:', email);
+
     try {
+      const supabase = createClient();
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
+      console.log('📊 LOGIN - Réponse Supabase:', {
+        hasData: !!data,
+        hasUser: !!data?.user,
+        hasSession: !!data?.session,
+        error: signInError?.message,
+      });
+
       if (signInError) {
+        console.error('❌ LOGIN - Erreur signInWithPassword:', signInError);
         if (signInError.message === 'Email not confirmed') {
           setError('Veuillez confirmer votre email avant de vous connecter.');
         } else if (signInError.message === 'Invalid login credentials') {
           setError('Email ou mot de passe incorrect.');
         } else {
-          setError('Erreur de connexion.');
+          setError('Erreur de connexion: ' + signInError.message);
         }
         return;
       }
 
       if (data.user) {
+        console.log('👤 LOGIN - Utilisateur trouvé:', data.user.email, 'ID:', data.user.id);
+
         const { data: userData, error: userError } = await supabase
           .from('User')
           .select('role')
           .eq('id', data.user.id)
           .single();
 
+        console.log('👤 LOGIN - Données User table:', { userData, userError });
+
         if (userError) {
-          setError('Erreur lors de la récupération du profil.');
+          console.error('❌ LOGIN - Erreur récupération profil:', userError);
+          setError('Erreur lors de la récupération du profil: ' + userError.message);
           return;
         }
 
-        if (userData.role === 'ADMIN') {
-          router.push('/admin');
-        } else {
-          router.push('/academie');
-        }
+        const targetUrl = userData.role === 'ADMIN' ? '/admin' : '/academie';
+        console.log('🎯 LOGIN - Redirection vers:', targetUrl);
+
+        // Forcer un rechargement complet pour que le middleware détecte la session
+        window.location.href = targetUrl;
+      } else {
+        console.error('❌ LOGIN - Pas de user dans la réponse!');
+        setError('Erreur: utilisateur non trouvé.');
       }
-    } catch (err) {
-      setError('Une erreur est survenue.');
+    } catch (err: any) {
+      console.error('❌ LOGIN - Exception:', err);
+      setError('Une erreur est survenue: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -99,6 +120,7 @@ export default function LoginPage() {
     setError('');
 
     try {
+      const supabase = createClient();
       const { error: magicLinkError } = await supabase.auth.signInWithOtp({
         email,
         options: {

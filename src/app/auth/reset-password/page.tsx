@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import { motion } from 'framer-motion';
 import { Lock, CheckCircle, AlertCircle } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 import { resetPasswordSchema } from '@/lib/validation';
 
 export default function ResetPasswordPage() {

@@ -6,7 +6,7 @@ import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, Sparkles, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 import { registerSchema } from '@/lib/validation';
 
 export default function RegisterPage() {

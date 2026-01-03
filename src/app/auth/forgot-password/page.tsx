@@ -5,7 +5,7 @@ import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import { motion } from 'framer-motion';
 import { Mail, ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 import { forgotPasswordSchema } from '@/lib/validation';
 
 export default function ForgotPasswordPage() {
