@@ -56,7 +56,7 @@ export default function MilestonesGrid({ milestones }: MilestonesGridProps) {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.05 }}
             className={`
-              relative p-4 rounded-2xl border-2 transition-all cursor-pointer group
+              relative p-4 rounded-2xl border-2 transition-all group cursor-pointer
               ${
                 milestone.isUnlocked
                   ? 'bg-gradient-to-br from-[var(--emerald-deep)]/10 to-transparent border-[var(--emerald-deep)]/30 hover:border-[var(--emerald-deep)] hover:shadow-lg'

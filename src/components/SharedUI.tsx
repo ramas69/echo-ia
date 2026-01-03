@@ -30,7 +30,7 @@ export const SophisticatedButton = ({ children, variant = 'primary', className =
       whileHover={{ y: -3, scale: 1.02 }}
       whileTap={{ scale: 0.97 }}
       className={cn(
-        "px-10 py-5 rounded-full font-bold uppercase tracking-[0.2em] text-[10px] transition-all duration-500 flex items-center gap-3 relative group overflow-hidden",
+        "px-10 py-5 rounded-full font-bold uppercase tracking-[0.2em] text-[10px] transition-all duration-500 flex items-center gap-3 relative group overflow-hidden cursor-pointer",
         variants[variant],
         className
       )}
@@ -139,7 +139,7 @@ export const Navbar = () => {
           {/* Hamburger Mobile */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-[var(--emerald-deep)] hover:text-[var(--gold-vivid)] transition-colors"
+            className="md:hidden p-2 text-[var(--emerald-deep)] hover:text-[var(--gold-vivid)] transition-colors cursor-pointer"
             aria-label="Menu"
           >
             {mobileMenuOpen ? (

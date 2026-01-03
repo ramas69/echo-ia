@@ -85,3 +85,23 @@ body {
   border-color: var(--gold-vivid);
   box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
 }
+
+/* Curseur pointer pour tous les éléments cliquables */
+button,
+a,
+[role="button"],
+[onclick],
+label[for],
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+select,
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+button:disabled,
+a[disabled],
+[disabled] {
+  cursor: not-allowed !important;
+}

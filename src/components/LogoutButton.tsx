@@ -17,9 +17,9 @@ export default function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="flex items-center gap-3 p-3 rounded-xl hover:bg-red-50 text-[var(--text-secondary)] hover:text-red-500 font-bold text-[10px] uppercase tracking-widest transition-all group w-full"
+      className="flex items-center gap-3 p-3 rounded-xl hover:bg-red-50 text-[var(--text-secondary)] hover:text-red-500 font-bold text-[10px] uppercase tracking-widest transition-all group w-full cursor-pointer"
     >
-      <LogOut className="w-4 h-4" /> 
+      <LogOut className="w-4 h-4" />
       Se déconnecter
     </button>
   );

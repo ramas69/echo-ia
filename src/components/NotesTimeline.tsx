@@ -85,7 +85,7 @@ export default function NotesTimeline({ notes }: NotesTimelineProps) {
       {notes.length > 3 && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-6 w-full py-3 px-4 rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--emerald-deep)]/10 transition-colors flex items-center justify-center gap-2 text-xs font-bold text-[var(--emerald-deep)] uppercase tracking-wider"
+          className="mt-6 w-full py-3 px-4 rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--emerald-deep)]/10 transition-colors flex items-center justify-center gap-2 text-xs font-bold text-[var(--emerald-deep)] uppercase tracking-wider cursor-pointer"
         >
           {expanded ? (
             <>
