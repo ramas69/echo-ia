@@ -4,7 +4,6 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  console.log('🛡️ MIDDLEWARE - Path:', pathname);
 
   let response = NextResponse.next({
     request: {
@@ -59,7 +58,6 @@ export async function middleware(request: NextRequest) {
   );
 
   const { data: { session } } = await supabase.auth.getSession();
-  console.log('🛡️ MIDDLEWARE - Session:', session ? `✅ ${session.user.email}` : '❌ Pas de session');
 
   // Routes publiques
   const publicRoutes = [
@@ -83,7 +81,6 @@ export async function middleware(request: NextRequest) {
 
   // Si pas de session et route protégée
   if (!session && !publicRoutes.includes(pathname)) {
-    console.log('🛡️ MIDDLEWARE - ❌ Pas de session, redirect vers /auth/login');
     const redirectUrl = new URL('/auth/login', request.url);
     return NextResponse.redirect(redirectUrl);
   }
@@ -97,7 +94,6 @@ export async function middleware(request: NextRequest) {
       .single();
 
     const userRole = userData?.role;
-    console.log('🛡️ MIDDLEWARE - Rôle:', userRole);
 
     // Redirection automatique si déjà connecté et sur page auth
     if (pathname === '/auth/login' || pathname === '/auth/register') {
@@ -105,19 +101,16 @@ export async function middleware(request: NextRequest) {
         userRole === 'ADMIN' ? '/admin' : '/academie',
         request.url
       );
-      console.log('🛡️ MIDDLEWARE - 🔀 Redirect auth page vers:', redirectUrl.pathname);
       return NextResponse.redirect(redirectUrl);
     }
 
     // Protection des routes admin
     if (pathname.startsWith('/admin') && userRole !== 'ADMIN') {
-      console.log('🛡️ MIDDLEWARE - ❌ Accès admin refusé, redirect vers /');
       const redirectUrl = new URL('/', request.url);
       return NextResponse.redirect(redirectUrl);
     }
   }
 
-  console.log('🛡️ MIDDLEWARE - ✅ Accès autorisé');
   return response;
 }
 

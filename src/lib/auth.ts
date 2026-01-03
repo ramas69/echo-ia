@@ -33,11 +33,8 @@ export async function auth() {
   const { data: { session }, error } = await supabase.auth.getSession();
 
   if (error || !session) {
-    console.log('🔍 AUTH - Pas de session:', error?.message);
     return null;
   }
-
-  console.log('🔍 AUTH - Session trouvée:', session.user.email);
 
   // Récupérer le rôle de l'utilisateur
   const { data: userData } = await supabase

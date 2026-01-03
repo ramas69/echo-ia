@@ -52,8 +52,6 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    console.log('🔐 LOGIN - Début de la connexion pour:', email);
-
     try {
       const supabase = createClient();
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
@@ -61,15 +59,7 @@ export default function LoginPage() {
         password,
       });
 
-      console.log('📊 LOGIN - Réponse Supabase:', {
-        hasData: !!data,
-        hasUser: !!data?.user,
-        hasSession: !!data?.session,
-        error: signInError?.message,
-      });
-
       if (signInError) {
-        console.error('❌ LOGIN - Erreur signInWithPassword:', signInError);
         if (signInError.message === 'Email not confirmed') {
           setError('Veuillez confirmer votre email avant de vous connecter.');
         } else if (signInError.message === 'Invalid login credentials') {
@@ -81,33 +71,23 @@ export default function LoginPage() {
       }
 
       if (data.user) {
-        console.log('👤 LOGIN - Utilisateur trouvé:', data.user.email, 'ID:', data.user.id);
-
         const { data: userData, error: userError } = await supabase
           .from('User')
           .select('role')
           .eq('id', data.user.id)
           .single();
 
-        console.log('👤 LOGIN - Données User table:', { userData, userError });
-
         if (userError) {
-          console.error('❌ LOGIN - Erreur récupération profil:', userError);
           setError('Erreur lors de la récupération du profil: ' + userError.message);
           return;
         }
 
         const targetUrl = userData.role === 'ADMIN' ? '/admin' : '/academie';
-        console.log('🎯 LOGIN - Redirection vers:', targetUrl);
-
-        // Forcer un rechargement complet pour que le middleware détecte la session
         window.location.href = targetUrl;
       } else {
-        console.error('❌ LOGIN - Pas de user dans la réponse!');
         setError('Erreur: utilisateur non trouvé.');
       }
     } catch (err: any) {
-      console.error('❌ LOGIN - Exception:', err);
       setError('Une erreur est survenue: ' + err.message);
     } finally {
       setLoading(false);

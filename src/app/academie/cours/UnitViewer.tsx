@@ -73,7 +73,6 @@ const VideoPlayer = ({ provider, id }: { provider: string, id: string }) => {
   } else if (provider === "YOUTUBE") {
     // ID YouTube valide = 11 caractères
     if (id.length !== 11) {
-      console.warn('⚠️ ID YouTube invalide:', id, '(doit faire 11 caractères)');
       isValidId = false;
     }
     embedUrl = `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&playsinline=1`;
@@ -303,7 +302,6 @@ export default function UnitViewerClient({
         setIsCompleting(false);
       }
     } catch (error) {
-      console.error(error);
       setErrorMessage("Une erreur s'est produite. Vérifiez votre connexion.");
       setIsCompleting(false);
     }
