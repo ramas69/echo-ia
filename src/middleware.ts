@@ -14,43 +14,27 @@ export default auth((req) => {
   const isPublicRoute = ["/", "/auth/login", "/auth/register", "/auth/logout", "/le-programme", "/offres", "/candidature-vip", "/mentions-legales", "/cgv"].includes(nextUrl.pathname);
   const isAdminRoute = nextUrl.pathname.startsWith("/admin");
 
-  console.log("🔍 MIDDLEWARE:", {
-    path: nextUrl.pathname,
-    isLoggedIn,
-    role,
-    isApiAuthRoute,
-    isApiRegisterRoute,
-    isPublicRoute,
-    isAdminRoute
-  });
-
   // Laisser passer les routes API publiques
   if (isApiAuthRoute || isApiRegisterRoute) {
-    console.log("✅ Route API autorisée:", nextUrl.pathname);
     return;
   }
 
-  // TEMPORAIREMENT DÉSACTIVÉ pour debug
   // Redirection automatique si déjà connecté (sauf pour logout)
-  // if (isLoggedIn && (nextUrl.pathname === "/auth/login" || nextUrl.pathname === "/auth/register") && nextUrl.pathname !== "/auth/logout") {
-  //   const redirectTo = role === "ADMIN" ? "/admin" : "/academie";
-  //   console.log("🔄 Utilisateur connecté sur page auth, redirection vers:", redirectTo);
-  //   return Response.redirect(new URL(redirectTo, nextUrl));
-  // }
+  if (isLoggedIn && (nextUrl.pathname === "/auth/login" || nextUrl.pathname === "/auth/register") && nextUrl.pathname !== "/auth/logout") {
+    const redirectTo = role === "ADMIN" ? "/admin" : "/academie";
+    return Response.redirect(new URL(redirectTo, nextUrl));
+  }
 
   // Protection des routes
   if (!isLoggedIn && !isPublicRoute) {
-    console.log("🔒 Route protégée, redirection vers /auth/login");
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
 
   // Protection admin
   if (isLoggedIn && isAdminRoute && role !== "ADMIN") {
-    console.log("⛔ Non-admin tente d'accéder à admin, redirection vers /");
     return Response.redirect(new URL("/", nextUrl));
   }
 
-  console.log("✅ Accès autorisé");
   return;
 });
 

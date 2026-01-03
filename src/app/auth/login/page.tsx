@@ -20,8 +20,6 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    console.log('🔐 Tentative de connexion pour:', email);
-
     try {
       const result = await signIn('credentials', {
         email,
@@ -29,21 +27,11 @@ export default function LoginPage() {
         redirect: false,
       });
 
-      console.log('📥 Résultat signIn:', result);
-
       if (result?.error) {
-        console.log('❌ Erreur de connexion:', result.error);
         setError('Identifiants invalides.');
       } else {
-        console.log('✅ Connexion réussie, récupération de la session...');
-        // Récupérer la session pour obtenir le rôle de l'utilisateur
         const session = await getSession();
-        console.log('👤 Session récupérée:', session);
         const userRole = (session?.user as any)?.role as "ADMIN" | "STUDENT" | undefined;
-        
-        // Redirection selon le rôle
-        const redirectUrl = userRole === 'ADMIN' ? "/admin" : "/academie";
-        console.log('🔄 Redirection vers:', redirectUrl);
         
         if (userRole === 'ADMIN') {
           window.location.href = "/admin";
@@ -52,7 +40,6 @@ export default function LoginPage() {
         }
       }
     } catch (err) {
-      console.error('💥 Exception lors de la connexion:', err);
       setError('Une erreur est survenue.');
     } finally {
       setLoading(false);

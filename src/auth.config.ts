@@ -6,10 +6,6 @@ export const authConfig = {
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      console.log("🔑 AUTH.CONFIG authorized() appelé:", {
-        path: nextUrl.pathname,
-        isAuthenticated: !!auth
-      });
       // Laisser le middleware gérer les redirections
       return true;
     },
