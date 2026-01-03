@@ -5,16 +5,23 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Vérifier que les variables d'environnement sont définies
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    // Si variables manquantes, laisser passer (pour éviter les crashes)
+    return NextResponse.next();
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
+  try {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      {
       cookies: {
         get(name: string) {
           return request.cookies.get(name)?.value;
@@ -85,33 +92,41 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Si session existe, récupérer le rôle
-  if (session) {
-    const { data: userData } = await supabase
-      .from('User')
-      .select('role')
-      .eq('id', session.user.id)
-      .single();
+    // Si session existe, récupérer le rôle
+    if (session) {
+      try {
+        const { data: userData } = await supabase
+          .from('User')
+          .select('role')
+          .eq('id', session.user.id)
+          .single();
 
-    const userRole = userData?.role;
+        const userRole = userData?.role;
 
-    // Redirection automatique si déjà connecté et sur page auth
-    if (pathname === '/auth/login' || pathname === '/auth/register') {
-      const redirectUrl = new URL(
-        userRole === 'ADMIN' ? '/admin' : '/academie',
-        request.url
-      );
-      return NextResponse.redirect(redirectUrl);
+        // Redirection automatique si déjà connecté et sur page auth
+        if (pathname === '/auth/login' || pathname === '/auth/register') {
+          const redirectUrl = new URL(
+            userRole === 'ADMIN' ? '/admin' : '/academie',
+            request.url
+          );
+          return NextResponse.redirect(redirectUrl);
+        }
+
+        // Protection des routes admin
+        if (pathname.startsWith('/admin') && userRole !== 'ADMIN') {
+          const redirectUrl = new URL('/', request.url);
+          return NextResponse.redirect(redirectUrl);
+        }
+      } catch (error) {
+        // En cas d'erreur DB, continuer sans redirection
+      }
     }
 
-    // Protection des routes admin
-    if (pathname.startsWith('/admin') && userRole !== 'ADMIN') {
-      const redirectUrl = new URL('/', request.url);
-      return NextResponse.redirect(redirectUrl);
-    }
+    return response;
+  } catch (error) {
+    // En cas d'erreur, laisser passer pour éviter les crashes
+    return NextResponse.next();
   }
-
-  return response;
 }
 
 export const config = {

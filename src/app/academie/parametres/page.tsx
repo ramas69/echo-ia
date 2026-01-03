@@ -10,11 +10,12 @@ import {
 } from "@/lib/analytics";
 
 export default async function ParametresPage() {
-  const session = await auth();
+  try {
+    const session = await auth();
 
-  if (!session?.user) {
-    redirect("/auth/login");
-  }
+    if (!session?.user) {
+      redirect("/auth/login");
+    }
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
@@ -120,5 +121,9 @@ export default async function ParametresPage() {
       }}
     />
   );
+  } catch (error) {
+    // En cas d'erreur (DB, auth, etc.), rediriger vers login
+    redirect("/auth/login");
+  }
 }
 

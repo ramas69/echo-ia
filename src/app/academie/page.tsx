@@ -5,23 +5,24 @@ import AcademieClient from "./AcademieClient";
 import { PhaseStatus } from "@prisma/client";
 
 export default async function AcademiePage() {
-  const session = await auth();
+  try {
+    const session = await auth();
 
-  if (!session?.user) {
-    redirect("/auth/login");
-  }
+    if (!session?.user) {
+      redirect("/auth/login");
+    }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: { 
-      progress: true,
-      phaseStatuses: true
-    },
-  });
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      include: { 
+        progress: true,
+        phaseStatuses: true
+      },
+    });
 
-  if (!user) {
-    redirect("/auth/login");
-  }
+    if (!user) {
+      redirect("/auth/login");
+    }
 
   // Fetch all phases with units
   const phases = await prisma.phase.findMany({
@@ -76,12 +77,16 @@ export default async function AcademiePage() {
     };
   });
 
-  return (
-    <AcademieClient 
-      userName={user.name || "Membre"} 
-      initialProgress={progressPercent}
-      phases={formattedPhases as any}
-      userRole={user.role}
-    />
-  );
+    return (
+      <AcademieClient 
+        userName={user.name || "Membre"} 
+        initialProgress={progressPercent}
+        phases={formattedPhases as any}
+        userRole={user.role}
+      />
+    );
+  } catch (error) {
+    // En cas d'erreur (DB, auth, etc.), rediriger vers login
+    redirect("/auth/login");
+  }
 }
