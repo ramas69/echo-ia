@@ -6,6 +6,7 @@ import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import { motion } from 'framer-motion';
 import { Lock, CheckCircle, AlertCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { resetPasswordSchema } from '@/lib/validation';
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState('');
@@ -34,22 +35,22 @@ export default function ResetPasswordPage() {
     setLoading(true);
     setError('');
 
-    // Validation
-    if (password.length < 6) {
-      setError('Le mot de passe doit contenir au moins 6 caractères.');
-      setLoading(false);
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError('Les mots de passe ne correspondent pas.');
-      setLoading(false);
-      return;
-    }
-
     try {
+      // Validation stricte avec zod
+      const validationResult = resetPasswordSchema.safeParse({
+        password,
+        confirmPassword,
+      });
+
+      if (!validationResult.success) {
+        const firstError = validationResult.error.issues[0];
+        setError(firstError.message);
+        setLoading(false);
+        return;
+      }
+
       const { error: updateError } = await supabase.auth.updateUser({
-        password: password,
+        password: validationResult.data.password,
       });
 
       if (updateError) {

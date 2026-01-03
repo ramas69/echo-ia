@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { Mail, Lock, User, Sparkles, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { registerSchema } from '@/lib/validation';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -24,12 +25,30 @@ export default function RegisterPage() {
     setSuccess(false);
 
     try {
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email,
+      // Validation stricte des données
+      const validationResult = registerSchema.safeParse({
+        email: email.trim(),
         password,
+        name: name.trim(),
+      });
+
+      if (!validationResult.success) {
+        // Récupérer le premier message d'erreur
+        const firstError = validationResult.error.issues[0];
+        setError(firstError.message);
+        setLoading(false);
+        return;
+      }
+
+      // Données validées
+      const { email: validEmail, password: validPassword, name: validName } = validationResult.data;
+
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: validEmail,
+        password: validPassword,
         options: {
           data: {
-            name: name,
+            name: validName,
             role: 'STUDENT',
           },
           emailRedirectTo: `${window.location.origin}/auth/callback`,

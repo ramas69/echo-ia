@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Mail, ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { forgotPasswordSchema } from '@/lib/validation';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -20,9 +21,24 @@ export default function ForgotPasswordPage() {
     setSuccess(false);
 
     try {
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`,
+      // Validation de l'email
+      const validationResult = forgotPasswordSchema.safeParse({
+        email: email.trim(),
       });
+
+      if (!validationResult.success) {
+        const firstError = validationResult.error.issues[0];
+        setError(firstError.message);
+        setLoading(false);
+        return;
+      }
+
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(
+        validationResult.data.email,
+        {
+          redirectTo: `${window.location.origin}/auth/reset-password`,
+        }
+      );
 
       if (resetError) {
         setError('Erreur lors de l\'envoi de l\'email.');
