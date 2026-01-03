@@ -7,7 +7,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { reorderUnits } from "@/lib/services/curriculum.service";
 import { reorderUnitsSchema } from "@/lib/validators/curriculum";
 

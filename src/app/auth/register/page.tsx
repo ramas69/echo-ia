@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import { motion } from 'framer-motion';
-import { Mail, Lock, User, Sparkles } from 'lucide-react';
+import { Mail, Lock, User, Sparkles, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -13,58 +14,88 @@ export default function RegisterPage() {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("🔵 FRONTEND - Début de l'inscription...");
     setLoading(true);
     setError('');
+    setSuccess(false);
 
     try {
-      console.log("📤 FRONTEND - Envoi des données:", { email, name, passwordLength: password.length });
-      
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name }),
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name: name,
+            role: 'STUDENT',
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
 
-      console.log("📥 FRONTEND - Réponse reçue:", res.status, res.statusText);
-      
-      // Lire le texte brut d'abord pour déboguer
-      const textResponse = await res.text();
-      console.log("📄 FRONTEND - Contenu brut de la réponse:", textResponse.substring(0, 500));
+      if (signUpError) {
+        setError(signUpError.message === 'User already registered' 
+          ? 'Cet email est déjà utilisé.'
+          : 'Erreur lors de l\'inscription.');
+        return;
+      }
 
-      if (res.ok) {
-        try {
-          const data = JSON.parse(textResponse);
-          console.log("✅ FRONTEND - Inscription réussie!", data);
-          alert('✅ Inscription réussie ! Vous pouvez maintenant vous connecter.');
-          router.push('/auth/login');
-        } catch (parseError) {
-          console.error("❌ FRONTEND - Impossible de parser le JSON:", parseError);
-          console.error("📄 FRONTEND - Réponse complète:", textResponse);
-          setError('Erreur de parsing de la réponse du serveur');
-        }
-      } else {
-        try {
-          const data = JSON.parse(textResponse);
-          console.error("❌ FRONTEND - Erreur:", data);
-          setError(data.message || 'Une erreur est survenue.');
-        } catch (parseError) {
-          console.error("❌ FRONTEND - Réponse non-JSON:", textResponse.substring(0, 200));
-          setError('Erreur du serveur: ' + textResponse.substring(0, 100));
-        }
+      if (data.user) {
+        setSuccess(true);
       }
     } catch (err) {
-      console.error("❌ FRONTEND - Exception:", err);
-      setError('Une erreur est survenue: ' + (err instanceof Error ? err.message : 'Inconnue'));
+      setError('Une erreur est survenue.');
     } finally {
       setLoading(false);
-      console.log("🏁 FRONTEND - Fin du processus d'inscription");
     }
   };
+
+  if (success) {
+    return (
+      <div className="min-h-screen bg-[#FDFCFB] flex items-center justify-center p-6 mesh-gradient">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-md w-full glass-card p-12 rounded-[2.5rem] shadow-2xl border border-emerald-500/20 relative overflow-hidden text-center"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring" }}
+          >
+            <CheckCircle className="w-20 h-20 text-emerald-500 mx-auto mb-6" />
+          </motion.div>
+          
+          <Badge className="mb-6 bg-emerald-50 text-emerald-700 border-emerald-200">Inscription réussie</Badge>
+          
+          <h1 className="text-2xl font-light uppercase tracking-tighter mb-4">
+            VÉRIFIEZ VOTRE <br /><span className="font-serif italic text-[var(--emerald-deep)]">BOÎTE EMAIL.</span>
+          </h1>
+          
+          <p className="text-sm text-[var(--text-secondary)] mb-6 leading-relaxed">
+            Un email de confirmation a été envoyé à <br />
+            <span className="font-bold text-[var(--emerald-deep)]">{email}</span>
+          </p>
+          
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6">
+            <p className="text-xs text-amber-800 leading-relaxed">
+              📧 Cliquez sur le lien dans l'email pour activer votre compte.<br />
+              💡 Pensez à vérifier vos <span className="font-bold">spams</span> !
+            </p>
+          </div>
+
+          <Link href="/auth/login">
+            <SophisticatedButton className="w-full justify-center">
+              Retour à la connexion
+            </SophisticatedButton>
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FDFCFB] flex items-center justify-center p-6 mesh-gradient">

@@ -1,15 +1,17 @@
 'use client';
 
 import React from 'react';
-import { signOut } from 'next-auth/react';
 import { LogOut } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 
 export default function LogoutButton() {
+  const router = useRouter();
+
   const handleLogout = async () => {
-    await signOut({ 
-      callbackUrl: '/',
-      redirect: true 
-    });
+    await supabase.auth.signOut();
+    router.push('/');
+    router.refresh();
   };
 
   return (
@@ -22,4 +24,3 @@ export default function LogoutButton() {
     </button>
   );
 }
-

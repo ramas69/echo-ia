@@ -7,7 +7,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { createUnit } from "@/lib/services/curriculum.service";
 import { createUnitSchema } from "@/lib/validators/curriculum";
 

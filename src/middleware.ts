@@ -1,54 +1,83 @@
-import NextAuth from "next-auth";
-import { authConfig } from "./auth.config";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
-const { auth } = NextAuth(authConfig);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-export default auth((req) => {
-  const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
-  // @ts-ignore
-  const role = req.auth?.user?.role;
+export async function middleware(request: NextRequest) {
+  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: false,
+    },
+  });
 
-  const isApiAuthRoute = nextUrl.pathname.startsWith("/api/auth");
-  const isApiRegisterRoute = nextUrl.pathname === "/api/register";
-  const isPublicRoute = ["/", "/auth/login", "/auth/register", "/auth/logout", "/le-programme", "/offres", "/candidature-vip", "/mentions-legales", "/cgv"].includes(nextUrl.pathname);
-  const isAdminRoute = nextUrl.pathname.startsWith("/admin");
-
-  // Laisser passer les routes API publiques
-  if (isApiAuthRoute || isApiRegisterRoute) {
-    return;
+  // Récupérer le token depuis les cookies
+  const token = request.cookies.get('sb-access-token')?.value;
+  
+  let session = null;
+  if (token) {
+    const { data: { session: userSession } } = await supabase.auth.getSession();
+    session = userSession;
   }
 
-  // Redirection automatique si déjà connecté (sauf pour logout)
-  if (isLoggedIn && (nextUrl.pathname === "/auth/login" || nextUrl.pathname === "/auth/register") && nextUrl.pathname !== "/auth/logout") {
-    const redirectTo = role === "ADMIN" ? "/admin" : "/academie";
-    return Response.redirect(new URL(redirectTo, nextUrl));
+  const { pathname } = request.nextUrl;
+
+  // Routes publiques
+  const publicRoutes = [
+    '/',
+    '/auth/login',
+    '/auth/register',
+    '/auth/callback',
+    '/le-programme',
+    '/offres',
+    '/candidature-vip',
+    '/mentions-legales',
+    '/cgv',
+  ];
+
+  // Routes API publiques
+  if (pathname.startsWith('/api/auth') || pathname === '/api/register') {
+    return NextResponse.next();
   }
 
-  // Protection des routes
-  if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL("/auth/login", nextUrl));
+  // Si pas de session et route protégée
+  if (!session && !publicRoutes.includes(pathname)) {
+    const redirectUrl = new URL('/auth/login', request.url);
+    return NextResponse.redirect(redirectUrl);
   }
 
-  // Protection admin
-  if (isLoggedIn && isAdminRoute && role !== "ADMIN") {
-    return Response.redirect(new URL("/", nextUrl));
+  // Si session existe, récupérer le rôle
+  if (session) {
+    const { data: userData } = await supabase
+      .from('User')
+      .select('role')
+      .eq('id', session.user.id)
+      .single();
+
+    const userRole = userData?.role;
+
+    // Redirection automatique si déjà connecté et sur page auth
+    if (pathname === '/auth/login' || pathname === '/auth/register') {
+      const redirectUrl = new URL(
+        userRole === 'ADMIN' ? '/admin' : '/academie',
+        request.url
+      );
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    // Protection des routes admin
+    if (pathname.startsWith('/admin') && userRole !== 'ADMIN') {
+      const redirectUrl = new URL('/', request.url);
+      return NextResponse.redirect(redirectUrl);
+    }
   }
 
-  return;
-});
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api/auth (NextAuth routes)
-     * - api/register
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public files (images, etc.)
-     */
-    '/((?!api/auth|api/register|_next/static|_next/image|favicon.ico|.*\\..*).*)' 
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|mp4)$).*)',
   ],
 };
