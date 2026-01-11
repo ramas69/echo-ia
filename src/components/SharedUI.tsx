@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 export const Badge = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-  <motion.div 
+  <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
     whileHover={{ scale: 1.05, borderColor: "var(--gold-vivid)" }}
@@ -18,58 +18,98 @@ export const Badge = ({ children, className }: { children: React.ReactNode, clas
   </motion.div>
 );
 
-export const SophisticatedButton = ({ children, variant = 'primary', className = '', ...props }: any) => {
+export const SophisticatedButton = ({ children, variant = 'primary', className = '', loading = false, disabled = false, ...props }: any) => {
   const variants: any = {
     primary: "bg-[var(--emerald-deep)] text-white hover:bg-[var(--emerald-light)] shadow-[0_20px_40px_rgba(6,78,59,0.15)]",
     secondary: "bg-[var(--gold-sand)] text-[var(--emerald-deep)] hover:bg-[var(--gold-vivid)] hover:text-white hover:shadow-[0_0_30px_rgba(212,175,55,0.4)]",
     outline: "border border-[var(--emerald-deep)]/20 text-[var(--emerald-deep)] hover:border-[var(--gold-vivid)] hover:text-[var(--gold-vivid)] hover:bg-[var(--gold-vivid)]/5"
   };
-  
+
   return (
-    <motion.button 
-      whileHover={{ y: -3, scale: 1.02 }}
-      whileTap={{ scale: 0.97 }}
+    <motion.button
+      whileHover={loading || disabled ? {} : { y: -3, scale: 1.02 }}
+      whileTap={loading || disabled ? {} : { scale: 0.97 }}
+      disabled={loading || disabled}
       className={cn(
         "px-10 py-5 rounded-full font-bold uppercase tracking-[0.2em] text-[10px] transition-all duration-500 flex items-center gap-3 relative group overflow-hidden cursor-pointer",
         variants[variant],
+        (loading || disabled) && "opacity-70 cursor-not-allowed",
         className
       )}
       {...props}
     >
       <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-      <span className="relative z-10 flex items-center gap-3">
-        {children}
-        <ArrowUpRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+      <span className="relative z-10 flex items-center justify-center gap-3 w-full">
+        {loading ? (
+          <>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="w-4 h-4 border-2 border-current border-t-transparent rounded-full"
+            />
+            <span>Traitement...</span>
+          </>
+        ) : (
+          <>
+            {children}
+            <ArrowUpRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+          </>
+        )}
       </span>
     </motion.button>
   );
 };
 
-export const TopBar = () => (
-  <div className="fixed top-0 w-full z-[110] bg-[var(--emerald-deep)] text-[var(--gold-sand)] py-2 md:py-3 px-3 md:px-6 flex flex-col md:flex-row gap-2 md:gap-0 justify-between items-center shadow-lg">
-    <div className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] flex items-center gap-2 md:gap-4 text-center md:text-left">
-      <motion.span 
-        animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className="w-2 h-2 bg-[var(--gold-vivid)] rounded-full shadow-[0_0_10px_var(--gold-vivid)] shrink-0" 
-      />
-      <span className="line-clamp-1">SESSION DE JANVIER : PLUS QU'UNE PLACE DISPONIBLE.</span>
+import { createClient } from '@/lib/supabase-client';
+
+export const TopBar = () => {
+  const [session, setSession] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoading(false);
+    });
+
+    // Listen for changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  return (
+    <div className="fixed top-0 w-full z-[110] bg-[var(--emerald-deep)] text-[var(--gold-sand)] py-2 md:py-3 px-3 md:px-6 flex flex-col md:flex-row gap-2 md:gap-0 justify-between items-center shadow-lg">
+      <div className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] flex items-center gap-2 md:gap-4 text-center md:text-left">
+        <motion.span
+          animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="w-2 h-2 bg-[var(--gold-vivid)] rounded-full shadow-[0_0_10px_var(--gold-vivid)] shrink-0"
+        />
+        <span className="line-clamp-1">SESSION DE JANVIER : PLUS QU'UNE PLACE DISPONIBLE.</span>
+      </div>
+
+      {!loading && (
+        <Link
+          href={session ? "/academie" : "/auth/login"}
+          className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] border border-[var(--gold-vivid)]/30 px-3 md:px-4 py-1 md:py-1.5 rounded-full hover:bg-[var(--gold-vivid)] hover:text-white transition-all shadow-sm whitespace-nowrap"
+        >
+          {session ? "Accéder au Dashboard" : "Espace Connexion"}
+        </Link>
+      )}
     </div>
-    <a 
-      href="https://tally.so/r/vIP-echo-ia"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] border border-[var(--gold-vivid)]/30 px-3 md:px-4 py-1 md:py-1.5 rounded-full hover:bg-[var(--gold-vivid)] hover:text-white transition-all shadow-sm whitespace-nowrap"
-    >
-      Réserver mon slot
-    </a>
-  </div>
-);
+  );
+};
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
@@ -113,13 +153,13 @@ export const Navbar = () => {
               L'ÉCHO IA
             </span>
           </Link>
-          
+
           {/* Menu Desktop */}
           <div className="hidden md:flex gap-8 lg:gap-12 text-[9px] font-bold uppercase tracking-[0.4em] text-[var(--text-secondary)]">
             {menuItems.map((item) => (
-              <Link 
-                key={item.href} 
-                href={item.href} 
+              <Link
+                key={item.href}
+                href={item.href}
                 className="hover:text-[var(--gold-vivid)] transition-colors relative group"
               >
                 {item.label}
@@ -129,7 +169,7 @@ export const Navbar = () => {
           </div>
 
           {/* CTA Desktop */}
-          <Link 
+          <Link
             href="/candidature-vip"
             className="hidden md:block text-[9px] lg:text-[10px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)] border-b-2 border-[var(--gold-vivid)] pb-1 hover:text-[var(--gold-vivid)] transition-all whitespace-nowrap"
           >
@@ -181,7 +221,7 @@ export const Navbar = () => {
                     </Link>
                   </motion.div>
                 ))}
-                
+
                 {/* CTA Mobile */}
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
@@ -228,7 +268,7 @@ export const Footer = () => (
           Créé en France · © 2026
         </p>
       </div>
-      
+
       <div className="flex flex-wrap gap-4 md:gap-8 lg:gap-16 text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] lg:tracking-[0.5em] text-[var(--text-secondary)]/40 justify-center md:justify-end">
         <Link href="/mentions-legales#rgpd" className="hover:text-[var(--gold-vivid)] transition-colors whitespace-nowrap">
           Privacy

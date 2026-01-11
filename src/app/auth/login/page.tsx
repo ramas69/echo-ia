@@ -124,7 +124,7 @@ function LoginPageContent() {
   if (magicLinkSent) {
     return (
       <div className="min-h-screen bg-[#FDFCFB] flex items-center justify-center p-6 mesh-gradient">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="max-w-md w-full glass-card p-12 rounded-[2.5rem] shadow-2xl border border-emerald-500/20 text-center"
@@ -136,18 +136,18 @@ function LoginPageContent() {
           >
             <CheckCircle className="w-20 h-20 text-emerald-500 mx-auto mb-6" />
           </motion.div>
-          
+
           <Badge className="mb-6 bg-emerald-50 text-emerald-700 border-emerald-200">Lien envoyé</Badge>
-          
+
           <h1 className="text-2xl font-light uppercase tracking-tighter mb-4">
             VÉRIFIEZ VOTRE <br /><span className="font-serif italic text-[var(--emerald-deep)]">BOÎTE EMAIL.</span>
           </h1>
-          
+
           <p className="text-sm text-[var(--text-secondary)] mb-6 leading-relaxed">
             Un lien de connexion a été envoyé à <br />
             <span className="font-bold text-[var(--emerald-deep)]">{email}</span>
           </p>
-          
+
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6">
             <p className="text-xs text-amber-800 leading-relaxed">
               📧 Cliquez sur le lien dans l'email pour vous connecter.<br />
@@ -173,7 +173,7 @@ function LoginPageContent() {
   if (showMagicLink) {
     return (
       <div className="min-h-screen bg-[#FDFCFB] flex items-center justify-center p-6 mesh-gradient">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-md w-full glass-card p-12 rounded-[2.5rem] shadow-2xl border border-[var(--gold-vivid)]/20 relative overflow-hidden"
@@ -199,7 +199,7 @@ function LoginPageContent() {
               </label>
               <div className="relative group">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--emerald-deep)]/30 group-focus-within:text-[var(--gold-vivid)] transition-colors" />
-                <input 
+                <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -220,13 +220,12 @@ function LoginPageContent() {
               </div>
             )}
 
-            <SophisticatedButton 
-              type="submit" 
-              disabled={loading}
+            <SophisticatedButton
+              type="submit"
+              loading={loading}
               className="w-full justify-center py-5 group"
             >
-              <span>{loading ? 'Envoi en cours...' : 'Envoyer le lien magique'}</span>
-              <Sparkles className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform" />
+              Envoyer le lien magique
             </SophisticatedButton>
           </form>
 
@@ -245,7 +244,7 @@ function LoginPageContent() {
 
   return (
     <div className="min-h-screen bg-[#FDFCFB] flex items-center justify-center p-6 mesh-gradient">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-md w-full glass-card p-12 rounded-[2.5rem] shadow-2xl border border-[var(--gold-vivid)]/20 relative overflow-hidden"
@@ -300,7 +299,7 @@ function LoginPageContent() {
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--emerald-deep)]/60">Email</label>
             <div className="relative group">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--emerald-deep)]/30 group-focus-within:text-[var(--gold-vivid)] transition-colors" />
-              <input 
+              <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -314,7 +313,7 @@ function LoginPageContent() {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--emerald-deep)]/60">Mot de passe</label>
-              <Link 
+              <Link
                 href="/auth/forgot-password"
                 className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] hover:text-[var(--gold-vivid)] transition-colors font-bold"
               >
@@ -323,7 +322,7 @@ function LoginPageContent() {
             </div>
             <div className="relative group">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--emerald-deep)]/30 group-focus-within:text-[var(--gold-vivid)] transition-colors" />
-              <input 
+              <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -341,13 +340,12 @@ function LoginPageContent() {
             </div>
           )}
 
-          <SophisticatedButton 
-            type="submit" 
-            disabled={loading}
+          <SophisticatedButton
+            type="submit"
+            loading={loading}
             className="w-full justify-center py-5 group"
           >
-            <span>{loading ? 'Connexion...' : 'Entrer dans l\'Académie'}</span>
-            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            Entrer dans l'Académie
           </SophisticatedButton>
         </form>
 
@@ -370,7 +368,7 @@ function LoginPageContent() {
           <p className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)]">
             Pas encore membre ? <Link href="/auth/register" className="text-[var(--emerald-deep)] font-black hover:text-[var(--gold-vivid)] transition-colors">Rejoindre</Link>
           </p>
-          
+
           <div className="pt-4 border-t border-[var(--border-subtle)]">
             <Link href="/" className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] hover:text-[var(--emerald-deep)] transition-colors">
               ← Retour à l'accueil
@@ -386,7 +384,11 @@ export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-[#FDFCFB] flex items-center justify-center">
-        <div className="text-sm text-[var(--text-secondary)]">Chargement...</div>
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-8 h-8 border-2 border-[var(--gold-vivid)] border-t-transparent rounded-full"
+        />
       </div>
     }>
       <LoginPageContent />

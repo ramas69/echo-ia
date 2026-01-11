@@ -11,7 +11,8 @@ import {
   Target, 
   FileText, 
   Link as LinkIcon,
-  RefreshCw
+  RefreshCw,
+  FileSpreadsheet
 } from 'lucide-react';
 import { Badge, SophisticatedButton } from '@/components/SharedUI';
 import Link from 'next/link';
@@ -200,6 +201,26 @@ export default function ManagePhaseClient({ phase }: ManagePhaseClientProps) {
               className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm font-bold focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
               placeholder="ex: Postez une capture d'écran de votre Vault sur Discord."
             />
+          </div>
+        </section>
+
+        {/* Section Configuration Export - CACHÉE */}
+        <section className="hidden p-8 bg-white border border-[var(--border-subtle)] rounded-[2.5rem] space-y-6 shadow-sm md:col-span-2">
+          <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] pb-4">
+            <FileSpreadsheet className="w-4 h-4 text-[var(--emerald-deep)]" />
+            <h2 className="text-sm font-bold uppercase tracking-widest">Configuration Export</h2>
+          </div>
+          
+          <div className="space-y-4">
+            <div className="p-4 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-subtle)]">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input 
+                  type="checkbox"
+                  className="w-4 h-4 rounded border-[var(--border-subtle)] text-[var(--emerald-deep)] focus:ring-[var(--emerald-deep)]"
+                />
+                <span className="text-sm font-bold">Créer un nouveau fichier Google Sheets</span>
+              </label>
+            </div>
           </div>
         </section>
       </div>

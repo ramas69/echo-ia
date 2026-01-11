@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useId } from 'react';
-import { 
-  DndContext, 
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  DndContext,
   closestCenter,
   KeyboardSensor,
   PointerSensor,
@@ -18,12 +19,12 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { 
-  Plus, 
-  GripVertical, 
-  Edit2, 
-  Trash2, 
-  ChevronDown, 
+import {
+  Plus,
+  GripVertical,
+  Edit2,
+  Trash2,
+  ChevronDown,
   ChevronRight,
   Video,
   FileText,
@@ -78,14 +79,14 @@ const formatDuration = (seconds: number) => {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
   const s = seconds % 60;
-  
+
   if (h > 0) return `${h}h ${m}m`;
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 };
 
 const getResourceSummary = (resources: Resource[]) => {
   if (!resources || resources.length === 0) return "Aucune ressource";
-  
+
   const counts: Record<string, number> = {};
   resources.forEach(r => {
     counts[r.type] = (counts[r.type] || 0) + 1;
@@ -106,14 +107,14 @@ const getResourceSummary = (resources: Resource[]) => {
 
 // --- Sortable Item Components ---
 
-const SortableUnit = ({ 
-  unit, 
-  phaseIndex, 
-  unitIndex, 
+const SortableUnit = ({
+  unit,
+  phaseIndex,
+  unitIndex,
   onDelete,
-  onTogglePublish 
-}: { 
-  unit: Unit, 
+  onTogglePublish
+}: {
+  unit: Unit,
   phaseIndex: number,
   unitIndex: number,
   onDelete: (id: string) => void,
@@ -136,8 +137,8 @@ const SortableUnit = ({
   const isContentMissing = !unit.content || unit.content === '<p></p>' || unit.content === '';
 
   return (
-    <div 
-      ref={setNodeRef} 
+    <div
+      ref={setNodeRef}
       style={style}
       className={cn(
         "group flex items-center justify-between p-4 bg-white border rounded-xl transition-all ml-12",
@@ -154,7 +155,7 @@ const SortableUnit = ({
               {phaseIndex + 1}.{unitIndex + 1}
             </span>
             <span className="text-sm font-bold uppercase tracking-tight">{unit.title}</span>
-            
+
             {/* Health Indicators */}
             <div className="flex items-center gap-1 ml-2">
               {isVideoMissing && (
@@ -176,15 +177,15 @@ const SortableUnit = ({
           </div>
         </div>
       </div>
-      
+
       <div className="flex items-center gap-4">
         {/* Toggle Published */}
-        <button 
+        <button
           onClick={() => onTogglePublish(unit)}
           className={cn(
             "flex items-center gap-2 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all",
-            unit.isPublished 
-              ? "bg-[var(--emerald-deep)] text-white shadow-lg shadow-emerald-900/20" 
+            unit.isPublished
+              ? "bg-[var(--emerald-deep)] text-white shadow-lg shadow-emerald-900/20"
               : "bg-gray-100 text-gray-400 hover:bg-gray-200"
           )}
         >
@@ -197,7 +198,7 @@ const SortableUnit = ({
               <Edit2 className="w-4 h-4" />
             </button>
           </Link>
-          <button 
+          <button
             onClick={() => onDelete(unit.id)}
             className="p-2 hover:bg-red-50 rounded-lg text-red-500 transition-colors"
           >
@@ -209,12 +210,12 @@ const SortableUnit = ({
   );
 };
 
-const SortablePhase = ({ phase, index, isExpanded, onToggleExpand, onEdit, onDelete, onAddUnit, onDeleteUnit, onReorderUnits, onTogglePhasePublish, onToggleUnitPublish }: { 
-  phase: Phase, 
+const SortablePhase = ({ phase, index, isExpanded, onToggleExpand, onEdit, onDelete, onAddUnit, onDeleteUnit, onReorderUnits, onTogglePhasePublish, onToggleUnitPublish }: {
+  phase: Phase,
   index: number,
   isExpanded: boolean,
   onToggleExpand: () => void,
-  onEdit: (phase: Phase) => void, 
+  onEdit: (phase: Phase) => void,
   onDelete: (id: string) => void,
   onAddUnit: (phaseId: string) => void,
   onDeleteUnit: (unitId: string) => void,
@@ -225,7 +226,7 @@ const SortablePhase = ({ phase, index, isExpanded, onToggleExpand, onEdit, onDel
   const dndId = useId();
   // Utiliser un ID unique et stable pour le contexte des unités
   const unitContextId = `units-ctx-${phase.id}`;
-  
+
   // DÉPLACEMENT DES HOOKS : Ils doivent être au top-level, jamais dans un bloc conditionnel
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -266,8 +267,8 @@ const SortablePhase = ({ phase, index, isExpanded, onToggleExpand, onEdit, onDel
             <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing p-2 opacity-20 group-hover:opacity-100 transition-opacity flex-shrink-0">
               <GripVertical className="w-5 h-5" />
             </button>
-            
-            <button 
+
+            <button
               type="button"
               onClick={(e) => {
                 e.preventDefault();
@@ -278,7 +279,7 @@ const SortablePhase = ({ phase, index, isExpanded, onToggleExpand, onEdit, onDel
             >
               {isExpanded ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
             </button>
-            
+
             <div className="flex flex-col flex-1 min-w-0">
               <div className="flex items-baseline gap-3 flex-wrap">
                 <span className="text-xs font-black text-[var(--emerald-deep)]/30 uppercase tracking-wider tabular-nums flex-shrink-0">
@@ -294,13 +295,13 @@ const SortablePhase = ({ phase, index, isExpanded, onToggleExpand, onEdit, onDel
           </div>
 
           {/* Statut de publication */}
-          <button 
+          <button
             type="button"
             onClick={() => onTogglePhasePublish(phase)}
             className={cn(
               "flex items-center gap-2 px-4 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all flex-shrink-0 ml-4",
-              phase.isPublished 
-                ? "bg-[var(--emerald-deep)] text-white shadow-lg shadow-emerald-900/20" 
+              phase.isPublished
+                ? "bg-[var(--emerald-deep)] text-white shadow-lg shadow-emerald-900/20"
                 : "bg-gray-100 text-gray-400 hover:bg-gray-200"
             )}
           >
@@ -311,7 +312,7 @@ const SortablePhase = ({ phase, index, isExpanded, onToggleExpand, onEdit, onDel
 
         {/* Barre d'actions */}
         <div className="flex items-center justify-between px-6 pb-6 pt-0">
-          <button 
+          <button
             type="button"
             onClick={() => onAddUnit(phase.id)}
             className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--emerald-deep)]/5 text-[var(--emerald-deep)] hover:bg-[var(--emerald-deep)] hover:text-white transition-all text-[10px] font-black uppercase tracking-widest shadow-sm hover:shadow-md"
@@ -320,7 +321,7 @@ const SortablePhase = ({ phase, index, isExpanded, onToggleExpand, onEdit, onDel
           </button>
 
           <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button 
+            <button
               type="button"
               onClick={() => onEdit(phase)}
               className="p-2.5 hover:bg-[var(--bg-secondary)] rounded-xl text-[var(--emerald-deep)] transition-colors"
@@ -328,7 +329,7 @@ const SortablePhase = ({ phase, index, isExpanded, onToggleExpand, onEdit, onDel
             >
               <Edit2 className="w-4 h-4" />
             </button>
-            <button 
+            <button
               type="button"
               onClick={() => onDelete(phase.id)}
               className="p-2.5 hover:bg-red-50 rounded-xl text-red-500 transition-colors"
@@ -341,27 +342,27 @@ const SortablePhase = ({ phase, index, isExpanded, onToggleExpand, onEdit, onDel
       </div>
 
       {/* Utilisation de CSS transitions au lieu de framer-motion pour éviter les conflits de hooks avec React 19 */}
-      <div 
+      <div
         className={cn(
           "transition-all duration-300 ease-in-out overflow-hidden",
           isExpanded ? "max-h-[10000px] opacity-100" : "max-h-0 opacity-0"
         )}
       >
         <div className="space-y-2 py-2">
-          <DndContext 
+          <DndContext
             id={unitContextId}
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragEnd={(event) => onReorderUnits(phase.id, event)}
           >
-            <SortableContext 
-              items={(phase.units || []).map(u => u.id)} 
+            <SortableContext
+              items={(phase.units || []).map(u => u.id)}
               strategy={verticalListSortingStrategy}
             >
               {(phase.units || []).map((unit, unitIndex) => (
-                <SortableUnit 
-                  key={unit.id} 
-                  unit={unit} 
+                <SortableUnit
+                  key={unit.id}
+                  unit={unit}
                   phaseIndex={index}
                   unitIndex={unitIndex}
                   onDelete={onDeleteUnit}
@@ -388,7 +389,8 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
   const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedPhases, setExpandedPhases] = useState<Record<string, boolean>>({});
-  
+  const [globalLoading, setGlobalLoading] = useState(false);
+
   const dndId = useId();
   const router = useRouter();
 
@@ -412,8 +414,8 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
   const filteredPhases = (phases || []).filter(phase => {
     if (!phase) return false;
     const searchLower = searchQuery.toLowerCase();
-    const phaseMatch = (phase.title || "").toLowerCase().includes(searchLower) || 
-                       (phase.description || "").toLowerCase().includes(searchLower);
+    const phaseMatch = (phase.title || "").toLowerCase().includes(searchLower) ||
+      (phase.description || "").toLowerCase().includes(searchLower);
     const unitMatch = (phase.units || []).some(u => (u.title || "").toLowerCase().includes(searchLower));
     return phaseMatch || unitMatch;
   });
@@ -435,10 +437,10 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
         const oldIndex = items.findIndex((i) => i.id === active.id);
         const newIndex = items.findIndex((i) => i.id === over.id);
         const newPhases = arrayMove(items, oldIndex, newIndex);
-        
+
         // Update orderIndex in DB
         updatePhasesOrder(newPhases);
-        
+
         return newPhases;
       });
     }
@@ -454,10 +456,10 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
             const oldIndex = phase.units.findIndex((u) => u.id === active.id);
             const newIndex = phase.units.findIndex((u) => u.id === over.id);
             const newUnits = arrayMove(phase.units, oldIndex, newIndex);
-            
+
             // Update orderIndex in DB
             updateUnitsOrder(phaseId, newUnits);
-            
+
             return { ...phase, units: newUnits };
           }
           return phase;
@@ -467,13 +469,14 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
   };
 
   const updatePhasesOrder = async (newPhases: Phase[]) => {
+    setGlobalLoading(true);
     try {
       const res = await fetch('/api/admin/curriculum/phases/reorder', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phaseIds: newPhases.map(p => p.id) }),
       });
-      
+
       const result = await res.json();
       if (!result.success) {
         console.error("Failed to reorder phases:", result.error);
@@ -481,21 +484,24 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
       router.refresh();
     } catch (error) {
       console.error("Failed to reorder phases", error);
+    } finally {
+      setGlobalLoading(false);
     }
   };
 
   const updateUnitsOrder = async (phaseId: string, newUnits: Unit[]) => {
+    setGlobalLoading(true);
     try {
       const unitIds = newUnits.map(u => u.id);
-      
+
       const res = await fetch('/api/admin/curriculum/units/reorder', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ unitIds }),
       });
-      
+
       const result = await res.json();
-      
+
       if (!result.success) {
         console.error("Failed to reorder units:", result.error);
         alert(`Erreur lors de la réorganisation: ${result.error}`);
@@ -504,15 +510,18 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
     } catch (error) {
       console.error("Failed to reorder units", error);
       alert(`Erreur réseau lors de la réorganisation`);
+    } finally {
+      setGlobalLoading(false);
     }
   };
 
   const deletePhase = async (id: string) => {
     if (!confirm("Attention : supprimer cette phase supprimera toutes ses unités et ressources associées. Confirmer ?")) return;
+    setGlobalLoading(true);
     try {
       const res = await fetch(`/api/admin/curriculum/phases/${id}`, { method: 'DELETE' });
       const result = await res.json();
-      
+
       if (result.success) {
         setPhases(prev => prev.filter(p => p.id !== id));
       } else {
@@ -522,15 +531,18 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
     } catch (error) {
       console.error(error);
       alert("Erreur lors de la suppression de la phase");
+    } finally {
+      setGlobalLoading(false);
     }
   };
 
   const deleteUnit = async (id: string) => {
     if (!confirm("Supprimer cette unité ?")) return;
+    setGlobalLoading(true);
     try {
       const res = await fetch(`/api/admin/curriculum/units/${id}`, { method: 'DELETE' });
       const result = await res.json();
-      
+
       if (result.success) {
         setPhases(prev => prev.map(phase => ({
           ...phase,
@@ -543,17 +555,20 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
     } catch (error) {
       console.error(error);
       alert("Erreur lors de la suppression de l'unité");
+    } finally {
+      setGlobalLoading(false);
     }
   };
 
   const addUnit = async (phaseId: string) => {
+    setGlobalLoading(true);
     try {
       const res = await fetch('/api/admin/curriculum/units', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phaseId, title: "Nouvelle Unité", slug: `unite-${Date.now()}` }),
       });
-      
+
       const result = await res.json();
       if (result.success) {
         router.push(`/admin/curriculum/units/${result.data.id}/edit`);
@@ -564,20 +579,22 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
     } catch (error) {
       console.error(error);
       alert("Erreur lors de la création de l'unité");
+    } finally {
+      setGlobalLoading(false);
     }
   };
 
   const togglePhasePublish = async (phase: Phase) => {
     const newStatus = !phase.isPublished;
     setPhases(prev => prev.map(p => p.id === phase.id ? { ...p, isPublished: newStatus } : p));
-    
+
     try {
       const res = await fetch(`/api/admin/curriculum/phases/${phase.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isPublished: newStatus }),
       });
-      
+
       const result = await res.json();
       if (!result.success) {
         console.error("Failed to toggle phase publish:", result.error);
@@ -604,7 +621,7 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isPublished: newStatus }),
       });
-      
+
       const result = await res.json();
       if (!result.success) {
         console.error("Failed to toggle unit publish:", result.error);
@@ -632,7 +649,7 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
       <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-white p-6 rounded-[2.5rem] border border-[var(--border-subtle)] shadow-sm">
         <div className="relative w-full md:w-96 group">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--emerald-deep)]/30 group-focus-within:text-[var(--emerald-deep)] transition-colors" />
-          <input 
+          <input
             type="text"
             placeholder="Rechercher une phase ou une unité..."
             value={searchQuery}
@@ -648,23 +665,42 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
             </button>
           </Link>
           <Link href="/admin/phases/new">
-            <SophisticatedButton>
+            <SophisticatedButton loading={globalLoading}>
               <Plus className="w-4 h-4 mr-2" /> Nouvelle Phase
             </SophisticatedButton>
           </Link>
         </div>
       </div>
 
+      {/* Global Saving Overlay */}
+      <AnimatePresence>
+        {globalLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed bottom-8 right-8 z-[200] bg-[var(--emerald-deep)] text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-white/10"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+            />
+            <span className="text-[10px] font-black uppercase tracking-widest">Mise à jour du système...</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Control Bar: Expand/Collapse */}
       <div className="flex justify-between items-center px-4">
         <div className="flex items-center gap-2">
-          <button 
+          <button
             onClick={() => toggleExpandAll(true)}
             className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[var(--bg-secondary)] text-[9px] font-black uppercase tracking-widest text-[var(--emerald-deep)]/60 transition-all"
           >
             <Maximize2 className="w-3 h-3" /> Tout déplier
           </button>
-          <button 
+          <button
             onClick={() => toggleExpandAll(false)}
             className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[var(--bg-secondary)] text-[9px] font-black uppercase tracking-widest text-[var(--emerald-deep)]/60 transition-all"
           >
@@ -676,21 +712,21 @@ export default function CurriculumManager({ initialPhases }: { initialPhases: Ph
         </div>
       </div>
 
-      <DndContext 
+      <DndContext
         id={dndId}
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEndPhases}
       >
-        <SortableContext 
+        <SortableContext
           items={filteredPhases.map(p => p.id)}
           strategy={verticalListSortingStrategy}
         >
           <div className="space-y-8">
             {filteredPhases.map((phase, index) => (
-              <SortablePhase 
-                key={phase.id} 
-                phase={phase} 
+              <SortablePhase
+                key={phase.id}
+                phase={phase}
                 index={index}
                 isExpanded={!!expandedPhases[phase.id]}
                 onToggleExpand={() => togglePhaseExpand(phase.id)}

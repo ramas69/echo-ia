@@ -2,16 +2,17 @@
 
 import React from 'react';
 import { LogOut } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 import { useRouter } from 'next/navigation';
 
 export default function LogoutButton() {
   const router = useRouter();
 
   const handleLogout = async () => {
+    const supabase = createClient();
     await supabase.auth.signOut();
-    router.push('/');
-    router.refresh();
+    // Use window.location for a hard refresh to ensure all cookies and local states are cleared
+    window.location.href = '/';
   };
 
   return (

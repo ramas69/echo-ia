@@ -5,15 +5,15 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Save, 
-  ArrowLeft, 
-  Plus, 
-  Trash2, 
-  ExternalLink, 
-  Sparkles, 
-  FileText, 
-  Video, 
+import {
+  Save,
+  ArrowLeft,
+  Plus,
+  Trash2,
+  ExternalLink,
+  Sparkles,
+  FileText,
+  Video,
   Link as LinkIcon,
   Zap as ZapIcon,
   Clock,
@@ -63,7 +63,7 @@ interface UnitEditorProps {
 // Helper pour extraire l'ID vidéo depuis une URL
 const extractVideoId = (input: string, provider: string): string => {
   if (!input) return '';
-  
+
   // Si ça ne ressemble pas à une URL, retourner tel quel (c'est déjà un ID)
   if (!input.includes('http') && !input.includes('www.')) {
     return input.trim();
@@ -92,7 +92,7 @@ const extractVideoId = (input: string, provider: string): string => {
   } catch (e) {
     console.error('Erreur extraction ID vidéo:', e);
   }
-  
+
   return input.trim(); // Fallback: retourner l'input nettoyé
 };
 
@@ -155,7 +155,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
       if (res.ok) {
         const result = await res.json();
         alert("✅ Unité sauvegardée avec succès !");
-        
+
         // Retour à la gestion du curriculum admin
         router.push('/admin/curriculum');
         router.refresh();
@@ -181,8 +181,8 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-12 pb-20">
       <header className="flex justify-between items-end">
         <div className="space-y-4">
-          <Link 
-            href="/admin/curriculum" 
+          <Link
+            href="/admin/curriculum"
             className="flex items-center gap-2 group text-[10px] font-black uppercase tracking-[0.3em] text-[var(--emerald-deep)]/60 hover:text-[var(--emerald-deep)] transition-colors"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -201,22 +201,21 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
           <h1 className="text-4xl font-light uppercase tracking-tighter">Édition : <span className="font-serif italic text-[var(--emerald-deep)]">{initialUnit.title}</span></h1>
         </div>
         <div className="flex items-center gap-4">
-          <button 
-            type="button" 
+          <button
+            type="button"
             onClick={() => setShowPreview(true)}
             className="px-6 py-3 rounded-full border border-[var(--border-subtle)] hover:border-[var(--emerald-deep)] text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
           >
             <Eye className="w-4 h-4" /> Aperçu Live
           </button>
-          <SophisticatedButton 
-            type="button" 
-            disabled={isSaving} 
+          <SophisticatedButton
+            type="button"
+            loading={isSaving}
             onClick={() => {
-              console.log("Button clicked, triggering manual submit...");
               handleSubmit(onSubmit, onInvalid)();
             }}
           >
-            <Save className="w-4 h-4 mr-2" /> {isSaving ? "Sauvegarde..." : "Publier les Changements"}
+            <Save className="w-4 h-4 mr-2" /> Publier les Changements
           </SophisticatedButton>
         </div>
       </header>
@@ -224,7 +223,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* Left Column: Metadata & Content */}
         <div className="lg:col-span-8 space-y-12">
-          
+
           {/* Section 1: Métadonnées */}
           <section className="p-8 bg-white border border-[var(--border-subtle)] rounded-[2.5rem] space-y-8 shadow-sm">
             <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] pb-6">
@@ -237,7 +236,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Titre de l'Unité</label>
-                <input 
+                <input
                   {...register("title")}
                   className="w-full bg-[var(--bg-secondary)] border border-transparent rounded-xl py-3 px-4 text-sm font-bold focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
                 />
@@ -245,7 +244,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Slug URL (généré automatiquement)</label>
-                <input 
+                <input
                   {...register("slug")}
                   className="w-full bg-[var(--bg-secondary)] border border-transparent rounded-xl py-3 px-4 text-sm font-bold focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
                   readOnly
@@ -255,7 +254,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
 
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Source Vidéo</label>
-                <select 
+                <select
                   {...register("videoProvider")}
                   className="w-full bg-[var(--bg-secondary)] border border-transparent rounded-xl py-3 px-4 text-sm font-bold focus:outline-none focus:border-[var(--gold-vivid)] appearance-none cursor-pointer"
                 >
@@ -270,7 +269,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
                   URL Vidéo ou ID
                   <span className="ml-2 text-[8px] opacity-40 normal-case font-normal">(Collez l'URL complète, l'ID sera extrait automatiquement)</span>
                 </label>
-                <input 
+                <input
                   {...register("videoId")}
                   onChange={(e) => {
                     const extractedId = extractVideoId(e.target.value, videoProvider);
@@ -289,7 +288,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
                 <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Durée (en secondes)</label>
                 <div className="relative">
                   <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-20" />
-                  <input 
+                  <input
                     type="number"
                     {...register("durationSec", { valueAsNumber: true })}
                     className="w-full bg-[var(--bg-secondary)] border border-transparent rounded-xl py-3 pl-12 pr-4 text-sm font-bold focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
@@ -307,9 +306,9 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
               </div>
               <h2 className="text-lg font-bold uppercase tracking-tight text-[var(--emerald-deep)]">Contenu de la Leçon</h2>
             </div>
-            
-            <TipTapEditor 
-              content={watch("content") || ""} 
+
+            <TipTapEditor
+              content={watch("content") || ""}
               onChange={(html) => setValue("content", html)}
               placeholder="Expliquez la leçon en détail ici..."
             />
@@ -328,7 +327,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
                 <Sparkles className="w-5 h-5 text-[var(--gold-vivid)]" />
                 <h2 className="text-xl font-bold uppercase tracking-tight italic">L'Arsenal</h2>
               </div>
-              <button 
+              <button
                 type="button"
                 onClick={() => append({ title: "", type: "EXTERNAL_LINK", url: "" })}
                 className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all"
@@ -342,8 +341,8 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
                 <div key={field.id} className="p-6 bg-white/5 rounded-2xl border border-white/10 space-y-4 group">
                   <div className="flex justify-between items-center">
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">Ressource #{index + 1}</span>
-                    <button 
-                      type="button" 
+                    <button
+                      type="button"
                       onClick={() => remove(index)}
                       className="p-2 text-white/20 hover:text-red-400 transition-colors"
                     >
@@ -353,7 +352,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
 
                   <div className="space-y-4">
                     <div className="space-y-1">
-                      <input 
+                      <input
                         {...register(`resources.${index}.title` as const)}
                         placeholder="Titre de la ressource"
                         className={cn(
@@ -366,7 +365,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
                       )}
                     </div>
 
-                    <select 
+                    <select
                       {...register(`resources.${index}.type` as const)}
                       className="w-full bg-white/5 border border-white/10 rounded-xl py-2 px-4 text-[10px] font-black uppercase tracking-widest focus:outline-none focus:border-[var(--gold-vivid)] appearance-none cursor-pointer"
                     >
@@ -379,14 +378,14 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
                     </select>
 
                     {watch(`resources.${index}.type`) === 'PROMPT_TEXT' ? (
-                      <textarea 
+                      <textarea
                         {...register(`resources.${index}.textContent` as const)}
                         placeholder="Collez votre prompt ici..."
                         rows={3}
                         className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-xs font-mono focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
                       />
                     ) : (
-                      <input 
+                      <input
                         {...register(`resources.${index}.url` as const)}
                         placeholder="URL (https://...)"
                         className="w-full bg-white/5 border border-white/10 rounded-xl py-2 px-4 text-xs focus:outline-none focus:border-[var(--gold-vivid)] transition-all"
@@ -407,11 +406,11 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
       </div>
       <AnimatePresence>
         {showPreview && (
-          <PreviewModal 
-            data={formData} 
+          <PreviewModal
+            data={formData}
             phaseOrder={initialUnit.phase.orderIndex}
             unitOrder={initialUnit.orderIndex}
-            onClose={() => setShowPreview(false)} 
+            onClose={() => setShowPreview(false)}
           />
         )}
       </AnimatePresence>
@@ -423,7 +422,7 @@ export default function UnitEditor({ initialUnit }: UnitEditorProps) {
 
 function PreviewModal({ data, onClose, phaseOrder, unitOrder }: { data: any, onClose: () => void, phaseOrder: number, unitOrder: number }) {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -435,7 +434,7 @@ function PreviewModal({ data, onClose, phaseOrder, unitOrder }: { data: any, onC
             <div className="bg-[var(--gold-vivid)] text-black text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">Aperçu Live</div>
             <div className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">Phase {phaseOrder} // Unité {unitOrder}</div>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="p-3 bg-[var(--bg-secondary)] hover:bg-[var(--border-subtle)] rounded-full transition-all"
           >
@@ -465,7 +464,7 @@ function PreviewModal({ data, onClose, phaseOrder, unitOrder }: { data: any, onC
               <h1 className="text-5xl font-light uppercase tracking-tighter leading-[0.9] text-[var(--emerald-deep)]">
                 {data.title || "Titre de l'unité"}
               </h1>
-              <div 
+              <div
                 className="text-[var(--text-secondary)] text-lg max-w-2xl font-light leading-relaxed prose prose-emerald prose-sm md:prose-base"
                 dangerouslySetInnerHTML={{ __html: data.content || "" }}
               />
@@ -477,7 +476,7 @@ function PreviewModal({ data, onClose, phaseOrder, unitOrder }: { data: any, onC
               <div className="absolute top-0 right-0 p-10 opacity-5 rotate-12">
                 <Sparkles className="w-48 h-48 text-[var(--gold-vivid)]" />
               </div>
-              
+
               <div className="relative z-10 flex items-center gap-4 mb-10 pb-6 border-b border-white/10">
                 <div className="w-10 h-10 rounded-2xl bg-[var(--gold-vivid)] flex items-center justify-center text-black">
                   <ZapIcon className="w-5 h-5" />
@@ -505,7 +504,7 @@ function PreviewResourceCard({ resource }: { resource: any }) {
   const [copied, setCopied] = useState(false);
 
   const getIcon = () => {
-    switch(resource.type) {
+    switch (resource.type) {
       case 'NOTION_TEMPLATE': return <Target className="w-5 h-5" />;
       case 'PDF_GUIDE': return <FileText className="w-5 h-5" />;
       case 'EXTERNAL_LINK': return <ExternalLink className="w-5 h-5" />;
@@ -525,7 +524,7 @@ function PreviewResourceCard({ resource }: { resource: any }) {
         </div>
         <div className="relative bg-black/40 rounded-xl p-4 font-mono text-[10px] text-white/80 leading-relaxed border border-white/5">
           {resource.textContent}
-          <button 
+          <button
             onClick={() => {
               setCopied(true);
               setTimeout(() => setCopied(false), 2000);
